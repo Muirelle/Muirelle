@@ -88,22 +88,16 @@
 <p>好了，不说废话。</p>
 <h3 id="1-虚拟机"><a href="#1-虚拟机" class="headerlink" title="1.虚拟机"></a>1.虚拟机</h3><p>一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载<strong><a href="https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html" target="_blank" rel="noopener">VMware workstation</a></strong>，结果下成了VMware Player也就是VMware workstation的缩水版，而且很长一段时间都没发觉。就一直没有用到快照功能，每次配置文件出错了改不回去就只能重装系统，很难受。</p>
 <p>顺便贴一点VMware workstation的激活密钥</p>
-<blockquote>
-<p><strong>CG54H-D8D0H-H8DHY-C6X7X-N2KG6</strong></p>
-</blockquote>
-<blockquote>
-<p><strong>ZC3WK-AFXEK-488JP-A7MQX-XL8YF</strong></p>
-</blockquote>
-<blockquote>
-<p><strong>AC5XK-0ZD4H-088HP-9NQZV-ZG2R4</strong></p>
-</blockquote>
-<blockquote>
-<p><strong>ZC5XK-A6E0M-080XQ-04ZZG-YF08D</strong></p>
-</blockquote>
-<blockquote>
-<p><strong>ZY5H0-D3Y8K-M89EZ-AYPEG-MYUA8</strong></p>
-</blockquote>
-<p>之后是kali linux的镜像，到<strong><a href="https://www.kali.org/downloads/" target="_blank" rel="noopener">官网</a></strong>上面去下载就行了，我用kali linux x64的版本一直不能安装vmtools，最后只好选择x86版本了。紧接着就是系统初始安装，网上也有很多教程，这里直接贴出来<strong><a href="https://jingyan.baidu.com/article/380abd0a1d066a1d91192c5c.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/380abd0a1d066a1d91192c5c.html</a></strong></p>
+<pre><code>CG54H-D8D0H-H8DHY-C6X7X-N2KG6
+
+ZC3WK-AFXEK-488JP-A7MQX-XL8YF
+
+AC5XK-0ZD4H-088HP-9NQZV-ZG2R4
+
+ZC5XK-A6E0M-080XQ-04ZZG-YF08D
+
+ZY5H0-D3Y8K-M89EZ-AYPEG-MYUA8
+</code></pre><p>之后是kali linux的镜像，到<strong><a href="https://www.kali.org/downloads/" target="_blank" rel="noopener">官网</a></strong>上面去下载就行了，我用kali linux x64的版本一直不能安装vmtools，最后只好选择x86版本了。紧接着就是系统初始安装，网上也有很多教程，这里直接贴出来<strong><a href="https://jingyan.baidu.com/article/380abd0a1d066a1d91192c5c.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/380abd0a1d066a1d91192c5c.html</a></strong></p>
 <h3 id="2-VMware-tools的安装"><a href="#2-VMware-tools的安装" class="headerlink" title="2.VMware tools的安装"></a>2.VMware tools的安装</h3><p>被这东西折磨了许久…感觉要安装好也是要看人品的。第一次本来安装好了结果是在VMware player里面，无奈只好在VMware workstation里面再安一次。结果提示安装好了之后却没有任何作用，网上找了各种办法也没用，无奈只好重新安一遍虚拟机（忘了照快照了- -），下面再详细说一下安装vmtools的步骤和坑。</p>
 <p>打开虚拟机后点击<strong>虚拟机</strong>，再点<strong>安装VMware tools</strong>，虚拟机里面就生成了一个文件</p>
 <p><img src="https://i.imgur.com/edJDkHU.png" alt=""></p>
@@ -119,23 +113,18 @@
 <p>如果这时VMware tools还不生效的话，用命令reboot重启一下应该就可以了</p>
 <h3 id="3-Kali源的配置以及更新"><a href="#3-Kali源的配置以及更新" class="headerlink" title="3.Kali源的配置以及更新"></a>3.Kali源的配置以及更新</h3><p>配置源这一块照理来说应该是很简单的，就直接在网上复制粘贴就行了，可它就是硬生生的卡了我好久，说到底其实是不会用vim编辑器…</p>
 <p>先把我用的源贴出来</p>
-<blockquote>
-<p>#中科大源</p>
-</blockquote>
-<blockquote>
-<p><strong>deb <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib</strong></p>
-</blockquote>
-<blockquote>
-<p>#清华大学源</p>
-<p><strong>deb <a href="http://mirrors.tuna.tsinghua.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.tuna.tsinghua.edu.cn/kali</a> kali-rolling main contrib non-free</strong></p>
-</blockquote>
-<blockquote>
-<p>#阿里云源</p>
-</blockquote>
-<blockquote>
-<p><strong>deb <a href="http://mirrors.aliyun.com/kali" target="_blank" rel="noopener">http://mirrors.aliyun.com/kali</a> kali-rolling main non-free contrib</strong></p>
-</blockquote>
-<p>用命令<strong>vim /etc/apt/sources.list</strong>打开配置源文件</p>
+<pre><code>\#中科大源
+
+deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
+
+\#清华大学源
+
+deb http://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free
+
+ \#阿里云源
+
+deb http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+</code></pre><p>用命令<strong>vim /etc/apt/sources.list</strong>打开配置源文件</p>
 <p><img src="https://i.imgur.com/JzoyyA5.png" alt=""></p>
 <p>然后参考vim编辑器的<strong><a href="https://blog.csdn.net/yangshuainan/article/details/78219604" target="_blank" rel="noopener">使用方法</a></strong>把上面的源复制到<strong>sources.list</strong>文件里面去</p>
 <p>最后变成这样，再输入<strong>:wq</strong>（注意包括冒号）保存并退出</p>
@@ -155,7 +144,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjjwfwms20001a8obhr1dbfp4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjjwo27i10000vcobmcs3myn4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/other/">other</a></li></ul>
@@ -230,7 +219,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjjwfwmry0000a8ob7ouoiegr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjjwo27i50001vcobcqsinkw4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/">ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/misc/">misc</a></li></ul>
@@ -277,7 +266,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjjwfwms70003a8obnjd5z8ue" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjjwo27i90003vcobh4n1cvnm" class="article-share-link">Share</a>
       
       
     </footer>
