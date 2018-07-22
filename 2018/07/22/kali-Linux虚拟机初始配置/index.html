@@ -5,13 +5,13 @@
   
   <title>kali Linux虚拟机初始配置 | Muirelle的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 ###1.虚拟机 一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMwa">
+  <meta name="description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
 <meta name="keywords" content="other">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kali Linux虚拟机初始配置">
 <meta property="og:url" content="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 ###1.虚拟机 一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMwa">
+<meta property="og:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.imgur.com/edJDkHU.png">
 <meta property="og:image" content="https://i.imgur.com/YUgUWNx.png">
@@ -21,10 +21,10 @@
 <meta property="og:image" content="https://i.imgur.com/YkV3Qck.png">
 <meta property="og:image" content="https://i.imgur.com/JzoyyA5.png">
 <meta property="og:image" content="https://i.imgur.com/xxA5dwe.png">
-<meta property="og:updated_time" content="2018-07-22T05:53:22.811Z">
+<meta property="og:updated_time" content="2018-07-22T06:04:48.497Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali Linux虚拟机初始配置">
-<meta name="twitter:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 ###1.虚拟机 一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMwa">
+<meta name="twitter:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
 <meta name="twitter:image" content="https://i.imgur.com/edJDkHU.png">
   
     <link rel="alternate" href="/atom.xml" title="Muirelle的博客" type="application/atom+xml">
@@ -98,8 +98,7 @@
       
         <p>弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。</p>
 <p>好了，不说废话。</p>
-<p>###1.虚拟机</p>
-<p>一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载<strong><a href="https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html" target="_blank" rel="noopener">VMware workstation</a></strong>，结果下成了VMware Player也就是VMware workstation的缩水版，而且很长一段时间都没发觉。就一直没有用到快照功能，每次配置文件出错了改不回去就只能重装系统，很难受。</p>
+<h3 id="1-虚拟机"><a href="#1-虚拟机" class="headerlink" title="1.虚拟机"></a>1.虚拟机</h3><p>一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载<strong><a href="https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html" target="_blank" rel="noopener">VMware workstation</a></strong>，结果下成了VMware Player也就是VMware workstation的缩水版，而且很长一段时间都没发觉。就一直没有用到快照功能，每次配置文件出错了改不回去就只能重装系统，很难受。</p>
 <p>顺便贴一点VMware workstation的激活密钥</p>
 <blockquote>
 <p><strong>CG54H-D8D0H-H8DHY-C6X7X-N2KG6</strong></p>
@@ -169,7 +168,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjjwfjcfp0000isob4srlh2iu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjjwfuaa1000664obw0fn4vq9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/other/">other</a></li></ul>
