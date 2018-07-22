@@ -84,7 +84,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="http://ctf.bugku.com/files/af49803469dfdabb80acf562f9381335/Welcome_.jpg" target="_blank" rel="noopener">题目点我</a></p>
+        <hr>
+<p><strong>2018/7/22更新</strong></p>
+<p>关于这道题突然想起有几点要补充一下。</p>
+<p>首先这道题的解题方法肯定不止一种，直接把图片扔进binwalk里面把包分离出来当然可以秒解。我这种方法算是最笨最没有效率的方法了，可是对于新手来讲要对题目有深刻的理解的话必须要从最繁琐最基本的方法开始做，而且更少不了一遍遍的尝试和失败。对解题的原理有大概清楚的认识之后再用工具就会更加得心应手。</p>
+<p>最后说一下手动找包的几个困难点。</p>
+<p>首先是要找到压缩包的特殊文件标识，这道题是因为用winhex打开然后碰巧看到了zip文件标识PK，加上之前做题的经验推测出内含压缩包的，说实话题还是要多做，不然看到解题需要的某个关键信息（比如文件标识）一点反应也没有的话，又要抱怨：这谁想得到啊？！如果运气不好没有碰巧注意到的话就只有慢慢去找，确实是要把眼睛看花的。不过还是那句话，多练嘛，熟悉之后直接用工具解题就没那么麻烦了。</p>
+<hr>
+<p><a href="http://ctf.bugku.com/files/af49803469dfdabb80acf562f9381335/Welcome_.jpg" target="_blank" rel="noopener">题目点我</a></p>
 <p>打开链接是一张图片<br><img src="https://i.imgur.com/p67HfEg.jpg" alt=""></p>
 <p>用winhex打开图片，注意到<strong>flag.rar</strong>，猜测图片内含rar压缩包。</p>
 <p><img src="https://i.imgur.com/IRAkhCb.png" alt=""></p>
@@ -96,6 +103,8 @@
 <p>(此处新建一个zip文件作为对比↓)</p>
 <p><img src="https://i.imgur.com/5jjI95U.png" alt=""></p>
 <p>头部固定以PK（即50 4B 03 04）作为开始，尾部以PK加上固定长度（一排多两个，即18个hex位）的标识位结束。</p>
+<blockquote>
+</blockquote>
 <p><a href="https://blog.csdn.net/a200710716/article/details/51644421" target="_blank" rel="noopener">关于zip文件格式更详细的介绍</a></p>
 <hr>
 <p>在winhex中找到标识位，删除PK之前的所有内容并保存，将修改后的文件后缀名由jpg改为zip，获得一个zip压缩包。</p>
@@ -116,7 +125,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjjr509j00001d4obew55gb6j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjjw6qdey00004gobj74ule8e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/">ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/misc/">misc</a></li></ul>
@@ -163,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjjr509iv0000d4ob3r3y20dh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjjw6qdfr00054gobs2azxqci" class="article-share-link">Share</a>
       
       
     </footer>
