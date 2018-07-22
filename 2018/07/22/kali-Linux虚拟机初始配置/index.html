@@ -25,7 +25,8 @@
 <meta property="og:image" content="https://i.imgur.com/IB9o0fw.png">
 <meta property="og:image" content="https://i.imgur.com/hzksyWJ.png">
 <meta property="og:image" content="https://i.imgur.com/fsREx9K.png">
-<meta property="og:updated_time" content="2018-07-22T13:03:31.432Z">
+<meta property="og:image" content="https://i.imgur.com/QSKbhpj.png">
+<meta property="og:updated_time" content="2018-07-22T14:15:40.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali Linux虚拟机初始配置">
 <meta name="twitter:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
@@ -154,11 +155,15 @@ apt-get dist-upgrade #将系统升级到新版本
 </code></pre><h3 id="4-杂项"><a href="#4-杂项" class="headerlink" title="4.杂项"></a>4.杂项</h3><p>由于kali linux没有打开终端的快捷键，不是很方便，所以到设置里面添加一个。我设置的快捷键和windows一样，也是<strong>win+R</strong></p>
 <p><img src="https://i.imgur.com/AdeM2tf.png" alt=""><br><img src="https://i.imgur.com/IB9o0fw.png" alt=""><br><img src="https://i.imgur.com/hzksyWJ.png" alt=""><br><img src="https://i.imgur.com/fsREx9K.png" alt=""></p>
 <p>名称随便取，<strong>gnome-terminal</strong>就是打开终端的命令，<strong>Super</strong>就是 <strong>win</strong> 键</p>
+<h3 id="5-输入法"><a href="#5-输入法" class="headerlink" title="5.输入法"></a>5.输入法</h3><p>本以为输入法也是一个大坑，应该要弄很久，结果安装过程也是出奇的顺利(虽然还是遇到小坑了)，哈哈可能是老天爷见我踩这么多坑也看不过去了。我安装的是搜狗输入法，参考了这篇<a href="https://blog.csdn.net/haodong_cc/article/details/80362495" target="_blank" rel="noopener"><strong>教程</strong></a>。</p>
+<p>首先用<strong>apt-get install fcitx</strong>命令安装<strong>fcitx</strong>，再用<strong>apt-get install fcitx-libs-qt</strong>安装<strong>fcitx-libs-qt</strong>。然后到搜狗<a href="https://pinyin.sogou.com/linux/?r=pinyin" target="_blank" rel="noopener"><strong>官网</strong></a>去下载对应的linux系统的输入法安装包，我当然下载32bit的。我第一次下载安装包的时候直接用linux系统进了官网下载安装包，结果是损坏的，根据那篇教程试了一下在物理机下载安装包再复制到虚拟机里面，就不会损坏文件了。</p>
+<p>在用<strong>dpkg -i （软件包名称）</strong>遇到如下情况就直接输入提示里面的命令就行了，最后再运行一遍<strong>dpkg -i （软件包名称）</strong> 就安装成功了。重启后在应用程序里面搜索<strong>fcitx</strong>，进入fcitx配置，就可以看到搜狗输入法了(图里的broken前面少打一个短横线- -)</p>
+<p><img src="https://i.imgur.com/QSKbhpj.png" alt=""></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjjwusnth0002m8obemx5a4n8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjjwxeo1c0001zsoblf184zie" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/other/">other</a></li></ul>
