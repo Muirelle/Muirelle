@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8">
   
-  <title>设置栈段时栈内数据改变 | Muirelle的博客</title>
+  <title>实验8-分析一个奇怪的程序 | Muirelle的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近学习汇编时遇到一个问题一直没能解决，现在先记录一下。 我遇到的问题和这个差不多http://tieba.baidu.com/p/1944917683 下面详细说一下  我在debug程序的时候想查看一下栈段的内容，结果发现栈里的数据和一开始设置的内容不一样，下面是程序代码 assume cs:code,ds:data,ss:stack  data segment     dw 0123H,04">
+  <meta name="description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。 下面是题目  分析下面程序，在运行前思考：这个程序可以正确返回吗？ 运行后再思考：为什么是这种结果？ 通过这个程序加深对相关内容的理解。 assume cs:codesg  codesg segment          mov ax,4c00h">
 <meta name="keywords" content="汇编">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设置栈段时栈内数据改变">
-<meta property="og:url" content="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/index.html">
+<meta property="og:title" content="实验8-分析一个奇怪的程序">
+<meta property="og:url" content="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="最近学习汇编时遇到一个问题一直没能解决，现在先记录一下。 我遇到的问题和这个差不多http://tieba.baidu.com/p/1944917683 下面详细说一下  我在debug程序的时候想查看一下栈段的内容，结果发现栈里的数据和一开始设置的内容不一样，下面是程序代码 assume cs:code,ds:data,ss:stack  data segment     dw 0123H,04">
+<meta property="og:description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。 下面是题目  分析下面程序，在运行前思考：这个程序可以正确返回吗？ 运行后再思考：为什么是这种结果？ 通过这个程序加深对相关内容的理解。 assume cs:codesg  codesg segment          mov ax,4c00h">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.imgur.com/WABb8l1.png">
-<meta property="og:image" content="https://i.imgur.com/wRAadNn.png">
-<meta property="og:updated_time" content="2018-08-07T09:27:54.282Z">
+<meta property="og:image" content="https://i.imgur.com/xF2sOwF.png">
+<meta property="og:updated_time" content="2018-08-10T04:06:22.997Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="设置栈段时栈内数据改变">
-<meta name="twitter:description" content="最近学习汇编时遇到一个问题一直没能解决，现在先记录一下。 我遇到的问题和这个差不多http://tieba.baidu.com/p/1944917683 下面详细说一下  我在debug程序的时候想查看一下栈段的内容，结果发现栈里的数据和一开始设置的内容不一样，下面是程序代码 assume cs:code,ds:data,ss:stack  data segment     dw 0123H,04">
-<meta name="twitter:image" content="https://i.imgur.com/WABb8l1.png">
+<meta name="twitter:title" content="实验8-分析一个奇怪的程序">
+<meta name="twitter:description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。 下面是题目  分析下面程序，在运行前思考：这个程序可以正确返回吗？ 运行后再思考：为什么是这种结果？ 通过这个程序加深对相关内容的理解。 assume cs:codesg  codesg segment          mov ax,4c00h">
+<meta name="twitter:image" content="https://i.imgur.com/xF2sOwF.png">
   
     <link rel="alternate" href="/atom.xml" title="Muirelle的博客" type="application/atom+xml">
   
@@ -68,10 +67,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-设置栈段时栈内数据改变" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-实验8-分析一个奇怪的程序" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/08/07/设置栈段时栈内数据改变/" class="article-date">
-  <time datetime="2018-08-07T08:30:46.000Z" itemprop="datePublished">2018-08-07</time>
+    <a href="/2018/08/10/实验8-分析一个奇怪的程序/" class="article-date">
+  <time datetime="2018-08-10T02:38:11.000Z" itemprop="datePublished">2018-08-10</time>
 </a>
     
   </div>
@@ -82,7 +81,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      设置栈段时栈内数据改变
+      实验8-分析一个奇怪的程序
     </h1>
   
 
@@ -90,54 +89,50 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近学习汇编时遇到一个问题一直没能解决，现在先记录一下。</p>
-<p>我遇到的问题和这个差不多<a href="http://tieba.baidu.com/p/1944917683" target="_blank" rel="noopener">http://tieba.baidu.com/p/1944917683</a></p>
-<p>下面详细说一下</p>
+        <p><em>来源：王爽《汇编语言》第九章 实验8 p187</em></p>
+<p>学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。</p>
+<p>下面是题目</p>
 <hr>
-<p>我在debug程序的时候想查看一下栈段的内容，结果发现栈里的数据和一开始设置的内容不一样，下面是程序代码</p>
-<pre><code>assume cs:code,ds:data,ss:stack
+<p>分析下面程序，在运行前思考：这个程序可以正确返回吗？</p>
+<p>运行后再思考：为什么是这种结果？</p>
+<p>通过这个程序加深对相关内容的理解。</p>
+<pre><code>assume cs:codesg
 
-data segment
-    dw 0123H,0456H,0789H,0ABCH,0DEFH,0CBAH,0987H
-data ends
+codesg segment
 
-stack segment
-    dw 0,0,0,0,0,0,0,0
-stack ends
+        mov ax,4c00h
+        int 21h
 
-code segment
-    start:
-        mov ax,stack
-        mov ss,ax
-        mov sp,16
+start:  mov ax,0
+s:      nop
+        nop
 
-        mov ax,data
-        mov ds,ax
+        mov di,offset s
+        mov si,offset s2
+        mov ax,cs:[si]
+        mov cs:[di],ax
 
-        push ds:[0]
-        push ds:[2]
+s0:     jmp short s
 
+s1:     mov ax,0
+        int 21h
+        mov ax,0
 
-        mov ax,4c00H
-        int 21H
-code ends
+s2:     jmp short s1
+        nop
 
+codesg ends
 end start
-</code></pre><p>进入debug调试，这时查看内存的内容。红框对应<strong>数据段</strong>，蓝框对应<strong>栈段</strong>。这时数据段，栈段数据和设置的一样。<br><img src="https://i.imgur.com/WABb8l1.png" alt=""></p>
-<p>接着用t命令单步执行，当执行到mov ss,ax时，栈段内数据已经改变</p>
-<p><img src="https://i.imgur.com/wRAadNn.png" alt=""></p>
-<p>其中0b3c=ss，0008=ip，0b3d=cs，0547还不知道是什么。</p>
-<p>网上比较能让我明白的解释是</p>
-<p><strong>“debug里的－t是单步中断指令，每执行一条指令产生一个中断（其实是执行其他指令－打印，否则－t后你怎么会看到各寄存器的值），但是要进行现场保护，即把子函数要用到的寄存器全部进栈，所以出现了以上结果”</strong></p>
-<p>可是这样就有一些新的问题：</p>
-<p>如果我不设置栈段，这些数据会存放到哪里？</p>
-<p>如果系统可以将这些数据存放到其他地方，那为什么还要占用我设置的栈段？难道说我手动设置的栈段优先级高一些吗。。。。</p>
-<p>先挖个坑在这儿，等哪天了解清楚了再来填这个坑。。。</p>
+</code></pre><hr>
+<p>一开始的思路是顺着代码一步一步走的，想着既然jmp short s1，那就直接从s1开始继续往下执行呗，遇到int 21h中断指令后就顺理成章的认为程序不能正确返回。保险起见，把代码编译运行之后，发现第二次运行到s处的时候(也就是执行jmp short s1)并没有直接跳转到s1处，而是往上跳到了mov ax,4c00h然后程序正常返回了。。惊呆了。。</p>
+<p>翻了一下前面几页看到了之前没有特别在意的“jmp指令是根据位移进行跳转的”，然后就恍然大悟了。。</p>
+<p>下图是解题的大致思路</p>
+<p><img src="https://i.imgur.com/xF2sOwF.png" alt=""></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjkndvfpv0009koobsl31amn7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjkndvfp00000koobgrbjbjuj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
@@ -148,19 +143,10 @@ end start
     
 <nav id="article-nav">
   
-    <a href="/2018/08/10/实验8-分析一个奇怪的程序/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          实验8-分析一个奇怪的程序
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/07/22/kali-Linux虚拟机初始配置/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/08/07/设置栈段时栈内数据改变/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">kali Linux虚拟机初始配置</div>
+      <div class="article-nav-title">设置栈段时栈内数据改变</div>
     </a>
   
 </nav>

@@ -62,6 +62,83 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-实验8-分析一个奇怪的程序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/10/实验8-分析一个奇怪的程序/" class="article-date">
+  <time datetime="2018-08-10T02:38:11.000Z" itemprop="datePublished">2018-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/10/实验8-分析一个奇怪的程序/">实验8-分析一个奇怪的程序</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>来源：王爽《汇编语言》第九章 实验8 p187</em></p>
+<p>学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。</p>
+<p>下面是题目</p>
+<hr>
+<p>分析下面程序，在运行前思考：这个程序可以正确返回吗？</p>
+<p>运行后再思考：为什么是这种结果？</p>
+<p>通过这个程序加深对相关内容的理解。</p>
+<pre><code>assume cs:codesg
+
+codesg segment
+
+        mov ax,4c00h
+        int 21h
+
+start:  mov ax,0
+s:      nop
+        nop
+
+        mov di,offset s
+        mov si,offset s2
+        mov ax,cs:[si]
+        mov cs:[di],ax
+
+s0:     jmp short s
+
+s1:     mov ax,0
+        int 21h
+        mov ax,0
+
+s2:     jmp short s1
+        nop
+
+codesg ends
+end start
+</code></pre><hr>
+<p>一开始的思路是顺着代码一步一步走的，想着既然jmp short s1，那就直接从s1开始继续往下执行呗，遇到int 21h中断指令后就顺理成章的认为程序不能正确返回。保险起见，把代码编译运行之后，发现第二次运行到s处的时候(也就是执行jmp short s1)并没有直接跳转到s1处，而是往上跳到了mov ax,4c00h然后程序正常返回了。。惊呆了。。</p>
+<p>翻了一下前面几页看到了之前没有特别在意的“jmp指令是根据位移进行跳转的”，然后就恍然大悟了。。</p>
+<p>下图是解题的大致思路</p>
+<p><img src="https://i.imgur.com/xF2sOwF.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjkndvfp00000koobgrbjbjuj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-设置栈段时栈内数据改变" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/08/07/设置栈段时栈内数据改变/" class="article-date">
@@ -131,7 +208,7 @@ end start
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjkjhxi5t0000icob4zbv3t1u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjkndvfpv0009koobsl31amn7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
@@ -227,7 +304,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjkjhvpnj0000n8obmbg2xnui" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjkndvfq5000bkoobl5ynm7fr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
@@ -302,7 +379,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjkjhvpns0003n8obtiz45ott" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjkndvfpk0003koobh0cp3jvf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/">ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/misc/">misc</a></li></ul>
@@ -349,7 +426,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjkjhvpno0001n8obpczbpo0m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjkndvfpu0008koob07v5gjv2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -381,7 +458,7 @@ apt-get dist-upgrade #将系统升级到新版本
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ctf/" style="font-size: 10px;">ctf</a> <a href="/tags/misc/" style="font-size: 10px;">misc</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/汇编/" style="font-size: 10px;">汇编</a>
+      <a href="/tags/ctf/" style="font-size: 10px;">ctf</a> <a href="/tags/misc/" style="font-size: 10px;">misc</a> <a href="/tags/其他/" style="font-size: 10px;">其他</a> <a href="/tags/汇编/" style="font-size: 20px;">汇编</a>
     </div>
   </div>
 
@@ -401,6 +478,10 @@ apt-get dist-upgrade #将系统升级到新版本
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/08/10/实验8-分析一个奇怪的程序/">实验8-分析一个奇怪的程序</a>
+          </li>
         
           <li>
             <a href="/2018/08/07/设置栈段时栈内数据改变/">设置栈段时栈内数据改变</a>
