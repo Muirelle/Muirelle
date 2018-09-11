@@ -3,22 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>实验8-分析一个奇怪的程序 | Muirelle的博客</title>
+  <title>使用gdb调试的基本方法 | Muirelle的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。 下面是题目  分析下面程序，在运行前思考：这个程序可以正确返回吗？ 运行后再思考：为什么是这种结果？ 通过这个程序加深对相关内容的理解。 assume cs:codesg  codesg segment          mov ax,4c00h">
-<meta name="keywords" content="汇编">
+  <meta name="description" content="下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑ (gdb) file &amp;lt;文件名&amp;gt;    #加载被调试的可执行程序文件  (gdb) r(un)    #运行被调试的程序。若中途遇到断点则暂停在断点处  (gdb) c(ontinue) #继续执行被调试程序，直至下一个断点或程序结束  (gdb) b(reakpoint) &amp;lt;函">
+<meta name="keywords" content="其他">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实验8-分析一个奇怪的程序">
-<meta property="og:url" content="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/index.html">
+<meta property="og:title" content="使用gdb调试的基本方法">
+<meta property="og:url" content="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。 下面是题目  分析下面程序，在运行前思考：这个程序可以正确返回吗？ 运行后再思考：为什么是这种结果？ 通过这个程序加深对相关内容的理解。 assume cs:codesg  codesg segment          mov ax,4c00h">
+<meta property="og:description" content="下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑ (gdb) file &amp;lt;文件名&amp;gt;    #加载被调试的可执行程序文件  (gdb) r(un)    #运行被调试的程序。若中途遇到断点则暂停在断点处  (gdb) c(ontinue) #继续执行被调试程序，直至下一个断点或程序结束  (gdb) b(reakpoint) &amp;lt;函">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.imgur.com/xF2sOwF.png">
-<meta property="og:updated_time" content="2018-08-10T04:06:22.997Z">
+<meta property="og:updated_time" content="2018-09-11T10:07:26.585Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实验8-分析一个奇怪的程序">
-<meta name="twitter:description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。 下面是题目  分析下面程序，在运行前思考：这个程序可以正确返回吗？ 运行后再思考：为什么是这种结果？ 通过这个程序加深对相关内容的理解。 assume cs:codesg  codesg segment          mov ax,4c00h">
-<meta name="twitter:image" content="https://i.imgur.com/xF2sOwF.png">
+<meta name="twitter:title" content="使用gdb调试的基本方法">
+<meta name="twitter:description" content="下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑ (gdb) file &amp;lt;文件名&amp;gt;    #加载被调试的可执行程序文件  (gdb) r(un)    #运行被调试的程序。若中途遇到断点则暂停在断点处  (gdb) c(ontinue) #继续执行被调试程序，直至下一个断点或程序结束  (gdb) b(reakpoint) &amp;lt;函">
   
     <link rel="alternate" href="/atom.xml" title="Muirelle的博客" type="application/atom+xml">
   
@@ -67,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-实验8-分析一个奇怪的程序" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-使用gdb调试的基本方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/08/10/实验8-分析一个奇怪的程序/" class="article-date">
-  <time datetime="2018-08-10T02:38:11.000Z" itemprop="datePublished">2018-08-10</time>
+    <a href="/2018/09/11/使用gdb调试的基本方法/" class="article-date">
+  <time datetime="2018-09-11T10:05:12.000Z" itemprop="datePublished">2018-09-11</time>
 </a>
     
   </div>
@@ -81,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      实验8-分析一个奇怪的程序
+      使用gdb调试的基本方法
     </h1>
   
 
@@ -89,53 +87,61 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><em>来源：王爽《汇编语言》第九章 实验8 p187</em></p>
-<p>学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。</p>
-<p>下面是题目</p>
-<hr>
-<p>分析下面程序，在运行前思考：这个程序可以正确返回吗？</p>
-<p>运行后再思考：为什么是这种结果？</p>
-<p>通过这个程序加深对相关内容的理解。</p>
-<pre><code>assume cs:codesg
+        <p>下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑</p>
+<pre><code>(gdb) file &lt;文件名&gt;    #加载被调试的可执行程序文件
 
-codesg segment
+(gdb) r(un)    #运行被调试的程序。若中途遇到断点则暂停在断点处
 
-        mov ax,4c00h
-        int 21h
+(gdb) c(ontinue) #继续执行被调试程序，直至下一个断点或程序结束
 
-start:  mov ax,0
-s:      nop
-        nop
+(gdb) b(reakpoint) &lt;函数名&gt;/*&lt;地址名&gt;/&lt;行号&gt;#设置断点
 
-        mov di,offset s
-        mov si,offset s2
-        mov ax,cs:[si]
-        mov cs:[di],ax
+(gdb) d(elete breakpoint) &lt;断点的编号&gt; #删除断点
 
-s0:     jmp short s
+(gdb) si/ni #都是执行一行汇编源代码，si会进入函数，ni不会。
+这两个命令必须在有源代码调试信息的情况下才可以使用（GCC编译时使用“-g”参数）。
 
-s1:     mov ax,0
-        int 21h
-        mov ax,0
+(gdb) p(rint) &lt;变量名称&gt; #显示指定变量（临时变量或全局变量）的值
 
-s2:     jmp short s1
-        nop
+(gdb) help &lt;命令名称&gt; #GDB帮助命令，提供对GDB名种命令的解释说明
 
-codesg ends
-end start
-</code></pre><hr>
-<p>一开始的思路是顺着代码一步一步走的，想着既然jmp short s1，那就直接从s1开始继续往下执行呗，遇到int 21h中断指令后就顺理成章的认为程序不能正确返回。保险起见，把代码编译运行之后，发现第二次运行到s处的时候(也就是执行jmp short s1)并没有直接跳转到s1处，而是往上跳到了mov ax,4c00h然后程序正常返回了。。惊呆了。。</p>
-<p>翻了一下前面几页看到了之前没有特别在意的“jmp指令是根据位移进行跳转的”，然后就恍然大悟了。。</p>
-<p>下图是解题的大致思路</p>
-<p><img src="https://i.imgur.com/xF2sOwF.png" alt=""></p>
+(gdb) i(nfo) #显示各类信息，具体内容查阅“help i”
+
+(gdb) q(uit) #退出gdb
+
+(gdb) (e)x(amine)/{COUNT}{FMT}{SIZE} {ADDRESS}    #按照一定的格式打印内存地址处的数据
+    {COUNT}: 打印的数目，默认为1。
+    {FMT}: 打印的格式1，默认为上次使用的{FMT}: 
+    o(octal): 8进制整数
+    x(hex): 16进制整数
+    d(decimal): 10进制整数
+    u(unsigned decimal): 10进制非负整数
+    t(binary): 2进制整数
+    f(float): 浮点数
+    a(address): 输出相对于前面最近的符号的偏移
+    i(instruction): 输出地址处的汇编指令
+    c(char): 字符
+    s(string): c字符串(null-terminated string)
+    z(hex, zero padded on the left): 见说明
+    {SIZE}: 打印的字节数目，默认为上次使用的{SIZE}: 
+    b(byte): 1个字节
+    h(halfword): 2个字节
+    w(word): 4个字节
+    g(giant, 8 bytes): 8个字节
+    {ADDRESS}: 目标地址
+    比如：(gdb) x/3uh 0x54320 表示，从内存地址0x54320读取内容，h表示以双字节为一个单位，
+    3表示输出三个单位，u表示按无符号十进制显示。
+</code></pre><p>最后顺便说一下编译c文件的命令</p>
+<pre><code>gcc （需要编译的c源文件名）-o (编译后的可执行文件名)
+</code></pre><p>比如要把test.c编译成test，用gcc test.c -o test就可以了</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjlxjwn6h0004x8obja6yip8c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/" data-id="cjlxjwn6i0005x8obvbsvtvt3" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
 
     </footer>
   </div>
@@ -143,19 +149,10 @@ end start
     
 <nav id="article-nav">
   
-    <a href="/2018/09/11/使用gdb调试的基本方法/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          使用gdb调试的基本方法
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/08/07/设置栈段时栈内数据改变/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/08/10/实验8-分析一个奇怪的程序/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">设置栈段时栈内数据改变</div>
+      <div class="article-nav-title">实验8-分析一个奇怪的程序</div>
     </a>
   
 </nav>
