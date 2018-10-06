@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://i.imgur.com/6PN7c3h.png">
 <meta property="og:image" content="https://i.imgur.com/BAWzxYv.png">
 <meta property="og:image" content="https://i.imgur.com/9Vo93dm.png">
-<meta property="og:updated_time" content="2018-10-06T03:38:59.714Z">
+<meta property="og:updated_time" content="2018-10-06T03:43:58.395Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x0F-ret2libc">
 <meta name="twitter:description" content="接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。 同样翻来覆去看了很多遍，可能比上个视频看的次数还多，但是一直没理解透彻，这两天又拿出来看了几遍，不知道为什么就豁然开朗了，，，赶紧趁热写进博客。 视频链接：http://liveoverflow.com/binary_hacking/ 下面是题目  Protostar Stack6AboutStack6 looks at what">
@@ -161,7 +161,7 @@ int main()
 <p><img src="https://i.imgur.com/SLCfmFW.png" alt=""></p>
 <p>可以看到在调用foo()之前已经将参数压入栈顶，然后在调用foo()时会把返回值也压入栈中，foo函数也有自己的栈帧，所以紧接着的命令就是<strong>push ebp</strong>，最后栈就变成了这个样子：</p>
 <p><img src="https://i.imgur.com/mMH8TcG.png" alt=""></p>
-<p>可见,原来的ebp(红框)，返回地址(蓝框)，参数(绿框)依次排列在栈中，参数的位置就是<strong>ebp+0x8</strong>，这只是传了一个参数的函数，多个参数就以此类推，<strong>ebp+0xc</strong>，<strong>ebp+0x10</strong>。就算是libc函数system也不例外，system只接收一个参数，所以可以确定/bin/sh放置的位置就是<strong>ebp+0x8</strong></p>
+<p>可见,原来的ebp(红框)，返回地址(蓝框)，参数(绿框)依次排列在栈中，参数的位置就是<strong>ebp+0x8</strong>，这只是传了一个参数的函数，多个参数就以此类推，<strong>ebp+0xc</strong>，<strong>ebp+0x10</strong>。就算是libc中的system函数也不例外，system只接收一个参数，所以可以确定/bin/sh放置的位置就是<strong>ebp+0x8</strong></p>
 <p>下面是思路</p>
 <p><img src="https://i.imgur.com/KXYHfXc.jpg" alt=""></p>
 <p>所以现在只需要找到system和/bin/sh的地址就行了</p>
@@ -181,7 +181,7 @@ print padding + system + return_after_system + bin_sh
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/" data-id="cjmwvqz8h00014oobsp2zljn2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/" data-id="cjmww9q100004b8obxcgwba3i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li></ul>

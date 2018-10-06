@@ -148,7 +148,7 @@ int main()
 <p><img src="https://i.imgur.com/SLCfmFW.png" alt=""></p>
 <p>可以看到在调用foo()之前已经将参数压入栈顶，然后在调用foo()时会把返回值也压入栈中，foo函数也有自己的栈帧，所以紧接着的命令就是<strong>push ebp</strong>，最后栈就变成了这个样子：</p>
 <p><img src="https://i.imgur.com/mMH8TcG.png" alt=""></p>
-<p>可见,原来的ebp(红框)，返回地址(蓝框)，参数(绿框)依次排列在栈中，参数的位置就是<strong>ebp+0x8</strong>，这只是传了一个参数的函数，多个参数就以此类推，<strong>ebp+0xc</strong>，<strong>ebp+0x10</strong>。就算是libc函数system也不例外，system只接收一个参数，所以可以确定/bin/sh放置的位置就是<strong>ebp+0x8</strong></p>
+<p>可见,原来的ebp(红框)，返回地址(蓝框)，参数(绿框)依次排列在栈中，参数的位置就是<strong>ebp+0x8</strong>，这只是传了一个参数的函数，多个参数就以此类推，<strong>ebp+0xc</strong>，<strong>ebp+0x10</strong>。就算是libc中的system函数也不例外，system只接收一个参数，所以可以确定/bin/sh放置的位置就是<strong>ebp+0x8</strong></p>
 <p>下面是思路</p>
 <p><img src="https://i.imgur.com/KXYHfXc.jpg" alt=""></p>
 <p>所以现在只需要找到system和/bin/sh的地址就行了</p>
@@ -168,7 +168,7 @@ print padding + system + return_after_system + bin_sh
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/" data-id="cjmwvqz8h00014oobsp2zljn2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/" data-id="cjmww9q100004b8obxcgwba3i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li></ul>
@@ -269,7 +269,7 @@ print padding + ret + nop + payload
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/03/Liveoverflow-0x0E-Shellcode/" data-id="cjmwvqz8l00034oobr56pu0dy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/03/Liveoverflow-0x0E-Shellcode/" data-id="cjmww9q0q0000b8obrrmpi9mp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li></ul>
@@ -354,7 +354,7 @@ print padding + ret + nop + payload
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/" data-id="cjmwvqz8z000g4oobyyl2arxz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/" data-id="cjmww9q14000ab8obwno5yyjk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
@@ -431,7 +431,7 @@ end start
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjmwvqz8y000f4oobd1lj8bud" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/实验8-分析一个奇怪的程序/" data-id="cjmww9q130008b8ob338pvszy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
@@ -512,7 +512,7 @@ end start
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjmwvqz91000i4oob0p46ib1z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/07/设置栈段时栈内数据改变/" data-id="cjmww9q16000cb8obhmvx8xts" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
@@ -608,7 +608,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjmwvqz8m00044oobw9u6e8gv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjmww9q110005b8obe6g8yiso" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
@@ -683,7 +683,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjmwvqz8a00004oob6d92926k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/18/bugku隐写2/" data-id="cjmww9q0v0001b8obhsdd666a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/">ctf</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/misc/">misc</a></li></ul>
@@ -730,7 +730,7 @@ apt-get dist-upgrade #将系统升级到新版本
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjmwvqz8n00054oob26n4jb6u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/12/hello-world/" data-id="cjmww9q0y0003b8ob8r5hiqq0" class="article-share-link">Share</a>
       
       
     </footer>
