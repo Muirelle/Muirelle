@@ -1,18 +1,92 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+
+
+
   
-  <title>kali Linux虚拟机初始配置 | Muirelle的博客</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="其他," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。">
 <meta name="keywords" content="其他">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kali Linux虚拟机初始配置">
 <meta property="og:url" content="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.imgur.com/edJDkHU.png">
 <meta property="og:image" content="https://i.imgur.com/YUgUWNx.png">
 <meta property="og:image" content="https://i.imgur.com/wP5IyPi.png">
@@ -26,84 +100,244 @@
 <meta property="og:image" content="https://i.imgur.com/hzksyWJ.png">
 <meta property="og:image" content="https://i.imgur.com/fsREx9K.png">
 <meta property="og:image" content="https://i.imgur.com/QSKbhpj.png">
-<meta property="og:updated_time" content="2018-08-07T08:31:52.849Z">
+<meta property="og:updated_time" content="2018-10-07T03:06:56.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali Linux虚拟机初始配置">
-<meta name="twitter:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。 好了，不说废话。 1.虚拟机一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载VMware w">
+<meta name="twitter:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。">
 <meta name="twitter:image" content="https://i.imgur.com/edJDkHU.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/"/>
+
+
+
+
+
+  <title>kali Linux虚拟机初始配置 | Muirelle的博客</title>
   
-    <link rel="alternate" href="/atom.xml" title="Muirelle的博客" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="D:\Hexo\blog\themes\landscape\source\css\images\favicon.ico">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
+
+
+
+
+
+
+
 
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Muirelle的博客</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-kali-Linux虚拟机初始配置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/22/kali-Linux虚拟机初始配置/" class="article-date">
-  <time datetime="2018-07-22T02:30:52.000Z" itemprop="datePublished">2018-07-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
   
-    <h1 class="article-title" itemprop="name">
-      kali Linux虚拟机初始配置
-    </h1>
+  
+    
   
 
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">kali Linux虚拟机初始配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-22T10:30:52+08:00">
+                2018-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
       
         <p>弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。</p>
+<a id="more"></a>
 <p>好了，不说废话。</p>
-<h3 id="1-虚拟机"><a href="#1-虚拟机" class="headerlink" title="1.虚拟机"></a>1.虚拟机</h3><p>一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载<strong><a href="https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html" target="_blank" rel="noopener">VMware workstation</a></strong>，结果下成了VMware Player也就是VMware workstation的缩水版，而且很长一段时间都没发觉。就一直没有用到快照功能，每次配置文件出错了改不回去就只能重装系统，很难受。</p>
+<h1 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h1><p>一开始虚拟机这个地方就出了问题，因为在下载虚拟机的时候没注意看，本来应该下载<strong><a href="https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html" target="_blank" rel="noopener">VMware workstation</a></strong>，结果下成了VMware Player也就是VMware workstation的缩水版，而且很长一段时间都没发觉。就一直没有用到快照功能，每次配置文件出错了改不回去就只能重装系统，很难受。</p>
 <p>顺便贴一点VMware workstation的激活密钥</p>
 <pre><code>CG54H-D8D0H-H8DHY-C6X7X-N2KG6
 
@@ -115,7 +349,7 @@ ZC5XK-A6E0M-080XQ-04ZZG-YF08D
 
 ZY5H0-D3Y8K-M89EZ-AYPEG-MYUA8
 </code></pre><p>之后是kali linux的镜像，到<strong><a href="https://www.kali.org/downloads/" target="_blank" rel="noopener">官网</a></strong>上面去下载就行了，我用kali linux x64的版本一直不能安装vmtools，最后只好选择x86版本了。紧接着就是系统初始安装，网上也有很多教程，这里直接贴出来<strong><a href="https://jingyan.baidu.com/article/380abd0a1d066a1d91192c5c.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/380abd0a1d066a1d91192c5c.html</a></strong></p>
-<h3 id="2-VMware-tools的安装"><a href="#2-VMware-tools的安装" class="headerlink" title="2.VMware tools的安装"></a>2.VMware tools的安装</h3><p>被这东西折磨了许久…感觉要安装好也是要看人品的。第一次本来安装好了结果是在VMware player里面，无奈只好在VMware workstation里面再安一次。结果提示安装好了之后却没有任何作用，网上找了各种办法也没用，无奈只好重新安一遍虚拟机（忘了照快照了- -），下面再详细说一下安装vmtools的步骤和坑。</p>
+<h1 id="VMware-tools的安装"><a href="#VMware-tools的安装" class="headerlink" title="VMware tools的安装"></a>VMware tools的安装</h1><p>被这东西折磨了许久…感觉要安装好也是要看人品的。第一次本来安装好了结果是在VMware player里面，无奈只好在VMware workstation里面再安一次。结果提示安装好了之后却没有任何作用，网上找了各种办法也没用，无奈只好重新安一遍虚拟机（忘了照快照了- -），下面再详细说一下安装vmtools的步骤和坑。</p>
 <p>打开虚拟机后点击<strong>虚拟机</strong>，再点<strong>安装VMware tools</strong>，虚拟机里面就生成了一个文件</p>
 <p><img src="https://i.imgur.com/edJDkHU.png" alt=""></p>
 <p><img src="https://i.imgur.com/YUgUWNx.png" alt=""></p>
@@ -128,7 +362,7 @@ ZY5H0-D3Y8K-M89EZ-AYPEG-MYUA8
 <p>最后显示如下的话就说明安装完成了</p>
 <p><img src="https://i.imgur.com/YkV3Qck.png" alt=""></p>
 <p>如果这时VMware tools还不生效的话，用命令reboot重启一下应该就可以了</p>
-<h3 id="3-Kali源的配置以及更新"><a href="#3-Kali源的配置以及更新" class="headerlink" title="3.Kali源的配置以及更新"></a>3.Kali源的配置以及更新</h3><p>配置源这一块照理来说应该是很简单的，就直接在网上复制粘贴就行了，可它就是硬生生的卡了我好久，说到底其实是不会用vim编辑器…</p>
+<h1 id="Kali源的配置以及更新"><a href="#Kali源的配置以及更新" class="headerlink" title="Kali源的配置以及更新"></a>Kali源的配置以及更新</h1><p>配置源这一块照理来说应该是很简单的，就直接在网上复制粘贴就行了，可它就是硬生生的卡了我好久，说到底其实是不会用vim编辑器…</p>
 <p>先把我用的源贴出来</p>
 <pre><code>#中科大源
 
@@ -152,146 +386,391 @@ deb http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
 apt-get upgrade #更新所有已安装的软件包(真正更新系统)
 
 apt-get dist-upgrade #将系统升级到新版本
-</code></pre><h3 id="4-杂项"><a href="#4-杂项" class="headerlink" title="4.杂项"></a>4.杂项</h3><p>由于kali linux没有打开终端的快捷键，不是很方便，所以到设置里面添加一个。我设置的快捷键和windows一样，也是<strong>win+R</strong></p>
+</code></pre><h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>由于kali linux没有打开终端的快捷键，不是很方便，所以到设置里面添加一个。我设置的快捷键和windows一样，也是<strong>win+R</strong></p>
 <p><img src="https://i.imgur.com/AdeM2tf.png" alt=""><br><img src="https://i.imgur.com/IB9o0fw.png" alt=""><br><img src="https://i.imgur.com/hzksyWJ.png" alt=""><br><img src="https://i.imgur.com/fsREx9K.png" alt=""></p>
 <p>名称随便取，<strong>gnome-terminal</strong>就是打开终端的命令，<strong>Super</strong>就是 <strong>win</strong> 键</p>
-<h3 id="5-输入法"><a href="#5-输入法" class="headerlink" title="5.输入法"></a>5.输入法</h3><p>本以为输入法也是一个大坑，应该要弄很久，结果安装过程也是出奇的顺利(虽然还是遇到小坑了)，哈哈可能是老天爷见我踩这么多坑也看不过去了。我安装的是搜狗输入法，参考了这篇<a href="https://blog.csdn.net/haodong_cc/article/details/80362495" target="_blank" rel="noopener"><strong>教程</strong></a>。</p>
+<h1 id="输入法"><a href="#输入法" class="headerlink" title="输入法"></a>输入法</h1><p>本以为输入法也是一个大坑，应该要弄很久，结果安装过程也是出奇的顺利(虽然还是遇到小坑了)，哈哈可能是老天爷见我踩这么多坑也看不过去了。我安装的是搜狗输入法，参考了这篇<a href="https://blog.csdn.net/haodong_cc/article/details/80362495" target="_blank" rel="noopener"><strong>教程</strong></a>。</p>
 <p>首先用<strong>apt-get install fcitx</strong>命令安装<strong>fcitx</strong>，再用<strong>apt-get install fcitx-libs-qt</strong>安装<strong>fcitx-libs-qt</strong>。然后到搜狗<a href="https://pinyin.sogou.com/linux/?r=pinyin" target="_blank" rel="noopener"><strong>官网</strong></a>去下载对应的linux系统的输入法安装包，我当然下载32bit的。我第一次下载安装包的时候直接用linux系统进了官网下载安装包，结果是损坏的，根据那篇教程试了一下在物理机下载安装包再复制到虚拟机里面，就不会损坏文件了。</p>
 <p>在用<strong>dpkg -i （软件包名称）</strong>遇到如下情况就直接输入提示里面的命令就行了，最后再运行一遍<strong>dpkg -i （软件包名称）</strong> 就安装成功了。重启后在应用程序里面搜索<strong>fcitx</strong>，进入fcitx配置，就可以看到搜狗输入法了(图里的broken前面少打一个短横线- -)</p>
 <p><img src="https://i.imgur.com/QSKbhpj.png" alt=""></p>
 
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/22/kali-Linux虚拟机初始配置/" data-id="cjmwwc99500040sobskb4a9e1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/其他/">其他</a></li></ul>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/其他/" rel="tag"># 其他</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/18/bugku隐写2/" rel="next" title="bugku隐写2">
+                <i class="fa fa-chevron-left"></i> bugku隐写2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/07/设置栈段时栈内数据改变/" rel="prev" title="设置栈段时栈内数据改变">
+                设置栈段时栈内数据改变 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
     </footer>
   </div>
   
-    
-<nav id="article-nav">
   
-    <a href="/2018/08/07/设置栈段时栈内数据改变/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
         
-          设置栈段时栈内数据改变
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机"><span class="nav-number">1.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VMware-tools的安装"><span class="nav-number">2.</span> <span class="nav-text">VMware tools的安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kali源的配置以及更新"><span class="nav-number">3.</span> <span class="nav-text">Kali源的配置以及更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#杂项"><span class="nav-number">4.</span> <span class="nav-text">杂项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输入法"><span class="nav-number">5.</span> <span class="nav-text">输入法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
-    </a>
-  
-  
-    <a href="/2018/07/18/bugku隐写2/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">bugku隐写2</div>
-    </a>
-  
-</nav>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
 
   
-</article>
+</div>
 
-</section>
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
         
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Hacking/">Binary-Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/misc/">misc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/其他/">其他</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li></ul>
-    </div>
-  </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Binary-Hacking/" style="font-size: 20px;">Binary-Hacking</a> <a href="/tags/ctf/" style="font-size: 10px;">ctf</a> <a href="/tags/misc/" style="font-size: 10px;">misc</a> <a href="/tags/其他/" style="font-size: 20px;">其他</a> <a href="/tags/汇编/" style="font-size: 20px;">汇编</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li></ul>
-    </div>
-  </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/10/05/Liveoverflow-0x0F-ret2libc/">Liveoverflow-0x0F-ret2libc</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/03/Liveoverflow-0x0E-Shellcode/">Liveoverflow-0x0E-Shellcode</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/11/使用gdb调试的基本方法/">使用gdb调试的基本方法</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/10/实验8-分析一个奇怪的程序/">实验8-分析一个奇怪的程序</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/07/设置栈段时栈内数据改变/">设置栈段时栈内数据改变</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
-  
-</aside>
+
+
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 Muirelle<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
+    
 
   </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
