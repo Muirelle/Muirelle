@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://i.imgur.com/hzksyWJ.png">
 <meta property="og:image" content="https://i.imgur.com/fsREx9K.png">
 <meta property="og:image" content="https://i.imgur.com/QSKbhpj.png">
-<meta property="og:updated_time" content="2018-10-07T03:06:56.983Z">
+<meta property="og:updated_time" content="2018-10-17T14:58:41.325Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali Linux虚拟机初始配置">
 <meta name="twitter:description" content="弄了几天总算是把kali linux 的虚拟机的基本配置弄好了，对于我这个菜鸡来说感觉是期间能踩的坑都被我踩了一遍。配置各种东西的时候焦头烂额，弄完了成就感还是满满的。今天就写篇文章记录一下我期间遇到的各种坑还有各项参数是怎么配置的，防止我以后再要弄的时候又要在网上到处查资料。">
@@ -381,12 +381,8 @@ deb http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
 <p>最后变成这样，再输入<strong>:wq</strong>（注意包括冒号）保存并退出</p>
 <p><img src="https://i.imgur.com/xxA5dwe.png" alt=""></p>
 <p>源设置完成后，就可以用以下命令来更新软件包了,更新过程比较久，耐心等就行了，遇到需要操作的提示直接按回车就行。</p>
-<pre><code>apt-get update #更新软件包资源列表(没有对系统真正更新)
-
-apt-get upgrade #更新所有已安装的软件包(真正更新系统)
-
-apt-get dist-upgrade #将系统升级到新版本
-</code></pre><h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>由于kali linux没有打开终端的快捷键，不是很方便，所以到设置里面添加一个。我设置的快捷键和windows一样，也是<strong>win+R</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get update <span class="comment">#更新软件包资源列表(没有对系统真正更新)</span></span><br><span class="line"></span><br><span class="line">apt-get upgrade <span class="comment">#更新所有已安装的软件包(真正更新系统)</span></span><br><span class="line"></span><br><span class="line">apt-get dist-upgrade <span class="comment">#将系统升级到新版本</span></span><br></pre></td></tr></table></figure>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p>由于kali linux没有打开终端的快捷键，不是很方便，所以到设置里面添加一个。我设置的快捷键和windows一样，也是<strong>win+R</strong></p>
 <p><img src="https://i.imgur.com/AdeM2tf.png" alt=""><br><img src="https://i.imgur.com/IB9o0fw.png" alt=""><br><img src="https://i.imgur.com/hzksyWJ.png" alt=""><br><img src="https://i.imgur.com/fsREx9K.png" alt=""></p>
 <p>名称随便取，<strong>gnome-terminal</strong>就是打开终端的命令，<strong>Super</strong>就是 <strong>win</strong> 键</p>
 <h1 id="输入法"><a href="#输入法" class="headerlink" title="输入法"></a>输入法</h1><p>本以为输入法也是一个大坑，应该要弄很久，结果安装过程也是出奇的顺利(虽然还是遇到小坑了)，哈哈可能是老天爷见我踩这么多坑也看不过去了。我安装的是搜狗输入法，参考了这篇<a href="https://blog.csdn.net/haodong_cc/article/details/80362495" target="_blank" rel="noopener"><strong>教程</strong></a>。</p>
@@ -512,7 +508,7 @@ apt-get dist-upgrade #将系统升级到新版本
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

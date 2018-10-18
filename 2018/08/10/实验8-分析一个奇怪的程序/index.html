@@ -88,7 +88,7 @@
 <meta property="og:description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.imgur.com/xF2sOwF.png">
-<meta property="og:updated_time" content="2018-10-07T03:08:27.743Z">
+<meta property="og:updated_time" content="2018-10-17T14:55:19.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="实验8-分析一个奇怪的程序">
 <meta name="twitter:description" content="来源：王爽《汇编语言》第九章 实验8 p187 学到jmp指令的时候发现这个实验8很有意思，分析完程序之后对jmp指令的理解会更深一点。">
@@ -330,34 +330,8 @@
 <p>分析下面程序，在运行前思考：这个程序可以正确返回吗？</p>
 <p>运行后再思考：为什么是这种结果？</p>
 <p>通过这个程序加深对相关内容的理解。</p>
-<pre><code>assume cs:codesg
-
-codesg segment
-
-        mov ax,4c00h
-        int 21h
-
-start:  mov ax,0
-s:      nop
-        nop
-
-        mov di,offset s
-        mov si,offset s2
-        mov ax,cs:[si]
-        mov cs:[di],ax
-
-s0:     jmp short s
-
-s1:     mov ax,0
-        int 21h
-        mov ax,0
-
-s2:     jmp short s1
-        nop
-
-codesg ends
-end start
-</code></pre><hr>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">   assume 	cs:codesg</span><br><span class="line"></span><br><span class="line">   codesg 	segment</span><br><span class="line"></span><br><span class="line">		<span class="keyword">mov</span> ax,<span class="number">4</span>c00h</span><br><span class="line">		int <span class="number">21</span>h</span><br><span class="line"></span><br><span class="line">	start:  <span class="keyword">mov</span> ax,<span class="number">0</span></span><br><span class="line">	s:      <span class="keyword">nop</span></span><br><span class="line">		<span class="keyword">nop</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">mov</span> di,offset s</span><br><span class="line">		<span class="keyword">mov</span> si,offset s2</span><br><span class="line">		<span class="keyword">mov</span> ax,cs:[si]</span><br><span class="line">		<span class="keyword">mov</span> cs:[di],ax</span><br><span class="line"></span><br><span class="line"><span class="symbol">s0:</span>	 	<span class="keyword">jmp</span> short s</span><br><span class="line"></span><br><span class="line"><span class="symbol">s1:</span>	 	<span class="keyword">mov</span> ax,<span class="number">0</span></span><br><span class="line">		int <span class="number">21</span>h</span><br><span class="line">		<span class="keyword">mov</span> ax,<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">s2:</span>	 	<span class="keyword">jmp</span> short s1</span><br><span class="line">		<span class="keyword">nop</span></span><br><span class="line"></span><br><span class="line">codesg ends</span><br><span class="line">end start</span><br></pre></td></tr></table></figure>
+<hr>
 <p>一开始的思路是顺着代码一步一步走的，想着既然jmp short s1，那就直接从s1开始继续往下执行呗，遇到int 21h中断指令后就顺理成章的认为程序不能正确返回。保险起见，把代码编译运行之后，发现第二次运行到s处的时候(也就是执行jmp short s1)并没有直接跳转到s1处，而是往上跳到了mov ax,4c00h然后程序正常返回了。。惊呆了。。</p>
 <p>翻了一下前面几页看到了之前没有特别在意的“jmp指令是根据位移进行跳转的”，然后就恍然大悟了。。</p>
 <p>下图是解题的大致思路</p>
@@ -472,7 +446,7 @@ end start
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

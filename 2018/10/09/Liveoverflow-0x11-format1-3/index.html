@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://i.imgur.com/0oo5ERd.jpg">
 <meta property="og:image" content="https://i.imgur.com/hK3FWGF.png">
 <meta property="og:image" content="https://i.imgur.com/9dkSPmD.png">
-<meta property="og:updated_time" content="2018-10-13T07:25:06.808Z">
+<meta property="og:updated_time" content="2018-10-17T14:44:08.968Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x11-format1-3">
 <meta name="twitter:description" content="开始一个新部分的学习，Format。这次做的题目是format1，和之前题目类型差异很大，解题方法也完全不同，所以现在要转换思路，尽量对前面比较简单题目有透彻的理解。">
@@ -342,42 +342,16 @@
 <li>objdump -t is your friend, and your input string lies far up the stack :)</li>
 </ul>
 <p>This level is at /opt/protostar/bin/format1</p>
-<pre><code>#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-
-int target;
-
-void vuln(char *string)
-{
-  printf(string);
-
-  if(target) {
-      printf(&quot;you have modified the target :)\n&quot;);
-  }
-}
-
-int main(int argc, char **argv)
-{
-  vuln(argv[1]);
-}
-</code></pre><hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> target;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">(<span class="keyword">char</span> *<span class="built_in">string</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="built_in">string</span>);</span><br><span class="line">		</span><br><span class="line">  <span class="keyword">if</span>(target) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have modified the target :)\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  vuln(argv[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
 <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>先运行一下，运行时带上字符串参数，程序就会原样的将字符串打印出来，这也是预料之内的事。但是有一个问题，我们可以控制的是printf里的哪个参数？<br><img src="https://i.imgur.com/VvqynVS.png" alt=""><br><strong>man printf</strong>看一下<br><img src="https://i.imgur.com/2LBqcLs.png" alt=""></p>
 <p>再看一眼源码，显然我们控制的是第一个format string(格式化字符串)，这就意味着我们可以在要打印字符串里面加上一些格式化输出，比如%d，%x等。那就先试试%d，%x能打印出什么。<br><img src="https://i.imgur.com/6s1jtuR.png" alt="">%d打印的东西看不出什么蹊跷，但是%x打印的东西就非常熟悉了，经过前面几章的学习可以很容易联想到是栈地址。但是为什么会打印一些看似随机的地址？</p>
 <p>由于我们只控制了printf的第一个参数，而且也没有第二个参数，所以printf找不到需要被打印的内容的地址，所以就只有在栈里面随机找地址打印里面的内容。</p>
 <p>嗯，，然后呢？知道了这些信息有什么用？</p>
 <p><strong>man 3 printf</strong>看看有什么可用的信息。<br><img src="https://i.imgur.com/kfGP1rF.png" alt="">可以看到，手册里提醒我们如果printf里包含%n则可能造成安全隐患。</p>
 <p><img src="https://i.imgur.com/PXabIHL.png" alt="">意思是参数必须是一个整型指针，并且会把%n前面打印的所有字符个数写入这个地址。</p>
-<p>写个小程序测试一下</p>
-<pre><code>#include&lt;stdio.h&gt;
-int main()
-{
-        int a;
-        printf(&quot;abcd %n\n&quot;, &amp;a);
-        printf(&quot;a = %d\n&quot;, a);
-}
-</code></pre><p><img src="https://i.imgur.com/8X2M3sb.png" alt="">空格也算在内，没毛病</p>
+<p>写个小程序测试一下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"abcd %n\n"</span>, &amp;a);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"a = %d\n"</span>, a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/8X2M3sb.png" alt="">空格也算在内，没毛病</p>
 <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>再回顾一下题目，所以现在肯定是用%n将target的值覆盖掉。</p>
 <p>先找到target的地址 <strong>objdump -t ./format1 | grep “target”</strong><br><img src="https://i.imgur.com/90t2JVi.png" alt=""></p>
 <p>然后试着多打印点栈里的值<br><img src="https://i.imgur.com/n8D20eR.png" alt=""><br>后面一直重复出现的25782e其实就是 <strong>%x.</strong> 的ascii码，这样就有一个明确的思路了。如下图</p>
@@ -386,32 +360,8 @@ int main()
 <p><img src="https://i.imgur.com/hK3FWGF.png" alt=""><br>多次尝试后成功修改target的值</p>
 <p><strong>2018/10/12更新</strong></p>
 <h1 id="Protostar-Format2"><a href="#Protostar-Format2" class="headerlink" title="Protostar Format2"></a>Protostar Format2</h1><hr>
-<pre><code>#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-
-int target;
-
-void vuln()
-{
-  char buffer[512];
-
-  fgets(buffer, sizeof(buffer), stdin);
-  printf(buffer);
-
-  if(target == 64) {
-      printf(&quot;you have modified the target :)\n&quot;);
-  } else {
-      printf(&quot;target is %d :(\n&quot;, target);
-  }
-}
-
-int main(int argc, char **argv)
-{
-  vuln();
-}
-</code></pre><hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> target;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">512</span>];</span><br><span class="line"></span><br><span class="line">  fgets(buffer, <span class="keyword">sizeof</span>(buffer), <span class="built_in">stdin</span>);</span><br><span class="line">  <span class="built_in">printf</span>(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(target == <span class="number">64</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have modified the target :)\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"target is %d :(\n"</span>, target);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  vuln();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
 <p>format2和1差不多，只不过规定了target的值为64。</p>
 <p>找地址<br><img src="https://i.imgur.com/9dkSPmD.png" alt=""></p>
 <pre><code>user@protostar:/opt/protostar/bin$ python -c &quot;print &apos;%x &apos;*100&quot; | ./format2
@@ -446,38 +396,8 @@ you have modified the target :)
 </code></pre><p>成功修改</p>
 <p><strong>2018/10/13更新</strong></p>
 <h1 id="Protostar-Format3"><a href="#Protostar-Format3" class="headerlink" title="Protostar Format3"></a>Protostar Format3</h1><hr>
-<pre><code>#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-
-int target;
-
-void printbuffer(char *string)
-{
-  printf(string);
-}
-
-void vuln()
-{
-  char buffer[512];
-
-  fgets(buffer, sizeof(buffer), stdin);
-
-  printbuffer(buffer);
-
-  if(target == 0x01025544) {
-      printf(&quot;you have modified the target :)\n&quot;);
-  } else {
-      printf(&quot;target is %08x :(\n&quot;, target);
-  }
-}
-
-int main(int argc, char **argv)
-{
-  vuln();
-}
-</code></pre><hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> target;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printbuffer</span><span class="params">(<span class="keyword">char</span> *<span class="built_in">string</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="built_in">string</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">512</span>];</span><br><span class="line"></span><br><span class="line">  fgets(buffer, <span class="keyword">sizeof</span>(buffer), <span class="built_in">stdin</span>);</span><br><span class="line"></span><br><span class="line">  printbuffer(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(target == <span class="number">0x01025544</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have modified the target :)\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"target is %08x :(\n"</span>, target);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  vuln();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
 <p>这次题目要求将target覆盖为0x01025544，而%n一次只能写入一个字节，所以可以分多次写入。</p>
 <pre><code>user@protostar:/opt/protostar/bin$ objdump -t ./format3 | grep &quot;target&quot;
 080496f4 g     O .bss   00000004              target
@@ -542,6 +462,10 @@ you have modified the target :)
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/17/Liveoverflow-0x13-format4/" rel="prev" title="Liveoverflow-0x13-format4">
+                Liveoverflow-0x13-format4 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -618,7 +542,7 @@ you have modified the target :)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

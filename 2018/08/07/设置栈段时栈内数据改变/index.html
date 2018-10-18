@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.imgur.com/WABb8l1.png">
 <meta property="og:image" content="https://i.imgur.com/wRAadNn.png">
-<meta property="og:updated_time" content="2018-10-07T03:08:42.359Z">
+<meta property="og:updated_time" content="2018-10-17T14:56:58.037Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设置栈段时栈内数据改变">
 <meta name="twitter:description" content="最近学习汇编时遇到一个问题一直没能解决，现在先记录一下。 我遇到的问题和这个差不多http://tieba.baidu.com/p/1944917683">
@@ -329,35 +329,8 @@
 <p>下面详细说一下</p>
 <hr>
 <p>我在debug程序的时候想查看一下栈段的内容，结果发现栈里的数据和一开始设置的内容不一样，下面是程序代码</p>
-<pre><code>assume cs:code,ds:data,ss:stack
-
-data segment
-    dw 0123H,0456H,0789H,0ABCH,0DEFH,0CBAH,0987H
-data ends
-
-stack segment
-    dw 0,0,0,0,0,0,0,0
-stack ends
-
-code segment
-    start:
-        mov ax,stack
-        mov ss,ax
-        mov sp,16
-
-        mov ax,data
-        mov ds,ax
-
-        push ds:[0]
-        push ds:[2]
-
-
-        mov ax,4c00H
-        int 21H
-code ends
-
-end start
-</code></pre><p>进入debug调试，这时查看内存的内容。红框对应<strong>数据段</strong>，蓝框对应<strong>栈段</strong>。这时数据段，栈段数据和设置的一样。<br><img src="https://i.imgur.com/WABb8l1.png" alt=""></p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  assume cs:code,ds:data,ss:stack</span><br><span class="line"></span><br><span class="line">  data segment</span><br><span class="line">dw <span class="number">0123</span>H,<span class="number">0456</span>H,<span class="number">0789</span>H,<span class="number">0</span>ABCH,<span class="number">0</span>DEFH,<span class="number">0</span>CBAH,<span class="number">0987</span>H</span><br><span class="line">  data ends</span><br><span class="line"></span><br><span class="line">  stack segment</span><br><span class="line">dw <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line">  stack ends</span><br><span class="line"></span><br><span class="line">  code segment</span><br><span class="line"><span class="symbol">start:</span></span><br><span class="line">	<span class="keyword">mov</span> ax,stack</span><br><span class="line">	<span class="keyword">mov</span> ss,ax</span><br><span class="line">	<span class="keyword">mov</span> sp,<span class="number">16</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">mov</span> ax,data</span><br><span class="line">	<span class="keyword">mov</span> ds,ax</span><br><span class="line"></span><br><span class="line">	<span class="keyword">push</span> ds:[<span class="number">0</span>]</span><br><span class="line">	<span class="keyword">push</span> ds:[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="keyword">mov</span> ax,<span class="number">4</span>c00H</span><br><span class="line">	int <span class="number">21</span>H</span><br><span class="line">  code ends</span><br><span class="line"></span><br><span class="line">  end start</span><br></pre></td></tr></table></figure>
+<p>进入debug调试，这时查看内存的内容。红框对应<strong>数据段</strong>，蓝框对应<strong>栈段</strong>。这时数据段，栈段数据和设置的一样。<br><img src="https://i.imgur.com/WABb8l1.png" alt=""></p>
 <p>接着用t命令单步执行，当执行到mov ss,ax时，栈段内数据已经改变</p>
 <p><img src="https://i.imgur.com/wRAadNn.png" alt=""></p>
 <p>其中0b3c=ss，0008=ip，0b3d=cs，0547还不知道是什么。</p>
@@ -477,7 +450,7 @@ end start
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

