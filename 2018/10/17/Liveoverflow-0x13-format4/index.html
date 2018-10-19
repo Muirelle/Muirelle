@@ -90,8 +90,8 @@
 <meta property="og:image" content="https://i.imgur.com/8rDUqee.png">
 <meta property="og:image" content="https://i.imgur.com/70981yu.png">
 <meta property="og:image" content="https://i.imgur.com/kGYgYjN.png">
-<meta property="og:image" content="https://i.imgur.com/HjYJi7L.png">
-<meta property="og:updated_time" content="2018-10-18T13:12:32.572Z">
+<meta property="og:image" content="https://i.imgur.com/6f2GEQh.png">
+<meta property="og:updated_time" content="2018-10-19T04:48:18.682Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x13-format4">
 <meta name="twitter:description" content="format4， 运用了PLT和GOT的相关知识 这次的format4再加到前面的1-3后面有点太长了，不好翻，所以新开一篇，也因为这次用到了一些新的方法。">
@@ -343,7 +343,7 @@
 <p><img src="https://i.imgur.com/8rDUqee.png" alt=""><br>先找到了exit在plt中的地址<strong>0x80483ec</strong>，紧接着就跳转到了got中，got中的跳转地址就是plt的下一条指令(<strong>push 0x30</strong>)，plt最后一条指令<strong>jmp 0x804837c</strong>则是跳转到了plt的表头，用于执行<code>_dl_runtime_resolve</code>，这个函数才将真正的exit的地址写进<strong>0x8049724</strong>中。</p>
 <p><img src="https://i.imgur.com/70981yu.png" alt=""><br>在执行<code>_dl_runtime_resolve</code>后可以看到got中对应的值已经从开始的<strong>0x080483f2</strong>变为了真正的exit的地址<strong>0xb7ec60c0</strong></p>
 <p><img src="https://i.imgur.com/kGYgYjN.png" alt=""><br><strong>i proc mapping</strong>看一下，地址确实是位于libc库中，说明整个过程没问题。</p>
-<p>示意图如下<del>画的很好有没有</del><br><img src="https://i.imgur.com/HjYJi7L.png" alt=""></p>
+<p>示意图如下<br><img src="https://i.imgur.com/6f2GEQh.png" alt=""></p>
 <p>参考：</p>
 <p><strong><a href="https://www.cnblogs.com/pannengzhi/p/2018-04-09-about-got-plt.html" target="_blank" rel="noopener">https://www.cnblogs.com/pannengzhi/p/2018-04-09-about-got-plt.html</a></strong></p>
 <p><strong><a href="https://www.jianshu.com/p/0ac63c3744dd" target="_blank" rel="noopener">https://www.jianshu.com/p/0ac63c3744dd</a></strong></p>
