@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Binary-Hacking," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="把heap部分啃完之后终于来到net部分，与网络相关。需要多花时间理解。">
+<meta name="keywords" content="Binary-Hacking">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Liveoverflow-0x19-net0~2">
+<meta property="og:url" content="http://yoursite.com/2018/11/02/Liveoverflow-0x19-net0-2/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="把heap部分啃完之后终于来到net部分，与网络相关。需要多花时间理解。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/Y7vxXjy.png">
+<meta property="og:image" content="https://i.imgur.com/Dhz7pwB.png">
+<meta property="og:image" content="https://i.imgur.com/2DWkl1i.png">
+<meta property="og:image" content="https://i.imgur.com/pN8GcCd.png">
+<meta property="og:image" content="https://i.imgur.com/XDBSS5y.png">
+<meta property="og:image" content="https://i.imgur.com/caPKYbz.png">
+<meta property="og:image" content="https://i.imgur.com/ldKDVPw.png">
+<meta property="og:image" content="https://i.imgur.com/I7nKoDu.png">
+<meta property="og:image" content="https://i.imgur.com/vb3sdMD.png">
+<meta property="og:image" content="https://i.imgur.com/6xfYCgB.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/04/5bde923e24249.png">
+<meta property="og:updated_time" content="2018-11-04T06:56:48.325Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Liveoverflow-0x19-net0~2">
+<meta name="twitter:description" content="把heap部分啃完之后终于来到net部分，与网络相关。需要多花时间理解。">
+<meta name="twitter:image" content="https://i.imgur.com/Y7vxXjy.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/02/Liveoverflow-0x19-net0-2/"/>
+
+
+
+
+
+  <title>Liveoverflow-0x19-net0~2 | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/Liveoverflow-0x19-net0-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Liveoverflow-0x19-net0~2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-02T21:21:02+08:00">
+                2018-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>把heap部分啃完之后终于来到net部分，与网络相关。需要多花时间理解。</p>
+<a id="more"></a>
+<p>视频链接：<a href="http://liveoverflow.com/binary_hacking/" target="_blank" rel="noopener">http://liveoverflow.com/binary_hacking/</a></p>
+<p>net部分的题目说复杂也复杂，说简单也简单。复杂就复杂在对网络相关的socket部分的理解，虽然理解不是很深刻也能做题，但总觉得不爽。抛开网络这部分来说，题目本身是比较简单的。涉及到的面也比较窄(指protostar里面的题目)。</p>
+<hr>
+<h1 id="Protostar-Net0"><a href="#Protostar-Net0" class="headerlink" title="Protostar Net0"></a>Protostar Net0</h1><h2 id="About"><a href="#About" class="headerlink" title="About"></a>About</h2><p><strong>This level takes a look at converting strings to little endian integers.</strong></p>
+<p><strong>This level is at /opt/protostar/bin/net0</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"../common/common.c"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NAME <span class="meta-string">"net0"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UID 999</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GID 999</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PORT 2999</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> wanted;</span><br><span class="line"></span><br><span class="line">  wanted = random();</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"Please send '%d' as a little endian 32bit int\n"</span>, wanted);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(fread(&amp;i, <span class="keyword">sizeof</span>(i), <span class="number">1</span>, <span class="built_in">stdin</span>) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">      errx(<span class="number">1</span>, <span class="string">":(\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(i == wanted) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"Thank you sir/madam\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"I'm sorry, you sent %d instead\n"</span>, i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd;</span><br><span class="line">  <span class="keyword">char</span> *username;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Run the process as a daemon */</span></span><br><span class="line">  background_process(NAME, UID, GID); </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Wait for socket activity and return */</span></span><br><span class="line">  fd = serve_forever(PORT);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Set the client socket to STDIN, STDOUT, and STDERR */</span></span><br><span class="line">  set_io(fd);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Don't do this :&gt; */</span></span><br><span class="line">  srandom(time(<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">  run();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="铺垫"><a href="#铺垫" class="headerlink" title="铺垫"></a>铺垫</h1><p>先看源码，一开始分别定义了<strong>name</strong>，<strong>uid</strong>，<strong>gid</strong>和<strong>port</strong>。接着再看main函数，main函数中调用的前三个函数都是在程序一开始声明的头文件中，看作者给的注释可以大概了解这些函数的作用。</p>
+<p>首先，第一个函数的作用是将这个程序(就是net0)变为一个后台进程运行(又称<a href="https://en.wikipedia.org/wiki/Daemon_(computing" target="_blank" rel="noopener">daemon(守护进程)</a>))</p>
+<p><img src="https://i.imgur.com/Y7vxXjy.png" alt=""><br>所以可以看到无论怎么运行net0都没有反应</p>
+<p><img src="https://i.imgur.com/Dhz7pwB.png" alt=""><br><code>ps aux | grep net0</code>查看一下正在运行的程序，net0确实是在后台运行着的。</p>
+<p><img src="https://i.imgur.com/2DWkl1i.png" alt=""><br>用strace跟踪一下net0(需要先用su获得root权限，然后kill掉刚刚这个net0进程，root密码是<code>godmode</code>)。可以看到在结尾处调用了<code>clone</code>函数，<strong><code>clone</code>的作用简单说就是生下一个新的进程，新的进程就是这个进程的一个复制，并且返回值是这个新进程的pid</strong>。紧接着就调用了<code>exit</code>，将父进程终止了，留下一个刚刚创建的进程，又称为<a href="https://en.wikipedia.org/wiki/Orphan_process" target="_blank" rel="noopener">Orphan process(孤儿进程)</a>。而像这种故意制造的孤儿进程又被称为守护进程，就是刚刚提到的那个。</p>
+<p><img src="https://i.imgur.com/pN8GcCd.png" alt=""><br>既然有子进程就看看子进程到底干了什么，命令<code>strace</code>带上参数<code>-f</code>可以跟踪一个程序的子进程。如图，在子进程(红框)中，打开了文件<a href="https://en.wikipedia.org/wiki/Null_device" target="_blank" rel="noopener"><strong>/dev/null</strong></a>，<strong>任何写进它的数据都会被丢弃</strong>，所以被称为“黑洞”，图中将0(stdin标准输入)，1(stdout标准输出),2(stderr标准错误输出)都指向了这个黑洞。接下来这个子程序调用了<code>socket</code>，这意味着你将建立一个网络连接，通过socket中提供的各种参数你可以选择需要连接的类型。<strong>然后程序调用了<code>bind</code>，参数之一为端口号2999，这意味着如果操作系统接收到了一个想要与这个程序建立连接的数据包，它会将这个包连同里面的数据发送给这个程序。</strong>但是看到图中调用bind失败了，提示2999端口已经被占用了，嗯，因为之前我们已经运行了net0还没有kill掉，所以端口自然就被前一个net0占用了。把它kill掉，带上<code>-f</code>选项再运行一次。</p>
+<p><img src="https://i.imgur.com/XDBSS5y.png" alt=""><br>重新运行之后可以看到<code>bind</code>成功绑定了2999端口，接着调用了<code>listen</code>和<code>accept</code>，<code>listen</code>用于监听我们刚才打开的端口，<code>accept</code>等待用于连接的数据包。具体过程如下图</p>
+<p><img src="https://i.imgur.com/caPKYbz.png" alt=""><br>图源：<a href="https://realpython.com/python-sockets/" target="_blank" rel="noopener">https://realpython.com/python-sockets/</a></p>
+<p><img src="https://i.imgur.com/ldKDVPw.png" alt=""><br>接着用命令<code>netstat -plant | grep net0</code>查看一下，端口2999确实处于被net0监听的状态。</p>
+<p><img src="https://i.imgur.com/I7nKoDu.png" alt=""><br>再开一个终端，<code>nc 1270.0.1 2999</code>命令用于连接到刚才监听端口，可以把左边的终端看作服务器，右边的终端看作客户端。现在服务器正在执行<code>read</code>用于等待客户端发送的数据。</p>
+<p><img src="https://i.imgur.com/vb3sdMD.png" alt=""><br>随便发送一些数据，这时候服务器就要用到题目中的run函数来判断我们的数据是否满足要求，很明显不满足，所以返回显示我们输入不正确的字符串，并且断开连接，重新等待客户端与服务器建立连接。</p>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><p>有了前面大致的了解就可以开始做题了。题目要求我们把字符串转换为小端的整数。</p>
+<p><img src="https://i.imgur.com/6xfYCgB.png" alt=""><br>题目是简单的，两步就完了。但还是有些地方要注意。</p>
+<p>由于服务器发送的数据是随机的，所以我们没办法用<code>echo</code>和管道将数据发送给服务器，但是有一个小技巧，老朋友`cat。通过将cat嵌套进echo中，可以将输入的数据通过cat反射出来再通过echo发送给服务器，再加上-e参数，解释特殊字符，就行了。</p>
+<p>如果不好理解的话就写个脚本。<br><img src="https://i.loli.net/2018/11/04/5bde923e24249.png" alt=""><br>我们作为客户端，使用的函数和服务器端就稍有不同，我们设置好ip和端口(port)参数之后用<code>connect</code>函数主动和服务器进行连接，连接成功后用<code>send</code>发送数据，再用<code>recv</code>接收服务器传回的数据，以此来和服务器进行交互。</p>
+<p>上图中用正则表达式将服务器返回的字符串中我们需要的那个数字取出，这时数字还是字符串类型，所以转换为int类型之后再用<code>struct.pack</code>打包发送给服务器就行了。</p>
+<hr>
+<h1 id="Protostar-Net1"><a href="#Protostar-Net1" class="headerlink" title="Protostar Net1"></a>Protostar Net1</h1><h2 id="About-1"><a href="#About-1" class="headerlink" title="About"></a>About</h2><p><strong>This level tests the ability to convert binary integers into ascii representation.</strong></p>
+<p><strong>This level is at /opt/protostar/bin/net1</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"../common/common.c"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NAME <span class="meta-string">"net1"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UID 998</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GID 998</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PORT 2998</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buf[<span class="number">12</span>];</span><br><span class="line">  <span class="keyword">char</span> fub[<span class="number">12</span>];</span><br><span class="line">  <span class="keyword">char</span> *q;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> wanted;</span><br><span class="line"></span><br><span class="line">  wanted = random();</span><br><span class="line"></span><br><span class="line">  <span class="built_in">sprintf</span>(fub, <span class="string">"%d"</span>, wanted);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(write(<span class="number">0</span>, &amp;wanted, <span class="keyword">sizeof</span>(wanted)) != <span class="keyword">sizeof</span>(wanted)) &#123;</span><br><span class="line">      errx(<span class="number">1</span>, <span class="string">":(\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(fgets(buf, <span class="keyword">sizeof</span>(buf)<span class="number">-1</span>, <span class="built_in">stdin</span>) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">      errx(<span class="number">1</span>, <span class="string">":(\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  q = <span class="built_in">strchr</span>(buf, <span class="string">'\r'</span>); <span class="keyword">if</span>(q) *q = <span class="number">0</span>;</span><br><span class="line">  q = <span class="built_in">strchr</span>(buf, <span class="string">'\n'</span>); <span class="keyword">if</span>(q) *q = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">strcmp</span>(fub, buf) == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you correctly sent the data\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you didn't send the data properly\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd;</span><br><span class="line">  <span class="keyword">char</span> *username;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Run the process as a daemon */</span></span><br><span class="line">  background_process(NAME, UID, GID); </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Wait for socket activity and return */</span></span><br><span class="line">  fd = serve_forever(PORT);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Set the client socket to STDIN, STDOUT, and STDERR */</span></span><br><span class="line">  set_io(fd);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Don't do this :&gt; */</span></span><br><span class="line">  srandom(time(<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">  run();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>直接看函数<code>run</code>，</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Binary-Hacking/" rel="tag"># Binary-Hacking</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/24/Liveoverflow-0x18-heap3/" rel="next" title="Liveoverflow-0x18-heap3">
+                <i class="fa fa-chevron-left"></i> Liveoverflow-0x18-heap3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Protostar-Net0"><span class="nav-number">1.</span> <span class="nav-text">Protostar Net0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.1.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#铺垫"><span class="nav-number">2.</span> <span class="nav-text">铺垫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">3.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Protostar-Net1"><span class="nav-number">4.</span> <span class="nav-text">Protostar Net1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#About-1"><span class="nav-number">4.1.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">5.</span> <span class="nav-text">分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
