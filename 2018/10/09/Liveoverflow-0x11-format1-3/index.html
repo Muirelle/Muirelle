@@ -95,10 +95,10 @@
 <meta property="og:image" content="https://i.imgur.com/8X2M3sb.png">
 <meta property="og:image" content="https://i.imgur.com/90t2JVi.png">
 <meta property="og:image" content="https://i.imgur.com/n8D20eR.png">
-<meta property="og:image" content="https://i.imgur.com/0oo5ERd.jpg">
+<meta property="og:image" content="https://i.imgur.com/6sMeZtt.jpg">
 <meta property="og:image" content="https://i.imgur.com/hK3FWGF.png">
 <meta property="og:image" content="https://i.imgur.com/9dkSPmD.png">
-<meta property="og:updated_time" content="2018-11-03T12:27:00.891Z">
+<meta property="og:updated_time" content="2018-11-12T12:21:46.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x11-format1~3">
 <meta name="twitter:description" content="开始一个新部分的学习，Format。这次做的题目是format1，和之前题目类型差异很大，解题方法也完全不同，所以现在要转换思路，尽量对前面比较简单题目有透彻的理解。">
@@ -366,9 +366,10 @@
 <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>再回顾一下题目，所以现在肯定是用%n将target的值覆盖掉。</p>
 <p>先找到target的地址 <strong>objdump -t ./format1 | grep “target”</strong><br><img src="https://i.imgur.com/90t2JVi.png" alt=""></p>
 <p>然后试着多打印点栈里的值<br><img src="https://i.imgur.com/n8D20eR.png" alt=""><br>后面一直重复出现的25782e其实就是 <strong>%x.</strong> 的ascii码，这样就有一个明确的思路了。如下图</p>
-<p><img src="https://i.imgur.com/0oo5ERd.jpg" alt=""><br>printf找到我们输入的第一个%x之后会在栈中随机找个地址打印其内容，后面的%x也就跟着打印前面那个地址后面的内容，直到%x的数量足够多时，后面的%x开始打印前面%x.的信息，也就是刚刚看到的25782e。如果我们把其中的一个%x改成%n会发生什么？</p>
-<p>假设上图的倒数第二排第一个%x改成了%n，显然，这时printf会将252e7825(<strong>%x.%</strong>)当作一个地址，然后将前面打印的所有字符个数都写入这个地址中去，所以我们要做的就是构造字符串，将那个地址改为target的地址，再用%n将数据写入。</p>
-<p><img src="https://i.imgur.com/hK3FWGF.png" alt=""><br>多次尝试后成功修改target的值</p>
+<p><img src="https://i.imgur.com/6sMeZtt.jpg" alt=""><br>printf找到我们输入的第一个%x之后会在栈中随机找个地址打印其内容，后面的%x也就跟着打印前面那个地址后面的内容，直到%x的数量足够多时，后面的%x开始打印前面%x.的信息，也就是刚刚看到的25782e。如果我们把其中的一个%x改成%n会发生什么？</p>
+<p>假设上图的%x(红框2)改成了%n，显然，这时printf会将红框1内的数据也就是252e7825(<strong>%x.%</strong>)当作一个地址，然后将前面打印的所有字符个数都写入这个地址中去，所以我们要做的就是构造字符串，将红框1的内容写成target的地址，再将红框2改成%n进行写入。%n的位置就只有一步步试出来了。</p>
+<p><img src="https://i.imgur.com/hK3FWGF.png" alt=""><br>可以看到在几次尝试过程中不断地修改a的个数就是为了数据能够对齐。</p>
+<p>多次尝试后成功修改target的值。</p>
 <p><strong>2018/10/12更新</strong></p>
 <h1 id="Protostar-Format2"><a href="#Protostar-Format2" class="headerlink" title="Protostar Format2"></a>Protostar Format2</h1><hr>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> target;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">512</span>];</span><br><span class="line"></span><br><span class="line">  fgets(buffer, <span class="keyword">sizeof</span>(buffer), <span class="built_in">stdin</span>);</span><br><span class="line">  <span class="built_in">printf</span>(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(target == <span class="number">64</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have modified the target :)\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"target is %d :(\n"</span>, target);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  vuln();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -553,7 +554,7 @@ you have modified the target :)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -575,7 +576,7 @@ you have modified the target :)
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

