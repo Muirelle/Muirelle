@@ -333,21 +333,14 @@
 
       
         
-          
-            <p>安装这玩意经常遇到莫名问题，记录一下踩坑历程</p>
-<p>安装方法就老老实实的去<a href="https://github.com/Gallopsled/pwntools" target="_blank" rel="noopener">pwntools主页</a>看吧，被其他人写的教程坑过不止一遍。</p>
-<p>安装方法</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential</span><br><span class="line">pip install --upgrade pip</span><br><span class="line">pip install --upgrade pwntools</span><br></pre></td></tr></table></figure>
-<p>在执行最后一条命令时报错：<strong>Import Error:cannot import name main</strong></p>
-<p>解决方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /usr/bin/pip</span><br></pre></td></tr></table></figure>
-<p>将</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from pip import main</span><br></pre></td></tr></table></figure>
-<p>改成</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from pip._internal import main</span><br></pre></td></tr></table></figure>
-<p>即可</p>
-
-          
+          <p>安装这玩意经常遇到莫名问题，记录一下踩坑历程</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/20/pwntools安装/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
