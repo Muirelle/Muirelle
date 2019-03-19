@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="想到什么写什么 看到什么写什么">
+<meta name="description" content="一些笔记">
 <meta name="keywords" content="其他">
 <meta property="og:type" content="article">
 <meta property="og:title" content="随笔">
 <meta property="og:url" content="http://yoursite.com/2019/03/08/随笔/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="想到什么写什么 看到什么写什么">
+<meta property="og:description" content="一些笔记">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-13T08:30:30.473Z">
+<meta property="og:image" content="https://i.imgur.com/YXhbulm.png">
+<meta property="og:updated_time" content="2019-03-19T08:49:17.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="随笔">
-<meta name="twitter:description" content="想到什么写什么 看到什么写什么">
+<meta name="twitter:description" content="一些笔记">
+<meta name="twitter:image" content="https://i.imgur.com/YXhbulm.png">
 
 
 
@@ -331,10 +333,9 @@
       
 
       
-        <p>想到什么写什么</p>
-<p>看到什么写什么</p>
+        <p>一些笔记</p>
 <a id="more"></a>
-<h1 id="2019-3-8《程序员的自我修养》"><a href="#2019-3-8《程序员的自我修养》" class="headerlink" title="2019/3/8《程序员的自我修养》"></a>2019/3/8《程序员的自我修养》</h1><h2 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h2><hr>
+<h1 id="2019-3-8-特殊符号、符号修饰…"><a href="#2019-3-8-特殊符号、符号修饰…" class="headerlink" title="2019/3/8 特殊符号、符号修饰…"></a>2019/3/8 特殊符号、符号修饰…</h1><h2 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h2><hr>
 <p>使用ld进行链接时，会在链接脚本中生成一些特殊符号。连接器在最终将程序链接成可执行文件时将其解析为正确的值。</p>
 <p>__executable_start，该符号为程序起始地址（并非入口地址），比如0x8048000。</p>
 <p>__etext，该符号为代码段结束地址，如0x80484d4。</p>
@@ -353,13 +354,41 @@
 <p>解决办法：条件宏判断配合c++宏<code>__cplusplus</code></p>
 <p>例如：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">memset</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">int</span> ,<span class="keyword">size_t</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="2019-3-11《程序员的自我修养》"><a href="#2019-3-11《程序员的自我修养》" class="headerlink" title="2019/3/11《程序员的自我修养》"></a>2019/3/11《程序员的自我修养》</h1><h2 id="两步链接"><a href="#两步链接" class="headerlink" title="两步链接"></a>两步链接</h2><h3 id="第一步：空间与地址分配"><a href="#第一步：空间与地址分配" class="headerlink" title="第一步：空间与地址分配"></a>第一步：空间与地址分配</h3><hr>
+<p>——《程序员的自我修养》</p>
+<h1 id="2019-3-11-两步链接"><a href="#2019-3-11-两步链接" class="headerlink" title="2019/3/11 两步链接"></a>2019/3/11 两步链接</h1><h2 id="第一步：空间与地址分配"><a href="#第一步：空间与地址分配" class="headerlink" title="第一步：空间与地址分配"></a>第一步：空间与地址分配</h2><hr>
 <p>扫描所有输入目标文件，获取各个段的长度，属性和位置，并将输入目标文件中的符号表中所有的符号定义和符号引用统一放到全局符号表。<br>这一步中，链接器能获得所有输入目标文件的段长度，并将他们合并，计算输出文件各个段合并后的长度与位置，并建立映射关系。</p>
-<h3 id="第二步：符号解析与重定位"><a href="#第二步：符号解析与重定位" class="headerlink" title="第二步：符号解析与重定位"></a>第二步：符号解析与重定位</h3><hr>
+<h2 id="第二步：符号解析与重定位"><a href="#第二步：符号解析与重定位" class="headerlink" title="第二步：符号解析与重定位"></a>第二步：符号解析与重定位</h2><hr>
 <p>使用上一步收集到的信息，读取输入文件中段的数据、重定位信息，并进行符号解析和重定位、调整代码中的地址等。此过程特别是重定位过程是整个链接过程的核心。</p>
+<p>——《程序员的自我修养》</p>
 <h1 id="2019-3-13-C-operator"><a href="#2019-3-13-C-operator" class="headerlink" title="2019/3/13 C ??!??! operator"></a>2019/3/13 C ??!??! operator</h1><p>c语言 <strong>??!??!</strong> 运算符是啥鬼？</p>
-<p><a href="https://stackoverflow.com/jobs?med=site-ui&amp;ref=jobs-tab" target="_blank" rel="noopener">https://stackoverflow.com/jobs?med=site-ui&amp;ref=jobs-tab</a></p>
-<p>逛一圈so总能学点新东西/滑稽。</p>
+<p><a href="https://stackoverflow.com/questions/7825055/what-does-the-c-operator-do" target="_blank" rel="noopener">https://stackoverflow.com/questions/7825055/what-does-the-c-operator-do</a></p>
+<p>逛一圈so总能学点新东西\滑稽。</p>
+<h1 id="2019-3-17-链接过程比喻"><a href="#2019-3-17-链接过程比喻" class="headerlink" title="2019/3/17 链接过程比喻"></a>2019/3/17 链接过程比喻</h1><p>如果把整个链接过程比作一台计算机，那么ld链接器就是计算机的cpu，所有的目标文件、库文件就是输入，链接结果输出的可执行文件就是输出，而链接控制脚本正是这台计算机的“程序”，它控制cpu的运行，以“程序”要求的方式将输入加工成所需要的输出结果。</p>
+<p>——《程序员的自我修养》</p>
+<h1 id="2019-3-18-可执行文件的装载"><a href="#2019-3-18-可执行文件的装载" class="headerlink" title="2019/3/18 可执行文件的装载"></a>2019/3/18 可执行文件的装载</h1><h2 id="可执行文件的装载"><a href="#可执行文件的装载" class="headerlink" title="可执行文件的装载"></a>可执行文件的装载</h2><hr>
+<p>最开始可分为三步：</p>
+<ol>
+<li>创建一个独立的虚拟地址空间</li>
+<li>读取可执行文件头，以<a href="https://en.wikipedia.org/wiki/Page_(computer_memory" target="_blank" rel="noopener"><strong>页</strong></a>为单位建立虚拟地址空间与可执行文件的映射</li>
+<li>cpu的指令指向可执行文件入口，启动运行</li>
+</ol>
+<ul>
+<li>创建虚拟地址空间时并不会立即将其各个页映射到相应的物理地址，实际上只是创建了一个页目录，等到运行程序触发<a href="https://en.wikipedia.org/wiki/Page_fault" target="_blank" rel="noopener"><strong>页错误</strong></a>时才会向物理地址申请相关页并进行映射。</li>
+<li>系统从可执行文件中读取头部各个段(section)的信息，然后将其映射到虚拟空间的相应位置，虚拟空间中的一个段叫做<strong>虚拟内存区域</strong>(VMA,Virtual Memory Area)。</li>
+<li>通过设置指令寄存器指向可执行文件入口，将控制权转交给进程。</li>
+</ul>
+<h2 id="虚拟内存的分布"><a href="#虚拟内存的分布" class="headerlink" title="虚拟内存的分布"></a>虚拟内存的分布</h2><hr>
+<p>在第二步将可执行文件地址映射到虚拟空间时，由于存在页对齐机制，如果直接把每个段按页映射到虚拟空间就会造成空间浪费的问题。比如一个页大小规定为4KiB，有一个可执行文件有10个段，每个段都只有不到1KiB，但是在进行映射时每个段都要独自占用一个页，这样就造成了空间的极大浪费。所以自然会有方法来解决这种浪费。</p>
+<p>操作系统装载可执行文件时并不关心各个段包含的内容，而是关心一些跟装载相关的问题，主要是段的权限。(如读，写，运行权限)。所以，对于具有相同权限的段(section)，把他们合并到一起进行映射(如 .text和.rodata)。</p>
+<p>这种合并到一起具有多个section的段被称为segment。把这一个segment映射到虚拟空间中就只有一个与其对应的VMA，从而减少了碎片，节省了内存空间。</p>
+<h3 id="区分section和segment"><a href="#区分section和segment" class="headerlink" title="区分section和segment"></a>区分section和segment</h3><p>section是链接视图，segment是装载视图</p>
+<p><img src="https://i.imgur.com/YXhbulm.png" alt=""></p>
+<p>在链接过程中，链接器需要将每一个section信息提取出来，为之后的重定位工作做准备。(可用<code>readelf -S file</code>查看)</p>
+<p>而在装载的过程中，系统只关心section的属性，把它们整合成segment后映射到同一个VMA。为之后的创建进程映像做准备。(可用<code>readelf -l file</code>查看)</p>
+<p>参考 :</p>
+<p><a href="https://stackoverflow.com/questions/23379880/difference-between-program-header-and-section-header-in-elf" target="_blank" rel="noopener">https://stackoverflow.com/questions/23379880/difference-between-program-header-and-section-header-in-elf</a></p>
+<p><a href="https://venkateshabbarapu.blogspot.com/2012/09/process-segments-and-vma.html" target="_blank" rel="noopener">https://venkateshabbarapu.blogspot.com/2012/09/process-segments-and-vma.html</a></p>
+<p>——《程序员的自我修养》</p>
 
       
     </div>
@@ -534,7 +563,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-8《程序员的自我修养》"><span class="nav-number">1.</span> <span class="nav-text">2019/3/8《程序员的自我修养》</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊符号"><span class="nav-number">1.1.</span> <span class="nav-text">特殊符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-符号修饰"><span class="nav-number">1.2.</span> <span class="nav-text">c++符号修饰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-包含c符号时避免符号修饰"><span class="nav-number">1.3.</span> <span class="nav-text">c++包含c符号时避免符号修饰</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-11《程序员的自我修养》"><span class="nav-number">2.</span> <span class="nav-text">2019/3/11《程序员的自我修养》</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#两步链接"><span class="nav-number">2.1.</span> <span class="nav-text">两步链接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：空间与地址分配"><span class="nav-number">2.1.1.</span> <span class="nav-text">第一步：空间与地址分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：符号解析与重定位"><span class="nav-number">2.1.2.</span> <span class="nav-text">第二步：符号解析与重定位</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-13-C-operator"><span class="nav-number">3.</span> <span class="nav-text">2019/3/13 C ??!??! operator</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-8-特殊符号、符号修饰…"><span class="nav-number">1.</span> <span class="nav-text">2019/3/8 特殊符号、符号修饰…</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊符号"><span class="nav-number">1.1.</span> <span class="nav-text">特殊符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-符号修饰"><span class="nav-number">1.2.</span> <span class="nav-text">c++符号修饰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-包含c符号时避免符号修饰"><span class="nav-number">1.3.</span> <span class="nav-text">c++包含c符号时避免符号修饰</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-11-两步链接"><span class="nav-number">2.</span> <span class="nav-text">2019/3/11 两步链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步：空间与地址分配"><span class="nav-number">2.1.</span> <span class="nav-text">第一步：空间与地址分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步：符号解析与重定位"><span class="nav-number">2.2.</span> <span class="nav-text">第二步：符号解析与重定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-13-C-operator"><span class="nav-number">3.</span> <span class="nav-text">2019/3/13 C ??!??! operator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-17-链接过程比喻"><span class="nav-number">4.</span> <span class="nav-text">2019/3/17 链接过程比喻</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-18-可执行文件的装载"><span class="nav-number">5.</span> <span class="nav-text">2019/3/18 可执行文件的装载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可执行文件的装载"><span class="nav-number">5.1.</span> <span class="nav-text">可执行文件的装载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟内存的分布"><span class="nav-number">5.2.</span> <span class="nav-text">虚拟内存的分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区分section和segment"><span class="nav-number">5.2.1.</span> <span class="nav-text">区分section和segment</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
