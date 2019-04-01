@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="ctf,writeup," />
+  <meta name="keywords" content="ctf,writeup,pwn," />
 
 
 
@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="这周末连着两个比赛，酸爽。">
-<meta name="keywords" content="ctf,writeup">
+<meta name="description" content="两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc 这周末连着两个比赛，酸爽。">
+<meta name="keywords" content="ctf,writeup,pwn">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UTctf2019">
 <meta property="og:url" content="http://yoursite.com/2019/03/13/UTctf2019/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="这周末连着两个比赛，酸爽。">
+<meta property="og:description" content="两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc 这周末连着两个比赛，酸爽。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.imgur.com/dW95IHc.png">
 <meta property="og:image" content="https://i.imgur.com/CycOBQQ.png">
@@ -101,10 +101,10 @@
 <meta property="og:image" content="https://i.imgur.com/UBHklY6.png">
 <meta property="og:image" content="https://i.imgur.com/SVimSJR.png">
 <meta property="og:image" content="https://i.imgur.com/CQ6NYOx.png">
-<meta property="og:updated_time" content="2019-03-16T07:56:50.320Z">
+<meta property="og:updated_time" content="2019-04-01T13:42:12.065Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UTctf2019">
-<meta name="twitter:description" content="这周末连着两个比赛，酸爽。">
+<meta name="twitter:description" content="两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc 这周末连着两个比赛，酸爽。">
 <meta name="twitter:image" content="https://i.imgur.com/dW95IHc.png">
 
 
@@ -308,6 +308,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index">
+                    <span itemprop="name">ctf</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -346,7 +368,8 @@
       
 
       
-        <p>这周末连着两个比赛，酸爽。</p>
+        <p>两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc</p>
+<p>这周末连着两个比赛，酸爽。</p>
 <a id="more"></a>
 <h1 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h1><h2 id="babypwn"><a href="#babypwn" class="headerlink" title="babypwn"></a>babypwn</h2><p>docker环境： <strong>docker pull muirelle/utctf:pwn</strong></p>
 <p>想复杂了。老是想着ret2libc，结果discord一个老哥提醒global vireable还是没想起来利用bss段存放shellcode。</p>
@@ -492,6 +515,8 @@ p.interactive()
           
             <a href="/tags/writeup/" rel="tag"># writeup</a>
           
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
         </div>
       
 
@@ -512,6 +537,10 @@ p.interactive()
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/01/sunshineCTF/" rel="prev" title="sunshineCTF">
+                sunshineCTF <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -588,7 +617,7 @@ p.interactive()
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

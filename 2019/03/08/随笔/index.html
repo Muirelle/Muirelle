@@ -88,7 +88,7 @@
 <meta property="og:description" content="一些笔记">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.imgur.com/YXhbulm.png">
-<meta property="og:updated_time" content="2019-03-19T08:49:17.562Z">
+<meta property="og:updated_time" content="2019-04-01T13:57:29.828Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="随笔">
 <meta name="twitter:description" content="一些笔记">
@@ -389,6 +389,35 @@
 <p><a href="https://stackoverflow.com/questions/23379880/difference-between-program-header-and-section-header-in-elf" target="_blank" rel="noopener">https://stackoverflow.com/questions/23379880/difference-between-program-header-and-section-header-in-elf</a></p>
 <p><a href="https://venkateshabbarapu.blogspot.com/2012/09/process-segments-and-vma.html" target="_blank" rel="noopener">https://venkateshabbarapu.blogspot.com/2012/09/process-segments-and-vma.html</a></p>
 <p>——《程序员的自我修养》</p>
+<h1 id="2019-3-23-interrupt-and-system-call"><a href="#2019-3-23-interrupt-and-system-call" class="headerlink" title="2019/3/23 interrupt and system call"></a>2019/3/23 interrupt and system call</h1><p>What’s the difference between <strong>interrupt</strong> and <strong>system call</strong>?</p>
+<ul>
+<li><strong>System calls</strong>: issued by user processes to request system services</li>
+<li><strong>Interrupts</strong>: raised by decices to get OS attention</li>
+<li>a interrupt usually caused by external hardware and a system call can also trigger an interrupt(soft interrupt)</li>
+</ul>
+<p><a href="https://stackoverflow.com/questions/33654579/in-an-operating-system-what-is-the-difference-between-a-system-call-and-an-inte/33654831" target="_blank" rel="noopener">https://stackoverflow.com/questions/33654579/in-an-operating-system-what-is-the-difference-between-a-system-call-and-an-inte/33654831</a></p>
+<h1 id="2019-3-29-C-static-关键字限定对象作用域"><a href="#2019-3-29-C-static-关键字限定对象作用域" class="headerlink" title="2019/3/29 C static 关键字限定对象作用域"></a>2019/3/29 C static 关键字限定对象作用域</h1><p>如果在程序中给声明的对象前加了static关键字，则此对象对外不可见。</p>
+<p>例子：</p>
+<p>foo.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">4</span>;</span><br><span class="line">	bar(a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>bar.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bar</span><span class="params">(<span class="keyword">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译</p>
+<p><code>gcc -o fb foo.c bar.c</code></p>
+<p>运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/tmp/cckqp3JI.o: In function `main&apos;:</span><br><span class="line">foo.c:(.text+0x1a): undefined reference to `bar&apos;</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+<p>出错</p>
+<p>这就是因为添加了static关键字导致bar函数对外不可见，所以编译时报出未定义的错误。不止函数，在变量前添加static也可以对外不可见。</p>
+<p>顺便一提在编译时遇到警告：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo.c:6:2: warning: implicit declaration of function ‘bar’ [-Wimplicit-function-declaration]</span><br><span class="line">  bar(a);</span><br><span class="line">  ^~~</span><br></pre></td></tr></table></figure>
+<p>是由于在foo开头未对bar函数进行声明。</p>
+<p>在前面加上</p>
+<p><code>extern void bar(int a);</code></p>
+<p>即可消除警告。</p>
+<p>——《c程序设计语言》</p>
+<h1 id="2019-4-1-处理可变长参数表——va-list"><a href="#2019-4-1-处理可变长参数表——va-list" class="headerlink" title="2019/4/1 处理可变长参数表——va_list"></a>2019/4/1 处理可变长参数表——va_list</h1><p>形如<br><code>type func(type arg1, ...)</code><br>的函数声明，结尾的省略号表示该函数包含一个可变长的参数列表。比如<code>printf</code>就是这样定义的：<br><code>int printf(char *fmt, ...)</code><br>要遍历这些参数需要用到头文件&lt;stdarg.h&gt;中的一组宏定义。</p>
+<p>va_list类型用于声明一个变量，改变量将依次引用各参数。暂定该变量名为ap，意思是“参数指针”。宏va_start将ap初始化为指向第一个无名参数的指针。在使用ap之前，该宏必须被调用一次。参数表必须至少包括一个有名参数作为起点。每次调用va_arg，该函数都将返回一个参数，并将ap指向下一个参数。va_arg使用一个类型名来决定返回的对象类型、指针移动和步长。最后，必须在函数返回之前调用va_end，以完成一些必要的清理工作。</p>
+<p>——《c程序设计语言》</p>
 
       
     </div>
@@ -508,7 +537,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -563,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-8-特殊符号、符号修饰…"><span class="nav-number">1.</span> <span class="nav-text">2019/3/8 特殊符号、符号修饰…</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊符号"><span class="nav-number">1.1.</span> <span class="nav-text">特殊符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-符号修饰"><span class="nav-number">1.2.</span> <span class="nav-text">c++符号修饰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-包含c符号时避免符号修饰"><span class="nav-number">1.3.</span> <span class="nav-text">c++包含c符号时避免符号修饰</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-11-两步链接"><span class="nav-number">2.</span> <span class="nav-text">2019/3/11 两步链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步：空间与地址分配"><span class="nav-number">2.1.</span> <span class="nav-text">第一步：空间与地址分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步：符号解析与重定位"><span class="nav-number">2.2.</span> <span class="nav-text">第二步：符号解析与重定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-13-C-operator"><span class="nav-number">3.</span> <span class="nav-text">2019/3/13 C ??!??! operator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-17-链接过程比喻"><span class="nav-number">4.</span> <span class="nav-text">2019/3/17 链接过程比喻</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-18-可执行文件的装载"><span class="nav-number">5.</span> <span class="nav-text">2019/3/18 可执行文件的装载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可执行文件的装载"><span class="nav-number">5.1.</span> <span class="nav-text">可执行文件的装载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟内存的分布"><span class="nav-number">5.2.</span> <span class="nav-text">虚拟内存的分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区分section和segment"><span class="nav-number">5.2.1.</span> <span class="nav-text">区分section和segment</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-8-特殊符号、符号修饰…"><span class="nav-number">1.</span> <span class="nav-text">2019/3/8 特殊符号、符号修饰…</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊符号"><span class="nav-number">1.1.</span> <span class="nav-text">特殊符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-符号修饰"><span class="nav-number">1.2.</span> <span class="nav-text">c++符号修饰</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-包含c符号时避免符号修饰"><span class="nav-number">1.3.</span> <span class="nav-text">c++包含c符号时避免符号修饰</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-11-两步链接"><span class="nav-number">2.</span> <span class="nav-text">2019/3/11 两步链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步：空间与地址分配"><span class="nav-number">2.1.</span> <span class="nav-text">第一步：空间与地址分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步：符号解析与重定位"><span class="nav-number">2.2.</span> <span class="nav-text">第二步：符号解析与重定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-13-C-operator"><span class="nav-number">3.</span> <span class="nav-text">2019/3/13 C ??!??! operator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-17-链接过程比喻"><span class="nav-number">4.</span> <span class="nav-text">2019/3/17 链接过程比喻</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-18-可执行文件的装载"><span class="nav-number">5.</span> <span class="nav-text">2019/3/18 可执行文件的装载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可执行文件的装载"><span class="nav-number">5.1.</span> <span class="nav-text">可执行文件的装载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟内存的分布"><span class="nav-number">5.2.</span> <span class="nav-text">虚拟内存的分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区分section和segment"><span class="nav-number">5.2.1.</span> <span class="nav-text">区分section和segment</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-23-interrupt-and-system-call"><span class="nav-number">6.</span> <span class="nav-text">2019/3/23 interrupt and system call</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-3-29-C-static-关键字限定对象作用域"><span class="nav-number">7.</span> <span class="nav-text">2019/3/29 C static 关键字限定对象作用域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019-4-1-处理可变长参数表——va-list"><span class="nav-number">8.</span> <span class="nav-text">2019/4/1 处理可变长参数表——va_list</span></a></li></ol></div>
             
 
           </div>
