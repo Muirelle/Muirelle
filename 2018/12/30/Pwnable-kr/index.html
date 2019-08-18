@@ -141,7 +141,7 @@
 <meta property="og:image" content="https://i.imgur.com/rX7qRx2.png">
 <meta property="og:image" content="https://i.imgur.com/ZOtgie6.png">
 <meta property="og:image" content="https://i.imgur.com/lyzdal0.png">
-<meta property="og:updated_time" content="2019-02-02T06:31:39.467Z">
+<meta property="og:updated_time" content="2019-08-18T04:28:39.327Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pwnable.kr[Toddler&#39;s Bottle]">
 <meta name="twitter:description" content="再不更博客就生灰了，找点题做 题目链接: http://pwnable.kr/play.php">
@@ -473,7 +473,7 @@ enter passcode1 : Now I can safely trust you that you have credential :)
 <p>2、参数argv[‘A’] = “\x00”</p>
 <p>3、参数argv[‘B’] = “\x20\x0a\x0d”</p>
 <p>解题代码如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *arg[<span class="number">101</span>] = &#123;<span class="string">"./input"</span>, [<span class="number">1</span> ... <span class="number">99</span>]=<span class="string">"A"</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">arg[<span class="string">'A'</span>] = <span class="string">"\x00"</span>;</span><br><span class="line">arg[<span class="string">'B'</span>] = <span class="string">"\x20\x0a\x0d"</span>;</span><br><span class="line">execve(args[<span class="number">0</span>], args, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *arg[<span class="number">101</span>] = &#123;<span class="string">"./input"</span>, [<span class="number">1</span> ... <span class="number">99</span>]=<span class="string">"A"</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">arg[<span class="string">'A'</span>] = <span class="string">"\x00"</span>;</span><br><span class="line">arg[<span class="string">'B'</span>] = <span class="string">"\x20\x0a\x0d"</span>;</span><br><span class="line">execve(arg[<span class="number">0</span>], arg, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
 <p>arg[‘A’]表明取参数中的第65个参数，也就是A的ascii码。<br>B同理。</p>
 <p>arg[]，env[] (等下会提到)最后跟一个NULL原因如下<br><img src="https://i.imgur.com/Hjyxxxy.png" alt=""></p>
 <h3 id="Stage2-stdio"><a href="#Stage2-stdio" class="headerlink" title="Stage2 - stdio"></a>Stage2 - stdio</h3><p>1、从<strong>stdin</strong>中读取<strong>“\x00\x0a\x00\xff”</strong></p>
@@ -823,7 +823,7 @@ enter passcode1 : Now I can safely trust you that you have credential :)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -845,7 +845,7 @@ enter passcode1 : Now I can safely trust you that you have credential :)
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
