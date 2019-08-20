@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="docker," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="之前弄很久都没搞懂该怎么复现ctf题目，直到TAUMctfwp给了docker的环境才慢慢仿照dockerfile学会了怎么在本地复现题目。">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用docker复现ctf题目">
+<meta property="og:url" content="http://yoursite.com/2019/03/07/使用docker复现ctf题目/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="之前弄很久都没搞懂该怎么复现ctf题目，直到TAUMctfwp给了docker的环境才慢慢仿照dockerfile学会了怎么在本地复现题目。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/Gb1zsfF.png">
+<meta property="og:updated_time" content="2019-03-08T11:16:07.640Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用docker复现ctf题目">
+<meta name="twitter:description" content="之前弄很久都没搞懂该怎么复现ctf题目，直到TAUMctfwp给了docker的环境才慢慢仿照dockerfile学会了怎么在本地复现题目。">
+<meta name="twitter:image" content="https://i.imgur.com/Gb1zsfF.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/07/使用docker复现ctf题目/"/>
+
+
+
+
+
+  <title>使用docker复现ctf题目 | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/07/使用docker复现ctf题目/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用docker复现ctf题目</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-07T21:44:40+08:00">
+                2019-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/03/07/使用docker复现ctf题目/" class="leancloud_visitors" data-flag-title="使用docker复现ctf题目">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前弄很久都没搞懂该怎么复现ctf题目，直到TAUMctfwp给了docker的环境才慢慢仿照dockerfile学会了怎么在本地复现题目。</p>
+<a id="more"></a>
+<p><a href="https://docs.docker.com/" target="_blank" rel="noopener">官方文档</a></p>
+<h1 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h1><p>ubuntu：<strong><a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/" target="_blank" rel="noopener">https://docs.docker.com/install/linux/docker-ce/ubuntu/</a></strong></p>
+<p>windows：<strong><a href="https://hub.docker.com/editions/community/docker-ce-desktop-windows" target="_blank" rel="noopener">https://hub.docker.com/editions/community/docker-ce-desktop-windows</a></strong></p>
+<p>安装window版要确保自己的windows是专业版并开启Hyper-V功能以兼容win版docker。</p>
+<p>如果是windows家庭版去买个激活码升级一下就行了。</p>
+<h1 id="docker基础操作"><a href="#docker基础操作" class="headerlink" title="docker基础操作"></a>docker基础操作</h1><h2 id="镜像-image"><a href="#镜像-image" class="headerlink" title="镜像(image)"></a>镜像(image)</h2><hr>
+<p>查看本机镜像<br><code>docker image ls 或 docker images</code></p>
+<p>删除镜像<br><code>docker image rm [imageName]</code></p>
+<p>拉取镜像(以官方提供的hello-world镜像为例)<br><code>docker image pull library/hello-world</code></p>
+<h2 id="容器-container"><a href="#容器-container" class="headerlink" title="容器(container)"></a>容器(container)</h2><hr>
+<p>查看本机正在运行的容器，加上参数<code>-all</code>查看包括已停止的所有容器<br><code>docker container ls</code></p>
+<p>运行容器<br><code>docker container run hello-world</code><br>若本地没有指定的镜像，则会自动拉取。</p>
+<p>删除容器<br><code>docker container rm [CONTAINER ID]</code></p>
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><hr>
+<p>如果要制作自己的镜像就需要用到Dockerfile配置镜像。</p>
+<p>以TAUMctf的一道题给出的Dockerfile为例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu:16.04	#该 image 文件继承官方的 ubuntu image，冒号表示标签，即16.04版本的ubuntu</span><br><span class="line"></span><br><span class="line">#RUN命令在创建镜像时被执行</span><br><span class="line"></span><br><span class="line">RUN apt update --fix-missing	#更新源</span><br><span class="line">RUN apt install -y socat	安装socat网络工具</span><br><span class="line"></span><br><span class="line">RUN groupadd ctf	#创建一个新的用户组</span><br><span class="line"></span><br><span class="line">RUN mkdir /rev	#在根目录创建一个文件夹</span><br><span class="line"></span><br><span class="line">#COPY命令将Dockerfile所在文件夹的指定文件复制到镜像中的指定位置</span><br><span class="line"></span><br><span class="line">COPY simple /rev/simple	</span><br><span class="line">COPY flag.txt /rev/flag.txt</span><br><span class="line"></span><br><span class="line">RUN useradd -G ctf --home=/rev revuser</span><br><span class="line">RUN useradd -G ctf --home=/rev revflag	#添加属于ctf组的用户</span><br><span class="line"></span><br><span class="line">RUN chown revflag:revflag /rev/flag.txt</span><br><span class="line">RUN chown revflag:revflag /rev/simple	#设置文件拥有者</span><br><span class="line"></span><br><span class="line">RUN chmod 4755 /rev/simple	#可执行权限设置为s</span><br><span class="line">RUN chmod 444 /rev/flag.txt</span><br><span class="line"></span><br><span class="line">EXPOSE 7223	#开放7223端口</span><br><span class="line"></span><br><span class="line">#CMD命令在容器运行时执行，并且一个Dockerfile只能有一个CMD命令</span><br><span class="line"></span><br><span class="line">CMD [&quot;su&quot;, &quot;-c&quot;, &quot;exec socat TCP-LISTEN:7223,reuseaddr,fork EXEC:/rev/simple,stderr&quot;, &quot;-&quot;, &quot;revuser&quot;]</span><br><span class="line"></span><br><span class="line">#TCP4-LISTEN	在本地建立的是一个TCP ipv4协议的监听端口</span><br><span class="line">#reuseaddr	绑定本地一个端口</span><br><span class="line">#fork	设定多链接模式，即当一个链接被建立后，自动复制一个同样的端口再进行监听</span><br></pre></td></tr></table></figure>
+<h1 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h1><h2 id="创建image"><a href="#创建image" class="headerlink" title="创建image"></a>创建image</h2><hr>
+<p>把Dockerfile需要的文件放在Dockerfile所在文件夹内。</p>
+<p><code>docker image build -t [imageName]:[tag] .</code><br>使用上面命令创建image文件，<code>-t</code>用于指定image的名字，tag可选。</p>
+<p>如：</p>
+<p><code>docker image build -t advkeygen .</code></p>
+<h2 id="生成容器"><a href="#生成容器" class="headerlink" title="生成容器"></a>生成容器</h2><hr>
+<p><code>docker container run -p 8000:7223 -it --rm advkeygen</code></p>
+<p>这个命令令从advkeygen镜像生成一个容器</p>
+<p><code>-p</code>用来指明映射端口，上述命令将本地8000端口映射到容器的7223端口。若使用<code>-P</code>参数则会由系统自动分配端口，可以使用<code>docker container ls</code>查看具体映射的端口。</p>
+<p><code>-it</code>容器的shell映射到当前shell，本机窗口输入的命令会传入容器。</p>
+<p><code>--rm</code>参数在容器停止运行后自动删除容器。</p>
+<p><img src="https://i.imgur.com/Gb1zsfF.png" alt=""></p>
+<h1 id="发布image"><a href="#发布image" class="headerlink" title="发布image"></a>发布image</h1><p>确定容器可以运行之后就可以发布到网上，方便随时取用。</p>
+<p>官网：<strong><a href="hub.docker.com">hub.docker.com</a></strong></p>
+<p>注册后用命令<code>docker login</code>登录。</p>
+<p><code>docker image tag [imgeName] [username]/[repository]:[tag]</code></p>
+<p>然后给要上传的image标注用户名(就是docker账号的用户名)和版本。tag可选。</p>
+<p>如：</p>
+<p><code>docker image tag advkeygen muirelle/advkeygen</code></p>
+<p>接着重构image文件：</p>
+<p><code>docker image build -t [username]/[repository]:[tag] .</code></p>
+<p>最后发布image文件:</p>
+<p><code>docker image push [username]/[repository]:[tag]</code></p>
+<p>发布完成后可以在官网登录账号查看自己的image</p>
+<p>用命令</p>
+<p><code>docker image pull muirelle/advkeygen</code></p>
+<p>就可以在其他设备拉取到之前上传的镜像了。</p>
+<p>:)</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/02/安恒杯2019二月-pwn/" rel="next" title="安恒杯2019二月-pwn">
+                <i class="fa fa-chevron-left"></i> 安恒杯2019二月-pwn
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/08/随笔/" rel="prev" title="随笔">
+                随笔 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#docker安装"><span class="nav-number">1.</span> <span class="nav-text">docker安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#docker基础操作"><span class="nav-number">2.</span> <span class="nav-text">docker基础操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像-image"><span class="nav-number">2.1.</span> <span class="nav-text">镜像(image)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器-container"><span class="nav-number">2.2.</span> <span class="nav-text">容器(container)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile"><span class="nav-number">2.3.</span> <span class="nav-text">Dockerfile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建环境"><span class="nav-number">3.</span> <span class="nav-text">搭建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建image"><span class="nav-number">3.1.</span> <span class="nav-text">创建image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成容器"><span class="nav-number">3.2.</span> <span class="nav-text">生成容器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发布image"><span class="nav-number">4.</span> <span class="nav-text">发布image</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

