@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="其他," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="吾将上下而求索">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Muirelle的博客">
-<meta property="og:url" content="http://yoursite.com/archives/page/2/index.html">
+<meta name="description" content="打个比赛不小心把原来glibc库搞崩了，命令都用不了了，试了好多办法没复原，干脆重新装一遍，顺便记录一下。">
+<meta name="keywords" content="其他">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0开始搭建pwn环境">
+<meta property="og:url" content="http://yoursite.com/2019/08/29/从0开始搭建pwn环境/index.html">
 <meta property="og:site_name" content="Muirelle的博客">
-<meta property="og:description" content="吾将上下而求索">
+<meta property="og:description" content="打个比赛不小心把原来glibc库搞崩了，命令都用不了了，试了好多办法没复原，干脆重新装一遍，顺便记录一下。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-06T02:16:01.380Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Muirelle的博客">
-<meta name="twitter:description" content="吾将上下而求索">
+<meta name="twitter:title" content="从0开始搭建pwn环境">
+<meta name="twitter:description" content="打个比赛不小心把原来glibc库搞崩了，命令都用不了了，试了好多办法没复原，干脆重新装一遍，顺便记录一下。">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/page/2/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/08/29/从0开始搭建pwn环境/"/>
 
 
 
 
 
-  <title>归档 | Muirelle的博客</title>
+  <title>从0开始搭建pwn环境 | Muirelle的博客</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,416 +283,194 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/从0开始搭建pwn环境/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Sidebar_Avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">从0开始搭建pwn环境</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T12:29:49+08:00">
+                2019-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 30 篇日志。 继续努力。
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/07/使用docker复现ctf题目/" itemprop="url">
-              
-                <span itemprop="name">使用docker复现ctf题目</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-03-07T21:44:40+08:00"
-              content="2019-03-07" >
-          03-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/02/安恒杯2019二月-pwn/" itemprop="url">
-              
-                <span itemprop="name">安恒杯2019二月-pwn</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-03-02T08:28:09+08:00"
-              content="2019-03-02" >
-          03-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/03/01/TAMUctf/" itemprop="url">
-              
-                <span itemprop="name">TAMUctf</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-03-01T18:51:16+08:00"
-              content="2019-03-01" >
-          03-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/02/02/pwnable-kr-Rookiss/" itemprop="url">
-              
-                <span itemprop="name">Pwnable.kr[Rookiss]</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-02-02T14:35:10+08:00"
-              content="2019-02-02" >
-          02-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/21/Pwnable-tw/" itemprop="url">
-              
-                <span itemprop="name">Pwnable.tw</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-01-21T15:33:58+08:00"
-              content="2019-01-21" >
-          01-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/20/pwntools安装/" itemprop="url">
-              
-                <span itemprop="name">pwntools安装和使用</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-01-20T13:10:19+08:00"
-              content="2019-01-20" >
-          01-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+          
+             <span id="/2019/08/29/从0开始搭建pwn环境/" class="leancloud_visitors" data-flag-title="从0开始搭建pwn环境">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/12/30/Pwnable-kr/" itemprop="url">
-              
-                <span itemprop="name">Pwnable.kr[Toddler's Bottle]</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-12-30T20:14:43+08:00"
-              content="2018-12-30" >
-          12-30
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/09/Liveoverflow-0x1D-final0/" itemprop="url">
-              
-                <span itemprop="name">Liveoverflow-0x1D-final0</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-09T09:41:00+08:00"
-              content="2018-11-09" >
-          11-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/02/Liveoverflow-0x19-net0-2/" itemprop="url">
-              
-                <span itemprop="name">Liveoverflow-0x19-net0~2</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-02T21:21:02+08:00"
-              content="2018-11-02" >
-          11-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>打个比赛不小心把原来glibc库搞崩了，命令都用不了了，试了好多办法没复原，干脆重新装一遍，顺便记录一下。</p>
+<a id="more"></a>
+<p>整个安装过程以我自己成功安装为准，可能不同的系统或者机器安装使用的命令稍有差距。此次安装的环境为ubuntu 18.04.3 TLS(windows下linux子系统)。</p>
+<h2 id="Ⅰ-修改密码"><a href="#Ⅰ-修改密码" class="headerlink" title="Ⅰ. 修改密码"></a>Ⅰ. 修改密码</h2><hr>
+<p>修改当前用户密码：<strong><code>$ passwd</code></strong></p>
+<p>修改root密码：<strong><code>$ sudo passwd root</code></strong></p>
+<h2 id="Ⅱ-换源"><a href="#Ⅱ-换源" class="headerlink" title="Ⅱ. 换源"></a>Ⅱ. 换源</h2><hr>
+<p><strong><code>$ sudo vim /etc/apt/source.list</code></strong></p>
+<p>ubuntu 16.04源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<p>ubuntu 18.04源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 阿里源</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<h2 id="Ⅲ-python-库-相关"><a href="#Ⅲ-python-库-相关" class="headerlink" title="Ⅲ. python(库)相关"></a>Ⅲ. python(库)相关</h2><hr>
+<p>python命令安装</p>
+<p><code>$ sudo apt install python</code></p>
+<p>pip安装</p>
+<p><code>$ sudo apt-get install --fix-missing python-pip</code></p>
+<p>pwntools安装</p>
+<p><a href="https://muirelle.com/2019/01/20/pwntools%E5%AE%89%E8%A3%85/" target="_blank" rel="noopener">https://muirelle.com/2019/01/20/pwntools%E5%AE%89%E8%A3%85/</a></p>
+<p>LibcSearcher安装<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git clone https://github.com/lieanu/LibcSearcher.git</span><br><span class="line"><span class="meta">$</span> cd LibcSearcher</span><br><span class="line"><span class="meta">$</span> python setup.py develop</span><br></pre></td></tr></table></figure></p>
+<h2 id="Ⅳ-gdb相关"><a href="#Ⅳ-gdb相关" class="headerlink" title="Ⅳ. gdb相关"></a>Ⅳ. gdb相关</h2><hr>
+<p>gdb安装<br><code>$ sudo apt-get install gdb</code></p>
+<p>pwndbg安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git clone https://github.com/pwndbg/pwndbg</span><br><span class="line"><span class="meta">$</span> cd pwndbg</span><br><span class="line"><span class="meta">$</span> sudo ./setup.sh</span><br></pre></td></tr></table></figure>
+<p>peda安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git clone https://github.com/longld/peda.git ~/peda</span><br><span class="line"><span class="meta">$</span> sudo chmod 666 ~/.gdbinit</span><br><span class="line"><span class="meta">$</span> echo "source ~/peda/peda.py" &gt;&gt; ~/.gdbinit</span><br></pre></td></tr></table></figure>
+<p>通过修改~/.gdbinit可以更换gdb插件(用#注释来禁用插件)</p>
+<h2 id="Ⅴ-其他"><a href="#Ⅴ-其他" class="headerlink" title="Ⅴ. 其他"></a>Ⅴ. 其他</h2><hr>
+<p>one_gadget安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo apt install ruby</span><br><span class="line"><span class="meta">$</span> sudo gem install one_gadget</span><br></pre></td></tr></table></figure>
+<h2 id="pwnenv"><a href="#pwnenv" class="headerlink" title="pwnenv"></a>pwnenv</h2><p>写完发现以后再准备配环境的话，还是要一个一个输命令安装，麻烦得很。</p>
+<p>索性写个脚本，一次就安完，省事。</p>
+<p>挂在我github上了<a href="https://github.com/Muirelle/pwnenv" target="_blank" rel="noopener">https://github.com/Muirelle/pwnenv</a></p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/24/Liveoverflow-0x18-heap3/" itemprop="url">
-              
-                <span itemprop="name">Liveoverflow-0x18-heap3</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-24T18:45:43+08:00"
-              content="2018-10-24" >
-          10-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/其他/" rel="tag"># 其他</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/14/Makefile学习记录/" rel="next" title="Makefile学习记录">
+                <i class="fa fa-chevron-left"></i> Makefile学习记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/03/ret2dl-resolve/" rel="prev" title="ret2dl-resolve">
+                ret2dl-resolve <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -698,6 +478,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -718,8 +502,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -813,6 +606,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ⅰ-修改密码"><span class="nav-number">1.</span> <span class="nav-text">Ⅰ. 修改密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ⅱ-换源"><span class="nav-number">2.</span> <span class="nav-text">Ⅱ. 换源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ⅲ-python-库-相关"><span class="nav-number">3.</span> <span class="nav-text">Ⅲ. python(库)相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ⅳ-gdb相关"><span class="nav-number">4.</span> <span class="nav-text">Ⅳ. gdb相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ⅴ-其他"><span class="nav-number">5.</span> <span class="nav-text">Ⅴ. 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwnenv"><span class="nav-number">6.</span> <span class="nav-text">pwnenv</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -946,6 +755,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
