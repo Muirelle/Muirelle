@@ -96,11 +96,12 @@
 <meta property="og:image" content="https://i.imgur.com/YrMVBLw.png">
 <meta property="og:image" content="https://i.imgur.com/NtnJJJ7.png">
 <meta property="og:image" content="https://i.imgur.com/NXd0TqW.png">
+<meta property="og:image" content="https://i.imgur.com/XJNNbOG.png">
 <meta property="og:image" content="https://i.imgur.com/Gi3CUHx.png">
 <meta property="og:image" content="https://i.imgur.com/HXxFdl3.png">
 <meta property="og:image" content="https://i.imgur.com/hzK1fsw.png">
 <meta property="og:image" content="https://i.imgur.com/E9ikH31.png">
-<meta property="og:updated_time" content="2019-05-04T01:58:04.398Z">
+<meta property="og:updated_time" content="2019-09-14T02:35:34.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastbin attack">
 <meta name="twitter:description" content="Fastbin double free attack">
@@ -420,6 +421,7 @@
 <p>可以看到第一个栈帧(橙色)，后面是\x00，递归调用一次后，可以泄露出<strong>0x00007fffffffe3e0</strong>，再通过计算偏移，可以找到返回值所在的位置。</p>
 <p><img src="https://i.imgur.com/NXd0TqW.png" alt=""><br>泄露出了数据</p>
 <h2 id="leak-libc"><a href="#leak-libc" class="headerlink" title="leak_libc"></a>leak_libc</h2><p>刚才提到了UAF，触发UAF的条件是申请一个大于fastbin大小的chunk然后free掉该chunk，该chunk会被添加到unsorted bin中，并且fd和bk会指向<strong>main_arena</strong>中，通过泄露fd，bk得到<strong>main_arena</strong>，结合偏移计算出libc基址。libc中的main_arena偏移可以在libc中的malloc_trim()函数中找到。</p>
+<p><img src="https://i.imgur.com/XJNNbOG.png" alt=""><br>用leak出的main_arena+88减88再减这个偏移得到的就是libc base</p>
 <p><img src="https://i.imgur.com/Gi3CUHx.png" alt=""></p>
 <p>例如现在申请一个chunk。</p>
 <p><img src="https://i.imgur.com/HXxFdl3.png" alt=""></p>
@@ -562,7 +564,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -394,17 +394,17 @@
 <p><code>$ sudo apt-get install --fix-missing python-pip</code></p>
 <p>pwntools安装</p>
 <p><a href="https://muirelle.com/2019/01/20/pwntools%E5%AE%89%E8%A3%85/" target="_blank" rel="noopener">https://muirelle.com/2019/01/20/pwntools%E5%AE%89%E8%A3%85/</a></p>
-<p>LibcSearcher安装<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git clone https://github.com/lieanu/LibcSearcher.git</span><br><span class="line"><span class="meta">$</span> cd LibcSearcher</span><br><span class="line"><span class="meta">$</span> python setup.py develop</span><br></pre></td></tr></table></figure></p>
+<p>LibcSearcher安装<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/lieanu/LibcSearcher.git</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> LibcSearcher</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> python setup.py develop</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="Ⅳ-gdb相关"><a href="#Ⅳ-gdb相关" class="headerlink" title="Ⅳ. gdb相关"></a>Ⅳ. gdb相关</h2><hr>
 <p>gdb安装<br><code>$ sudo apt-get install gdb</code></p>
 <p>pwndbg安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git clone https://github.com/pwndbg/pwndbg</span><br><span class="line"><span class="meta">$</span> cd pwndbg</span><br><span class="line"><span class="meta">$</span> sudo ./setup.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/pwndbg/pwndbg</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> pwndbg</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo ./setup.sh</span></span><br></pre></td></tr></table></figure>
 <p>peda安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git clone https://github.com/longld/peda.git ~/peda</span><br><span class="line"><span class="meta">$</span> sudo chmod 666 ~/.gdbinit</span><br><span class="line"><span class="meta">$</span> echo "source ~/peda/peda.py" &gt;&gt; ~/.gdbinit</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/longld/peda.git ~/peda</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chmod 666 ~/.gdbinit</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"source ~/peda/peda.py"</span> &gt;&gt; ~/.gdbinit</span></span><br></pre></td></tr></table></figure>
 <p>通过修改~/.gdbinit可以更换gdb插件(用#注释来禁用插件)</p>
 <h2 id="Ⅴ-其他"><a href="#Ⅴ-其他" class="headerlink" title="Ⅴ. 其他"></a>Ⅴ. 其他</h2><hr>
 <p>one_gadget安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo apt install ruby</span><br><span class="line"><span class="meta">$</span> sudo gem install one_gadget</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo apt install ruby</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo gem install one_gadget</span></span><br></pre></td></tr></table></figure>
 <h2 id="pwnenv"><a href="#pwnenv" class="headerlink" title="pwnenv"></a>pwnenv</h2><p>写完发现以后再准备配环境的话，还是要一个一个输命令安装，麻烦得很。</p>
 <p>索性写个脚本，一次就安完，省事。</p>
 <p>挂在我github上了<a href="https://github.com/Muirelle/pwnenv" target="_blank" rel="noopener">https://github.com/Muirelle/pwnenv</a></p>
@@ -448,8 +448,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/03/ret2dl-resolve/" rel="prev" title="ret2dl-resolve">
-                ret2dl-resolve <i class="fa fa-chevron-right"></i>
+              <a href="/2019/09/09/unsafe-unlink/" rel="prev" title="unsafe-unlink">
+                unsafe-unlink <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -531,7 +531,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
