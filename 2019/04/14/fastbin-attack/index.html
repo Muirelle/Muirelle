@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://i.imgur.com/HXxFdl3.png">
 <meta property="og:image" content="https://i.imgur.com/hzK1fsw.png">
 <meta property="og:image" content="https://i.imgur.com/E9ikH31.png">
-<meta property="og:updated_time" content="2019-09-14T02:35:34.287Z">
+<meta property="og:updated_time" content="2019-11-24T02:19:36.832Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastbin attack">
 <meta name="twitter:description" content="Fastbin double free attack">
@@ -428,7 +428,7 @@
 <p>free掉之后，fd和bk都指向<strong>main_arena+88</strong>中。通过程序提供的search函数泄露该值。</p>
 <p>大致过程如下<br><img src="https://i.imgur.com/hzK1fsw.png" alt=""></p>
 <p>此时用search查找4个\x00就会绕过第一个if判断，并且由于sentence已经置零，所以\x00也会在bbbb处匹配成功，从而进入第二个if语句内部，打印出fd，bk的值。</p>
-<p>如果题目给了libc文件可以直接用ida打开找到malloc_trim函数查看main_arena偏移，由于这道题是本地环境，所以直接用ldd查看使用的libc版本再找到main_arena偏移。</p>
+<p>如果题目给了libc文件可以直接用ida打开找到malloc_trim函数查看main_arena偏移，由于这道题是本地环境，所以直接用ldd查看使用的libc版本再找到main_arena偏移。也可以直接gdb里面用vmmap找到基址，用泄露的值减去基址即是偏移。</p>
 <h2 id="double-free"><a href="#double-free" class="headerlink" title="double free"></a>double free</h2><p>有了stack和libc，相当于有了纸和笔，还差一个写的动作将libc中的system写到栈上。</p>
 <p>先申请三个chunk，分别包含</p>
 <p><strong> ‘A’*50 + ‘ d’ </strong></p>
@@ -564,7 +564,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

